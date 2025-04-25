@@ -1,95 +1,46 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// app/page.tsx
+'use client';
 
-export default function Home() {
+import React, { useState } from 'react';
+import FileUploader from '@/components/FileUploader';
+import SpinnerOverlay from '@/components/SpinnerOverlay';
+import { applyIPS } from '@/lib/patcher';
+import { extractIPSFromZip } from '@/lib/zipUtils';
+import { computeCRC32 } from '@/lib/crc32';
+
+
+
+export default function HomePage() {
+  const [romFile, setRomFile] = useState<File | null>(null);
+  const [patchFiles, setPatchFiles] = useState<File[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleROMUpload = (file: File) => setRomFile(file);
+  const handlePatchUpload = (files: File[]) => setPatchFiles(files);
+
+  const zipBuffer = await someZipFile.arrayBuffer();
+  const patches = await extractIPSFromZip(zipBuffer);
+
+  const patchedRom = applyIPS(romBytes, patchBytes);
+  // patches[0].name → filename
+  // patches[0].data → Uint8Array for patching
+
+  const checksum = computeCRC32(romBytes);
+  // checksum → "A1B2C3D4"
+
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-3xl font-bold mb-4">FF4 Ultima Patcher</h1>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <FileUploader
+        onROMUpload={handleROMUpload}
+        onPatchUpload={handlePatchUpload}
+      />
+
+
+      {/* You can add buttons here later to trigger patching */}
+      {isProcessing && <SpinnerOverlay />}
+    </main>
   );
 }
