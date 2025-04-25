@@ -2,7 +2,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import RomVerifier from '@/components/RomVerifier';
 import FileUploader from '@/components/FileUploader';
+import PatchButton from '@/components/PatchButton';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
 import { applyIPS } from '@/lib/patcher';
 import { extractIPSFromZip } from '@/lib/zipUtils';
@@ -13,6 +15,7 @@ import { computeCRC32 } from '@/lib/crc32';
 export default function HomePage() {
   const [romFile, setRomFile] = useState<File | null>(null);
   const [patchFiles, setPatchFiles] = useState<File[]>([]);
+  const [zipFile, setZipFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleROMUpload = (file: File) => setRomFile(file);
@@ -38,6 +41,30 @@ export default function HomePage() {
         onPatchUpload={handlePatchUpload}
       />
 
+      <PatchButton romFile={romFile} patchFiles={patchFiles} />
+
+      <div className="p-4 space-y-4">
+        <input
+          type="file"
+          accept=".zip"
+          onChange={(e) => {
+            const zip = e.target.files?.[0] || null;
+            setZipFile(zip);
+          }}
+        />
+        {zipFile && (
+          <RomVerifier
+            patchZip={zipFile}
+            onMatch={(rom, patch) => {
+              setRomFile(rom);
+              setPatchFiles([new File([patch.data], patch.name)]);
+            }}
+          />
+        )}
+        {romFile && patchFiles.length > 0 && (
+          <PatchButton romFile={romFile} patchFiles={patchFiles} />
+        )}
+      </div>
 
       {/* You can add buttons here later to trigger patching */}
       {isProcessing && <SpinnerOverlay />}
