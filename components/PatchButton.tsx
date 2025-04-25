@@ -8,6 +8,7 @@ import { computeCRC32 } from '@/lib/crc32';
 type Props = {
   romFile: File | null;
   patchFiles: File[];
+  isProcessing?: boolean;
 };
 
 export default function PatchButton({ romFile, patchFiles }: Props) {
