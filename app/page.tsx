@@ -1,48 +1,74 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RomVerifier from '@/components/RomVerifier';
 import PatchButton from '@/components/PatchButton';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
+import { applyIPS } from '@/lib/patcher';
+import { extractIPSFromZip } from '@/lib/zipUtils';
 
 export default function HomePage() {
-  const [zipFile, setZipFile] = useState<File | null>(null);
   const [romFile, setRomFile] = useState<File | null>(null);
-  const [patchFiles, setPatchFiles] = useState<File[]>([]);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [patchFile, setPatchFile] = useState<File | null>(null);
+  const [patches, setPatches] = useState<{ name: string; data: Uint8Array }[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
+  // Load the patch bundle ONCE when page loads
+  useEffect(() => {
+    const loadPatchZip = async () => {
+      const response = await fetch('/FF4UP.zip');
+      const arrayBuffer = await response.arrayBuffer();
+      const extractedPatches = await extractIPSFromZip(arrayBuffer);
+      setPatches(extractedPatches);
+    };
+
+    loadPatchZip();
+  }, []);
+
+  const handleRomVerified = async (rom: File, patch: { name: string; data: Uint8Array }) => {
+    setRomFile(rom);
+    setPatchFile(new File([patch.data], patch.name));
+  };
+
+  const handlePatchClick = async () => {
+    if (!romFile || !patchFile) return;
+
+    setIsProcessing(true);
+
+    const romBytes = new Uint8Array(await romFile.arrayBuffer());
+    const patchBytes = new Uint8Array(await patchFile.arrayBuffer());
+
+    const patchedBytes = applyIPS(romBytes, patchBytes);
+
+    const patchedBlob = new Blob([patchedBytes], { type: 'application/octet-stream' });
+    const patchedUrl = URL.createObjectURL(patchedBlob);
+
+    const a = document.createElement('a');
+    a.href = patchedUrl;
+    a.download = `patched-${romFile.name}`;
+    a.click();
+
+    URL.revokeObjectURL(patchedUrl);
+    setIsProcessing(false);
+  };
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 space-y-4">
-      <h1 className="text-3xl font-bold">FF4 Ultima Patcher</h1>
+      <h1 className="text-3xl font-bold mb-4">FF4 Ultima Patcher</h1>
 
-      <label className="text-lg font-semibold">Upload Patch Archive (.zip):</label>
-      <input
-        type="file"
-        accept=".zip"
-        onChange={(e) => {
-          const zip = e.target.files?.[0] || null;
-          setZipFile(zip);
-        }}
+      {/* RomVerifier now accepts patches already loaded */}
+      <RomVerifier
+        patches={patches}
+        onMatch={handleRomVerified}
       />
 
-      {zipFile && (
-        <RomVerifier
-          patchZip={zipFile}
-          onMatch={(rom, patch) => {
-            setRomFile(rom);
-            setPatchFiles([new File([patch.data], patch.name)]);
-          }}
-        />
-      )}
+      <PatchButton
+        romFile={romFile}
+        patchFile={patchFile}
+        onPatch={handlePatchClick}
+        disabled={!romFile || !patchFile}
+      />
 
-      {romFile && patchFiles.length > 0 && (
-        <PatchButton
-          romFile={romFile}
-          patchFiles={patchFiles}
-          isProcessing={isProcessing}
-        />
-      )}
 
       {isProcessing && <SpinnerOverlay />}
     </main>

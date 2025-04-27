@@ -2,58 +2,64 @@
 
 import React, { useState } from 'react';
 import { computeCRC32 } from '@/lib/crc32';
-import { extractIPSFromZip } from '@/lib/zipUtils';
 
-type Props = {
-  patchZip: File; // FF4UP.zip
-  onMatch: (romFile: File, matchingPatch: { name: string; data: Uint8Array }) => void;
+type Patch = {
+  name: string;
+  data: Uint8Array;
 };
 
-const KNOWN_ROM_HASHES = new Map<string, string>([
-  ['65D0A825', 'ff2 v1.0.ips'],
-  ['23084FCD', 'ff2 v1.1.ips'],
-  ['6CDA700C', 'ff2 v1.0-H.ips'],
-  ['CAA15E97', 'ff2 v1.1-H.ips'],
-  ['E73564DB', 'ffiv easy.ips'],
-  ['A1ED8333', 'ffiv easy-H.ips'],
-  ['EE3FBCF2', 'ffiv rev1.1.ips'],
-  ['48449269', 'ffiv rev1.1-H.ips'],
-]);
+// .ips filenamess exactly match the CRC32 values; Headered are the 2nd set
+// 65D0A825, 23084FCD, 6CDA700C, CAA15E97, E73564DB, A1ED8333, EE3FBCF2, 48449269
 
-export default function RomVerifier({ patchZip, onMatch }: Props) {
-  const [status, setStatus] = useState<string | null>(null);
 
-  const handleRomUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const romFile = event.target.files?.[0];
-    if (!romFile) return;
+type RomVerifierProps = {
+  patches: Patch[];
+  onMatch: (rom: File, patch: Patch) => void;
+};
 
-    const romBytes = new Uint8Array(await romFile.arrayBuffer());
-    const romCRC = computeCRC32(romBytes);
+export default function RomVerifier({ patches, onMatch }: RomVerifierProps) {
+  const [romFile, setRomFile] = useState<File | null>(null);
+  const [matchStatus, setMatchStatus] = useState<'idle' | 'matching' | 'matched' | 'no-match'>('idle');
 
-    if (!KNOWN_ROM_HASHES.has(romCRC)) {
-      setStatus(`Unknown ROM CRC32: ${romCRC}. Please upload a valid version.`);
-      return;
-    }
+  const handleRomUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    setStatus(`ROM verified (CRC32: ${romCRC}). Searching patch...`);
+    setRomFile(file);
+    setMatchStatus('matching');
 
-    const patchList = await extractIPSFromZip(await patchZip.arrayBuffer());
-    const matchName = KNOWN_ROM_HASHES.get(romCRC);
-    const matchingPatch = patchList.find(p => p.name === matchName);
+    const romBytes = new Uint8Array(await file.arrayBuffer());
+    const crc32 = computeCRC32(romBytes);
+
+    // Try to find matching patch
+    const matchingPatch = patches.find(patch => patch.name.includes(crc32));
 
     if (matchingPatch) {
-      setStatus(`Patch "${matchName}" matched. Ready to patch!`);
-      onMatch(romFile, matchingPatch);
+      setMatchStatus('matched');
+      onMatch(file, matchingPatch);
     } else {
-      setStatus(`Patch "${matchName}" not found in zip. Please check FF4UP.zip.`);
+      setMatchStatus('no-match');
     }
   };
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <label className="font-semibold">Upload a ROM for verification:</label>
-      <input type="file" accept=".sfc,.smc" onChange={handleRomUpload} />
-      {status && <p className="text-sm text-purple-700">{status}</p>}
+    <div className="flex flex-col items-center space-y-4">
+      <input
+        type="file"
+        accept=".sfc,.smc"
+        onChange={handleRomUpload}
+        className="p-2 border rounded"
+      />
+
+      {matchStatus === 'matching' && (
+        <p className="text-gray-600">Checking ROM...</p>
+      )}
+      {matchStatus === 'matched' && (
+        <p className="text-green-600 font-semibold">ROM matched! Ready to patch.</p>
+      )}
+      {matchStatus === 'no-match' && (
+        <p className="text-red-600 font-semibold">No matching patch found.</p>
+      )}
     </div>
   );
 }
