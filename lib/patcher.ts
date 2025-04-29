@@ -1,55 +1,50 @@
 // lib/patcher.ts
 
-export function applyIPS(rom: Uint8Array, patch: Uint8Array): Uint8Array {
-  const PATCH_HEADER = 'PATCH';
-  const EOF_MARKER = 'EOF';
+export async function applyIPS(romData: Uint8Array, ipsData: Uint8Array): Promise<Uint8Array> {
+  const IPS_HEADER = "PATCH";
+  const IPS_FOOTER = "EOF";
 
-  const textDecoder = new TextDecoder();
-  const header = textDecoder.decode(patch.slice(0, 5));
-  if (header !== PATCH_HEADER) {
-    throw new Error('Invalid IPS patch: missing PATCH header');
+  let offset = 5; // Skip 'PATCH' header
+  if (new TextDecoder().decode(ipsData.slice(0, 5)) !== IPS_HEADER) {
+    throw new Error("Invalid IPS file: Incorrect header.");
   }
 
-  const romCopy = new Uint8Array(rom); // Don't mutate original ROM
-  let offset = 5;
-
-  while (offset < patch.length - 3) {
-    // Check for EOF marker
-    if (textDecoder.decode(patch.slice(offset, offset + 3)) === EOF_MARKER) {
-      break;
+  while (offset < ipsData.length) {
+    if (new TextDecoder().decode(ipsData.slice(offset, offset + 3)) === IPS_FOOTER) {
+      return romData;
     }
 
-    // Read 3-byte offset
-    const patchOffset =
-      (patch[offset] << 16) | (patch[offset + 1] << 8) | patch[offset + 2];
+    const address = (ipsData[offset] << 16) | (ipsData[offset + 1] << 8) | ipsData[offset + 2];
     offset += 3;
-
-    // Read 2-byte size
-    const size = (patch[offset] << 8) | patch[offset + 1];
+    const size = (ipsData[offset] << 8) | ipsData[offset + 1];
     offset += 2;
 
     if (size === 0) {
-      // RLE encoding
-      const rleSize = (patch[offset] << 8) | patch[offset + 1];
-      const rleValue = patch[offset + 2];
+      const rleSize = (ipsData[offset] << 8) | (ipsData[offset + 1]);
+      const value = ipsData[offset + 2];
       offset += 3;
 
-      for (let i = 0; i < rleSize; i++) {
-        if (patchOffset + i < romCopy.length) {
-          romCopy[patchOffset + i] = rleValue;
-        }
-      }
+      // Always reassign the possibly expanded ROM
+      romData = expandRomIfNeeded(romData, address + rleSize);
+      romData.fill(value, address, address + rleSize);
     } else {
-      // Normal patch data
-      const patchData = patch.slice(offset, offset + size);
-      for (let i = 0; i < size; i++) {
-        if (patchOffset + i < romCopy.length) {
-          romCopy[patchOffset + i] = patchData[i];
-        }
-      }
+      romData = expandRomIfNeeded(romData, address + size);
+      romData.set(ipsData.slice(offset, offset + size), address);
       offset += size;
     }
   }
 
-  return romCopy;
+  throw new Error("Invalid IPS file: Missing EOF footer.");
+}
+
+
+// Expands the ROM if needed
+function expandRomIfNeeded(rom: Uint8Array, neededSize: number): Uint8Array {
+  if (rom.length >= neededSize) {
+    return rom;
+  }
+  console.log(`Expanding ROM from ${rom.length} bytes to ${neededSize} bytes`);
+  const expandedRom = new Uint8Array(neededSize);
+  expandedRom.set(rom);
+  return expandedRom;
 }

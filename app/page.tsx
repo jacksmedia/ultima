@@ -38,9 +38,12 @@ export default function HomePage() {
     const romBytes = new Uint8Array(await romFile.arrayBuffer());
     const patchBytes = new Uint8Array(await patchFile.arrayBuffer());
 
-    const patchedBytes = applyIPS(romBytes, patchBytes);
+    const patchedRom = await applyIPS(romBytes, patchBytes);
+    // Logging patched ROM size for secure performance
+    console.log(`Patched ROM size: ${patchedRom.length} bytes (${(patchedRom.length / (1024 * 1024)).toFixed(2)} MB)`);
 
-    const patchedBlob = new Blob([patchedBytes], { type: 'application/octet-stream' });
+
+    const patchedBlob = new Blob([patchBytes], { type: 'application/octet-stream' });
     const patchedUrl = URL.createObjectURL(patchedBlob);
 
     const a = document.createElement('a');
@@ -56,7 +59,7 @@ export default function HomePage() {
     <main className="flex flex-col items-center justify-center min-h-screen p-4 space-y-4">
       <h1 className="text-3xl font-bold mb-4">FF4 Ultima Patcher</h1>
 
-      {/* RomVerifier now accepts patches already loaded */}
+      {/* all patched onboad in /public/FF4UP.zip */}
       <RomVerifier
         patches={patches}
         onMatch={handleRomVerified}
