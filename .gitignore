@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+*.ips
 
 # next.js
 /.next/

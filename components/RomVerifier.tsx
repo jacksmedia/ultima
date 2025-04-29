@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { computeCRC32 } from '@/lib/crc32';
+import computeCRC32 from '@/lib/crc32';
 
 type Patch = {
   name: string;
