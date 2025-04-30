@@ -1,10 +1,7 @@
-'use client'
-
-import 'globals.css';
+import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
