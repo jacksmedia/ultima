@@ -1,65 +1,120 @@
-'use client';
+import React, { useState, useRef } from 'react';
 
-import React, { useState } from 'react';
-import computeCRC32 from '@/lib/crc32';
+interface RomVerifierProps {
+  onMatch: (romFile: File) => void;
+}
 
-type Patch = {
-  name: string;
-  data: Uint8Array;
-};
+const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-// .ips filenamess exactly match the CRC32 values; Headered are the 2nd set
-// 65D0A825, 23084FCD, 6CDA700C, CAA15E97, E73564DB, A1ED8333, EE3FBCF2, 48449269
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
 
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
 
-type RomVerifierProps = {
-  patches: Patch[];
-  onMatch: (rom: File, patch: Patch) => void;
-};
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      processFile(file);
+    }
+  };
 
-export default function RomVerifier({ patches, onMatch }: RomVerifierProps) {
-  const [romFile, setRomFile] = useState<File | null>(null);
-  const [matchStatus, setMatchStatus] = useState<'idle' | 'matching' | 'matched' | 'no-match'>('idle');
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      processFile(file);
+    }
+  };
 
-  const handleRomUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const processFile = (file: File) => {
+    setFileName(file.name);
+    
+    // Only process .sfc, .smc, or .fig files
+    const validExtensions = ['.sfc', '.smc', '.fig'];
+    const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    
+    if (!validExtensions.includes(fileExt)) {
+      alert('Please select a valid SNES ROM file (.sfc, .smc, or .fig)');
+      return;
+    }
+    
+    onMatch(file);
+  };
 
-    setRomFile(file);
-    setMatchStatus('matching');
-
-    const romBytes = new Uint8Array(await file.arrayBuffer());
-    const crc32 = computeCRC32(romBytes);
-
-    // Try to find matching patch
-    const matchingPatch = patches.find(patch => patch.name.includes(crc32));
-
-    if (matchingPatch) {
-      setMatchStatus('matched');
-      onMatch(file, matchingPatch);
-    } else {
-      setMatchStatus('no-match');
+  const handleBrowseClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4">
+    <div
+      className={`
+        w-full max-w-md p-8 border-2 border-dashed rounded-lg
+        ${isDragging ? 'border-blue-500 bg-blue-950' : 'border-gray-600 bg-gray-900'}
+        transition-colors flex flex-col items-center justify-center
+      `}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
       <input
         type="file"
-        accept=".sfc,.smc"
-        onChange={handleRomUpload}
-        className="p-2 border rounded"
+        ref={fileInputRef}
+        onChange={handleFileInputChange}
+        accept=".sfc,.smc,.fig"
+        className="hidden"
       />
-
-      {matchStatus === 'matching' && (
-        <p className="text-gray-600">Checking ROM...</p>
-      )}
-      {matchStatus === 'matched' && (
-        <p className="text-green-600 font-semibold">ROM matched! Ready to patch.</p>
-      )}
-      {matchStatus === 'no-match' && (
-        <p className="text-red-600 font-semibold">No matching patch found.</p>
-      )}
+      
+      <div className="text-center">
+        <svg 
+          className="w-12 h-12 mx-auto mb-4 text-gray-400"
+          xmlns="http://www.w3.org/2000/svg" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" 
+          />
+        </svg>
+        
+        {fileName ? (
+          <p className="mb-2 text-sm text-gray-300">
+            Selected: <span className="font-semibold">{fileName}</span>
+          </p>
+        ) : (
+          <p className="mb-2 text-sm text-gray-400">
+            Drop your FF4 ROM file here or
+          </p>
+        )}
+        
+        <button
+          onClick={handleBrowseClick}
+          className="px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Browse Files
+        </button>
+        
+        <p className="mt-2 text-xs text-gray-500">
+          Supported formats: .sfc, .smc, .fig
+        </p>
+      </div>
     </div>
   );
-}
+};
+
+export default RomVerifier;
