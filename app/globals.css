@@ -40,3 +40,8 @@ a {
     color-scheme: dark;
   }
 }
+
+.constained-cloud {
+  max-width: 30vw;
+  max-height: 50vh;
+}

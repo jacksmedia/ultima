@@ -40,11 +40,11 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
     setFileName(file.name);
     
     // Only process .sfc, .smc, or .fig files
-    const validExtensions = ['.sfc', '.smc', '.fig'];
+    const validExtensions = ['.sfc', '.smc'];
     const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
     
     if (!validExtensions.includes(fileExt)) {
-      alert('Please select a valid SNES ROM file (.sfc, .smc, or .fig)');
+      alert('Please select a valid SNES ROM file (.sfc or .smc)');
       return;
     }
     
@@ -72,13 +72,13 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         type="file"
         ref={fileInputRef}
         onChange={handleFileInputChange}
-        accept=".sfc,.smc,.fig"
+        accept=".sfc,.smc"
         className="hidden"
       />
       
-      <div className="text-center">
+      <div className="text-center constained-cloud">
         <svg 
-          className="w-12 h-12 mx-auto mb-4 text-gray-400"
+          className="w-4 h-4 mx-auto mb-4 text-gray-400"
           xmlns="http://www.w3.org/2000/svg" 
           fill="none" 
           viewBox="0 0 24 24" 
@@ -110,7 +110,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         </button>
         
         <p className="mt-2 text-xs text-gray-500">
-          Supported formats: .sfc, .smc, .fig
+          Supported formats: .sfc, .smc
         </p>
       </div>
     </div>

@@ -27,7 +27,7 @@ export default function PatchPage() {
     const loadPatches = async () => {
       try {
         setLoadingPatches(true);
-        const response = await fetch('/FF4UP.zip');
+        const response = await fetch('/FF4UP-styles.zip');
         const zipData = await response.arrayBuffer();
         const zip = await JSZip.loadAsync(zipData);
         const patchEntries: Patch[] = [];
