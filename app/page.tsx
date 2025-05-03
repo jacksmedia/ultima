@@ -1,10 +1,8 @@
 'use client'
-
-import 'globals.css';
 import type { AppProps } from 'next/app';
-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import MainPage from '@/components/MainPage';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -13,24 +11,20 @@ function MyApp({ Component, pageProps }: AppProps) {
     <div className="min-h-screen flex flex-col bg-gray-800 text-white">
       <header className="bg-gray-900 p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <Link href="/">
-            <a className="text-xl font-bold">FF4Ultima Patcher</a>
+          <Link href="/" className="text-xl font-bold">
+            FF4Ultima Patcher
           </Link>
           
           <nav>
             <ul className="flex space-x-6">
               <li>
-                <Link href="/">
-                  <a className={`hover:text-blue-400 ${router.pathname === '/' ? 'text-blue-400 font-medium' : ''}`}>
-                    Main Patcher
-                  </a>
+                <Link href="/" className={`hover:text-blue-400`}>
+                  Main Patcher
                 </Link>
               </li>
               <li>
-                <Link href="/optional-patches">
-                  <a className={`hover:text-blue-400 ${router.pathname === '/optional-patches' ? 'text-blue-400 font-medium' : ''}`}>
-                    Optional Features
-                  </a>
+                <Link href="/optional-patches" className={`hover:text-blue-400`}>
+                  Optional Features
                 </Link>
               </li>
             </ul>
@@ -39,7 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </header>
       
       <main className="flex-grow container mx-auto px-4">
-        <Component {...pageProps} />
+        <MainPage />
       </main>
       
       <footer className="bg-gray-900 p-4 text-center text-gray-400 text-sm">

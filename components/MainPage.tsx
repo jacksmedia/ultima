@@ -6,7 +6,6 @@ import { validateFF4OriginalRom, calculateCrc32, extractRomInfo, RomInfo } from 
 import { applyIpsPatch } from '../lib/IpsPatcher'; // Assuming you have this utility function
 
 const MainPage: React.FC = () => {
-  const router = useRouter();
   const [romFile, setRomFile] = useState<File | null>(null);
   const [romInfo, setRomInfo] = useState<RomInfo | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
