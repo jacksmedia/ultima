@@ -3,7 +3,10 @@
  */
 
 // Apply a single IPS patch to a ROM file
-export const applyIpsPatch = async (romFile: File, patchPath: string): Promise<ArrayBuffer> => {
+export const applyIpsPatch = async (
+  romFile: File, 
+  patchPath: string
+): Promise<ArrayBuffer> => {
   // Load the ROM file as an ArrayBuffer
   const romData = await romFile.arrayBuffer();
   
