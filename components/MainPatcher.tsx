@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import ExtensibleRomVerifier, { RomValidationRule } from './ExtensibleRomVerifier';
 import { validateFF4OriginalRom, extractRomInfo, RomInfo } from '../lib/RomUtilities';
 import { applyIpsPatch } from '../lib/IpsPatcher'; // Assuming you have this utility function
-import Image from "next/image";
 
-const MainPage: React.FC = () => {
+const MainPatcher: React.FC = () => {
   const [romFile, setRomFile] = useState<File | null>(null);
   const [romInfo, setRomInfo] = useState<RomInfo | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -15,7 +14,7 @@ const MainPage: React.FC = () => {
   const validationRules: RomValidationRule[] = [
     {
       validateFile: validateFF4OriginalRom,
-      errorMessage: 'Please upload an unmodified FF4 ROM with CRC32: 97C92761'
+      errorMessage: 'Please upload a FFII or FF4 ROM'
     }
   ];
 
@@ -67,23 +66,6 @@ const MainPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white p-4">
-      
-      <h1 className="text-3xl font-bold mb-2">FF4Ultima ROM Patcher</h1>
-
-      <div className='flex flex-row items-center justify-center bg-red-500 text-white p-2'>
-      {/* begin 2 col row */}
-        <div>
-          <p className="text-gray-300 mb-8">Upload your original FF4 ROM to apply the FF4Ultima patch</p>
-          <Image
-              className=""
-              src="/Title.png"
-              alt="FF4 Ultima logo"
-              width={256}
-              height={224}
-              priority
-          />
-        </div>
-        {/* 2nd col */}
         {!isPatched ? (
           <div className="mb-8 w-full max-w-md">
             <ExtensibleRomVerifier 
@@ -135,11 +117,8 @@ const MainPage: React.FC = () => {
             </button>
           </div>
         )}
-        {/* end 2 col row */}
-      </div>
-
     </div>
   );
 };
 
-export default MainPage;
+export default MainPatcher;

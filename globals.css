@@ -5,7 +5,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #112;
     --foreground: #ededed;
   }
 }
@@ -13,10 +13,9 @@
 html,
 body {
   max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
   overflow-x: hidden;
-}
-
-body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
@@ -41,7 +40,9 @@ a {
   }
 }
 
-.constained-cloud {
-  max-width: 30vw;
-  max-height: 50vh;
+.constrained-cloud {
+  width: 3rem;
+  max-width: 3rem;
+  height: 5rem;
+  max-height: 5rem;
 }
