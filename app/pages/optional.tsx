@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import OptionalPatches from '@/components/OptionalPatches';
 import Head from 'next/head';
 
-const OptionalPatchesPage: NextPage = () => {
+const Optional: NextPage = () => {
   return (
     <>
       <Head>
@@ -16,4 +16,4 @@ const OptionalPatchesPage: NextPage = () => {
   );
 };
 
-export default OptionalPatchesPage;
+export default Optional;

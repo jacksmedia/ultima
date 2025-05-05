@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
 import ExtensibleRomVerifier, { RomValidationRule } from './ExtensibleRomVerifier';
-import { validateFF4OriginalRom, calculateCrc32, extractRomInfo, RomInfo } from '../lib/RomUtilities';
+import { validateFF4OriginalRom, extractRomInfo, RomInfo } from '../lib/RomUtilities';
 import { applyIpsPatch } from '../lib/IpsPatcher'; // Assuming you have this utility function
+import Image from "next/image";
 
 const MainPage: React.FC = () => {
   const [romFile, setRomFile] = useState<File | null>(null);
@@ -65,15 +64,20 @@ const MainPage: React.FC = () => {
     document.body.removeChild(a);
   };
 
-  const navigateToOptionalPatches = () => {
-    router.push('/optional-patches');
-  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white p-4">
+      
       <h1 className="text-3xl font-bold mb-2">FF4Ultima ROM Patcher</h1>
       <p className="text-gray-300 mb-8">Upload your original FF4 ROM to apply the FF4Ultima patch</p>
-      
+      <Image
+          className=""
+          src="/Title.png"
+          alt="FF4 Ultima logo"
+          width={256}
+          height={224}
+          priority
+        />
       {!isPatched ? (
         <div className="mb-8 w-full max-w-md">
           <ExtensibleRomVerifier 
@@ -109,17 +113,6 @@ const MainPage: React.FC = () => {
             >
               Download Patched ROM
             </button>
-            
-            <div className="text-sm text-gray-300 mb-4">
-              <p>Want to customize your FF4Ultima experience?</p>
-              <p>Download your ROM first, then visit the Optional Features page.</p>
-            </div>
-            
-            <Link href="/optional-patches">
-              <button className="px-6 py-3 bg-purple-700 hover:bg-purple-800 rounded-lg font-medium w-full">
-                Customize with Optional Features
-              </button>
-            </Link>
           </div>
           
           <button

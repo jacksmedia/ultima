@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ExtensibleRomVerifier, { RomValidationRule } from './ExtensibleRomVerifier';
 import { validateFF4UltimaRom, getAvailablePatchOptions, PatchOption, extractRomInfo, RomInfo } from '@/lib/RomUtilities';
-import { applyIpsPatches } from '@/lib/IpsPatcher'; // Assuming you have this utility function
+import { applyIpsPatches } from '@/lib/IpsPatcher';
 
 const OptionalPatches: React.FC = () => {
   const [romFile, setRomFile] = useState<File | null>(null);
@@ -51,7 +51,7 @@ const OptionalPatches: React.FC = () => {
         .filter(option => selectedPatches.includes(option.id))
         .map(option => option.patchPath);
 
-      // Apply all selected patches
+      // Apply all selected patches!
       const patchedRomData = await applyIpsPatches(romFile, selectedPatchPaths);
       
       // Create download URL
