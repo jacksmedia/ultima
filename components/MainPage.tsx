@@ -69,66 +69,75 @@ const MainPage: React.FC = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white p-4">
       
       <h1 className="text-3xl font-bold mb-2">FF4Ultima ROM Patcher</h1>
-      <p className="text-gray-300 mb-8">Upload your original FF4 ROM to apply the FF4Ultima patch</p>
-      <Image
-          className=""
-          src="/Title.png"
-          alt="FF4 Ultima logo"
-          width={256}
-          height={224}
-          priority
-        />
-      {!isPatched ? (
-        <div className="mb-8 w-full max-w-md">
-          <ExtensibleRomVerifier 
-            onValidRom={handleValidRom}
-            validationRules={validationRules}
-            title="Drop your Final Fantasy IV ROM here"
-            description="Only accepts unmodified FF4 ROMs (.sfc, .smc)"
+
+      <div className='flex flex-row items-center justify-center bg-red-500 text-white p-2'>
+      {/* begin 2 col row */}
+        <div>
+          <p className="text-gray-300 mb-8">Upload your original FF4 ROM to apply the FF4Ultima patch</p>
+          <Image
+              className=""
+              src="/Title.png"
+              alt="FF4 Ultima logo"
+              width={256}
+              height={224}
+              priority
           />
-          
-          {romInfo && (
-            <div className="mt-4 p-4 bg-gray-700 rounded-lg">
-              <h2 className="text-lg font-semibold mb-2">ROM Information</h2>
-              <p><span className="font-medium">Name:</span> {romInfo.name}</p>
-              <p><span className="font-medium">CRC32:</span> {romInfo.crc32}</p>
-              <p><span className="font-medium">Size:</span> {(romInfo.size / 1024 / 1024).toFixed(2)} MB</p>
-              <p><span className="font-medium">Status:</span> {
-                isProcessing ? 'Processing...' : 
-                romInfo.type === 'original' ? 'Valid FF4 ROM' : 
-                'Unknown ROM'
-              }</p>
-            </div>
-          )}
         </div>
-      ) : (
-        <div className="text-center mb-8">
-          <div className="mb-4 p-6 bg-green-800 rounded-lg">
-            <h2 className="text-xl font-bold mb-2">FF4Ultima Patch Applied!</h2>
-            <p className="mb-4">Your ROM has been successfully patched with FF4Ultima.</p>
+        {/* 2nd col */}
+        {!isPatched ? (
+          <div className="mb-8 w-full max-w-md">
+            <ExtensibleRomVerifier 
+              onValidRom={handleValidRom}
+              validationRules={validationRules}
+              title="Drop your Final Fantasy IV ROM here"
+              description="Only accepts unmodified FF4 ROMs (.sfc, .smc)"
+            />
+            
+            {romInfo && (
+              <div className="mt-4 p-4 bg-gray-700 rounded-lg">
+                <h2 className="text-lg font-semibold mb-2">ROM Information</h2>
+                <p><span className="font-medium">Name:</span> {romInfo.name}</p>
+                <p><span className="font-medium">CRC32:</span> {romInfo.crc32}</p>
+                <p><span className="font-medium">Size:</span> {(romInfo.size / 1024 / 1024).toFixed(2)} MB</p>
+                <p><span className="font-medium">Status:</span> {
+                  isProcessing ? 'Processing...' : 
+                  romInfo.type === 'original' ? 'Valid FF4 ROM' : 
+                  'Unknown ROM'
+                }</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="text-center mb-8">
+            <div className="mb-4 p-6 bg-green-800 rounded-lg">
+              <h2 className="text-xl font-bold mb-2">FF4Ultima Patch Applied!</h2>
+              <p className="mb-4">Your ROM has been successfully patched with FF4Ultima.</p>
+              
+              <button
+                onClick={handleDownload}
+                className="px-6 py-3 bg-blue-700 hover:bg-blue-800 rounded-lg font-medium mb-4 w-full"
+              >
+                Download Patched ROM
+              </button>
+            </div>
             
             <button
-              onClick={handleDownload}
-              className="px-6 py-3 bg-blue-700 hover:bg-blue-800 rounded-lg font-medium mb-4 w-full"
+              onClick={() => {
+                setRomFile(null);
+                setRomInfo(null);
+                setIsPatched(false);
+                if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+                setDownloadUrl(null);
+              }}
+              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg"
             >
-              Download Patched ROM
+              Patch Another ROM
             </button>
           </div>
-          
-          <button
-            onClick={() => {
-              setRomFile(null);
-              setRomInfo(null);
-              setIsPatched(false);
-              if (downloadUrl) URL.revokeObjectURL(downloadUrl);
-              setDownloadUrl(null);
-            }}
-            className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg"
-          >
-            Patch Another ROM
-          </button>
-        </div>
-      )}
+        )}
+        {/* end 2 col row */}
+      </div>
+
     </div>
   );
 };
