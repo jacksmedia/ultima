@@ -3,6 +3,7 @@ import Layout from '@/layout';
 import Image from "next/image";
 import PlusPatcher from '@/components/PlusPatcher';
 
+
 const HomePage: NextPage = () => {
   return (
     <Layout>
@@ -16,6 +17,7 @@ const HomePage: NextPage = () => {
           priority
       />
       <PlusPatcher />
+
     </Layout>
   );
 };

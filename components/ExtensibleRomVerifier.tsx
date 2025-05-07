@@ -1,12 +1,29 @@
 import React, { useState, useRef } from 'react';
 
-interface RomVerifierProps {
-  onMatch: (romFile: File) => void;
+export interface RomValidationRule {
+  validateFile: (file: File, fileData: ArrayBuffer) => Promise<boolean>;
+  errorMessage: string;
 }
 
-const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
+export interface RomVerifierProps {
+  onValidRom: (romFile: File) => void;
+  validationRules?: RomValidationRule[];
+  acceptedExtensions?: string[];
+  title?: string;
+  description?: string;
+}
+
+const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({ 
+  onValidRom, 
+  validationRules = [],
+  acceptedExtensions = ['.sfc', '.smc'],
+  title = "Drop your ROM file here",
+  description = "Supported formats: .sfc, .smc"
+}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -36,19 +53,45 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
     }
   };
 
-  const processFile = (file: File) => {
+  const processFile = async (file: File) => {
     setFileName(file.name);
+    setErrorMessage(null);
+    setIsProcessing(true);
     
-    // Only process .sfc, .smc, or .fig files
-    const validExtensions = ['.sfc', '.smc'];
+    // Check file extension
     const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
     
-    if (!validExtensions.includes(fileExt)) {
-      alert('Please select a valid SNES ROM file (.sfc or .smc)');
+    if (!acceptedExtensions.includes(fileExt)) {
+      setErrorMessage(`Please select a valid ROM file (${acceptedExtensions.join(', ')})`);
+      setIsProcessing(false);
       return;
     }
+
+    // Process validation rules if any
+    if (validationRules.length > 0) {
+      try {
+        // Read the file as ArrayBuffer for validations that need content
+        const fileBuffer = await file.arrayBuffer();
+        
+        // Check all validation rules
+        for (const rule of validationRules) {
+          const isValid = await rule.validateFile(file, fileBuffer);
+          if (!isValid) {
+            setErrorMessage(rule.errorMessage);
+            setIsProcessing(false);
+            return;
+          }
+        }
+      } catch (error) {
+        setErrorMessage('Error processing file: ' + (error instanceof Error ? error.message : String(error)));
+        setIsProcessing(false);
+        return;
+      }
+    }
     
-    onMatch(file);
+    // If we got here, the file passed all validations
+    setIsProcessing(false);
+    onValidRom(file);
   };
 
   const handleBrowseClick = () => {
@@ -72,13 +115,13 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         type="file"
         ref={fileInputRef}
         onChange={handleFileInputChange}
-        accept=".sfc,.smc"
+        accept={acceptedExtensions.join(',')}
         className="hidden"
       />
       
-      <div className="text-center constained-cloud">
+      <div className="text-center constrained-cloud">
         <svg 
-          className="w-12 h-12 mx-auto mb-4 text-gray-400 dropfile-cloud"
+          className="mx-auto mb-4 text-gray-400 h-24 w-24"
           xmlns="http://www.w3.org/2000/svg" 
           fill="none" 
           viewBox="0 0 24 24" 
@@ -98,23 +141,30 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
           </p>
         ) : (
           <p className="mb-2 text-sm text-gray-400">
-            Drop your FF4 ROM file here or
+            {title}
+          </p>
+        )}
+        
+        {errorMessage && (
+          <p className="mb-2 text-sm text-red-400">
+            {errorMessage}
           </p>
         )}
         
         <button
           onClick={handleBrowseClick}
           className="px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={isProcessing}
         >
-          Browse Files
+          {isProcessing ? 'Processing...' : 'Browse Files'}
         </button>
         
         <p className="mt-2 text-xs text-gray-500">
-          Supported formats: .sfc, .smc
+          {description}
         </p>
       </div>
     </div>
   );
 };
 
-export default RomVerifier;
+export default ExtensibleRomVerifier;

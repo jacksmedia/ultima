@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import Layout from '@/layout';
 
+
 const Discord: NextPage = () => {
   return (
     <Layout>      
