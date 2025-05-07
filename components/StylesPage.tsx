@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import JSZip from 'jszip';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
