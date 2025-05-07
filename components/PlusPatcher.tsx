@@ -160,11 +160,9 @@ export default function PatchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-8 space-y-6">
-      <h1 className="text-3xl font-bold">FF4 Ultima Patcher</h1>
-      
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-8 space-y-6">      
       <p className="text-gray-300 max-w-md text-center mb-4">
-        Upload your FF4 ROM file to patch it to the Ultima Plus version.
+        Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.
       </p>
 
       {loadingPatches ? (
