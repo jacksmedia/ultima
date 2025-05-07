@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -24,9 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
-      </body>
+      <Head>
+        <title>FF4 Ultima Patcher</title>
+        <meta name="description" content="Get FF4 Ultima Plus" />
+        <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+      </Head>
+        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          {children}
+        </body>
     </html>
   );
 }
