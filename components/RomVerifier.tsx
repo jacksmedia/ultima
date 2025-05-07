@@ -78,7 +78,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
       
       <div className="text-center">
         <svg 
-          className="w-12 h-12 mx-auto mb-4 text-gray-400"
+          className="w-12 h-12 mx-auto mb-4 text-gray-400 dropfile-cloud"
           xmlns="http://www.w3.org/2000/svg" 
           fill="none" 
           viewBox="0 0 24 24" 
