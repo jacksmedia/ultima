@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
