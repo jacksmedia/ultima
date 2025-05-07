@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
-import Layout from '@/Layout';
+import Layout from '@/layout';
 import Image from "next/image";
-import MainPatcher from '@/components/MainPatcher';
+import PlusPatcher from '@/components/PlusPatcher';
+
 
 const HomePage: NextPage = () => {
   return (
@@ -15,7 +16,8 @@ const HomePage: NextPage = () => {
           height={224}
           priority
       />
-      <MainPatcher />
+      <PlusPatcher />
+
     </Layout>
   );
 };

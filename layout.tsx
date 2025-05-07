@@ -1,10 +1,8 @@
-import type { Metadata } from "next";
-import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "@/globals.css";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +35,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <meta name="description" content="Get FF4 Ultima Plus" />
         <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
       </Head>
+
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <nav className="flex space-x-6 px-8 py-4 shadow-md">
             {navLinks.map(({ href, label }) => (

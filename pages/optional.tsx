@@ -1,7 +1,9 @@
 import { NextPage } from 'next';
-import Layout from '@/Layout';
+
+import Layout from '@/layout';
 import Head from 'next/head';
-import OptionalPatches from '@/components/OptionalPatches';
+// import OptionalPatches from '@/components/OptionalPatches';
+
 
 
 const Optional: NextPage = () => {
@@ -12,7 +14,8 @@ const Optional: NextPage = () => {
         <meta name="description" content="Customize your FF4Ultima ROM with optional features" />
       </Head>
       
-      <OptionalPatches />
+      {/* <OptionalPatches /> */}
+
     </Layout>
   );
 };
