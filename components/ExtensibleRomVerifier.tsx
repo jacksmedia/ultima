@@ -116,7 +116,7 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
         ref={fileInputRef}
         onChange={handleFileInputChange}
         accept={acceptedExtensions.join(',')}
-        className="hidden"
+        className="hidden-input"
       />
       
       <div className="text-center constrained-cloud">

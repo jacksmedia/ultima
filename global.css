@@ -210,3 +210,8 @@ a.secondary {
   height: 7em;
   max-height: 7em;
 }
+
+/* patcher styling */
+.hidden-input {
+  visibility: hidden;
+}

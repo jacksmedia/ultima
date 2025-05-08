@@ -73,7 +73,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         ref={fileInputRef}
         onChange={handleFileInputChange}
         accept=".sfc,.smc"
-        className="hidden"
+        className="hidden-input"
       />
       
       <div className="text-center constained-cloud">
@@ -98,7 +98,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
           </p>
         ) : (
           <p className="mb-2 text-sm text-gray-400">
-            Drop your FF4 ROM file here or
+            Drop your ROM file here or
           </p>
         )}
         
