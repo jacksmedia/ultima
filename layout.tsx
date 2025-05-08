@@ -1,9 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,10 +19,6 @@ const navLinks = [
   { href: '/optional', label: 'Optional' },
   { href: '/discord', label: 'Discord' },
 ];
-export const metadata: Metadata = {
-  title: "FF4 Ultima Patcher",
-  description: "Play the Ultimate FFIV",
-};
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -33,7 +27,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <Head>
         <title>FF4 Ultima Patcher</title>
-        <meta name="description" content="Get FF4 Ultima Plus" />
+        <meta name="description" content="Get FF4 Ultima Plus" title="FF4 Ultima Patcher" />
         <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
       </Head>
 

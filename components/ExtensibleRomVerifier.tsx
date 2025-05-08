@@ -121,7 +121,7 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
       
       <div className="text-center constrained-cloud">
         <svg 
-          className="mx-auto mb-4 text-gray-400 h-24 w-24"
+          className="mx-auto mb-4 text-gray-400 h-24 w-24 dropfile-cloud"
           xmlns="http://www.w3.org/2000/svg" 
           fill="none" 
           viewBox="0 0 24 24" 

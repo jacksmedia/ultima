@@ -1,9 +1,7 @@
 import { NextPage } from 'next';
-
 import Layout from '@/layout';
 import Head from 'next/head';
 import OptionalPatches from '@/components/OptionalPatches';
-
 
 
 const Optional: NextPage = () => {
