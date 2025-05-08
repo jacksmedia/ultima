@@ -124,6 +124,10 @@ a {
   font-weight: 500;
 }
 
+a {
+  color: #09c;
+}
+
 a.primary {
   background: var(--foreground);
   color: var(--background);
@@ -214,4 +218,14 @@ a.secondary {
 /* patcher styling */
 .hidden-input {
   visibility: hidden;
+}
+
+.plus-patcher-bg {
+  background: linear-gradient(#90f, #112);
+}
+.plus-optional-patcher-bg {
+  background: linear-gradient(#09c, #112);
+}
+.discord-bg {
+  background: linear-gradient(#000, #112);
 }

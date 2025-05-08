@@ -28,16 +28,20 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Head>
         <title>FF4 Ultima Patcher</title>
         <meta name="description" content="Get FF4 Ultima Plus" title="FF4 Ultima Patcher" />
-        <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
+        {/* Bootstrap 5.3 for styling bc Tailwind is overrated */}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"></script>
       </Head>
 
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <nav className="flex space-x-6 px-8 py-4 shadow-md">
+          <nav className="d-flex justify-content-left">
             {navLinks.map(({ href, label }) => (
               <Link key={href} href={href} passHref>
                 <span
-                  className={`cursor-pointer text-white hover:text-blue-400 transition-colors duration-200 ${
-                    router.pathname === href ? 'text-blue-400 font-semibold' : ''
+                  className={`  ${
+                    router.pathname === href ? '' : ''
                   }`}
                 >
                   {label}
@@ -45,7 +49,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             ))}
           </nav>
-          <main className="p-2">{children}</main>
+          <main className="d-flex justify-content-center">{children}</main>
         </body>
       </html>
   );

@@ -158,8 +158,8 @@ export default function PatchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-8 space-y-6">      
-      <p className="text-gray-300 max-w-md text-center mb-4">
+    <div className="">      
+      <p className="">
         Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.
       </p>
 
@@ -168,15 +168,15 @@ export default function PatchPage() {
       ) : patches.length > 0 ? (
         <RomVerifier onMatch={handleMatch} />
       ) : (
-        <p className="text-red-500">No patches could be loaded. Please refresh the page.</p>
+        <p className="">No patches could be loaded. Please refresh the page.</p>
       )}
 
-      {error && <p className="text-red-500 font-medium">{error}</p>}
+      {error && <p className="">{error}</p>}
       
       {crcInfo && (
-        <div className="p-4 bg-gray-800 rounded-lg">
-          <h2 className="text-xl mb-2">CRC32 Information:</h2>
-          <p className="font-mono">{crcInfo}</p>
+        <div className="">
+          <h2 className="">CRC32 Information:</h2>
+          <p className="">{crcInfo}</p>
         </div>
       )}
 

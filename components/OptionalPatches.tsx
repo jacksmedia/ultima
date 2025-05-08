@@ -80,12 +80,11 @@ const OptionalPatches: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-800 text-white p-4">
-      <h1 className="text-2xl font-bold mb-6">FF4Ultima Optional Features</h1>
+    <div className="">
       
       {!romFile ? (
-        <div className="mb-8">
-          <p className="text-center mb-4">Please upload your FF4Ultima ROM to customize it with optional features.</p>
+        <div className="">
+          <p className="">Please upload your FF4Ultima ROM to customize it with optional features.</p>
           <ExtensibleRomVerifier 
             onValidRom={handleValidRom}
             validationRules={validationRules}
@@ -94,25 +93,25 @@ const OptionalPatches: React.FC = () => {
           />
         </div>
       ) : (
-        <div className="w-full max-w-md">
-          <div className="bg-gray-700 p-4 rounded-lg mb-4">
-            <h2 className="text-lg font-semibold mb-2">ROM Information</h2>
+        <div className="">
+          <div className="">
+            <h2 className="">ROM Information</h2>
             {romInfo && (
-              <div className="text-sm">
-                <p><span className="font-medium">Name:</span> {romInfo.name}</p>
-                <p><span className="font-medium">CRC32:</span> {romInfo.crc32}</p>
-                <p><span className="font-medium">Size:</span> {(romInfo.size / 1024 / 1024).toFixed(2)} MB</p>
+              <div className="">
+                <p><span className="">Name:</span> {romInfo.name}</p>
+                <p><span className="">CRC32:</span> {romInfo.crc32}</p>
+                <p><span className="">Size:</span> {(romInfo.size / 1024 / 1024).toFixed(2)} MB</p>
               </div>
             )}
           </div>
 
-          <div className="bg-gray-700 p-4 rounded-lg mb-4">
-            <h2 className="text-lg font-semibold mb-2">Optional Features</h2>
-            <p className="text-sm text-gray-300 mb-4">Select the optional features you want to apply to your ROM:</p>
+          <div className="">
+            <h2 className="">Optional Features</h2>
+            <p className="">Select the optional features you want to apply to your ROM:</p>
             
-            <div className="space-y-3">
+            <div className="">
               {patchOptions.map(option => (
-                <div key={option.id} className="flex items-start">
+                <div key={option.id} className="">
                   <input
                     type="checkbox"
                     id={option.id}
@@ -121,23 +120,23 @@ const OptionalPatches: React.FC = () => {
                     className="mt-1 mr-3"
                   />
                   <div>
-                    <label htmlFor={option.id} className="font-medium cursor-pointer">
+                    <label htmlFor={option.id} className="">
                       {option.name}
                     </label>
-                    <p className="text-xs text-gray-400">{option.description}</p>
+                    <p className="">{option.description}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex justify-center space-x-4">
+          <div className="">
             {!isDownloadReady ? (
               <button
                 onClick={handleApplyPatches}
                 disabled={isProcessing || selectedPatches.length === 0}
                 className={`
-                  px-4 py-2 rounded-lg font-medium
+                  
                   ${isProcessing || selectedPatches.length === 0 
                     ? 'bg-gray-600 cursor-not-allowed' 
                     : 'bg-blue-700 hover:bg-blue-800'}
@@ -148,7 +147,7 @@ const OptionalPatches: React.FC = () => {
             ) : (
               <button
                 onClick={handleDownload}
-                className="px-4 py-2 bg-green-700 hover:bg-green-800 rounded-lg font-medium"
+                className=""
               >
                 Download Customized ROM
               </button>
@@ -163,7 +162,7 @@ const OptionalPatches: React.FC = () => {
                 if (downloadUrl) URL.revokeObjectURL(downloadUrl);
                 setDownloadUrl(null);
               }}
-              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg font-medium"
+              className=""
             >
               Start Over
             </button>

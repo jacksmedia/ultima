@@ -119,9 +119,9 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
         className="hidden-input"
       />
       
-      <div className="text-center constrained-cloud">
+      <div className="dropfile-cloud">
         <svg 
-          className="mx-auto mb-4 text-gray-400 h-24 w-24 dropfile-cloud"
+          className="w-12 h-12 mx-auto mb-4 text-gray-400 dropfile-cloud"
           xmlns="http://www.w3.org/2000/svg" 
           fill="none" 
           viewBox="0 0 24 24" 
