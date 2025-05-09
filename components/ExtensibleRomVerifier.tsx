@@ -18,7 +18,7 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
   onValidRom, 
   validationRules = [],
   acceptedExtensions = ['.sfc', '.smc'],
-  title = "Drop your ROM file here",
+  title = "Drop your ROM file here or",
   description = "Supported formats: .sfc, .smc"
 }) => {
   const [isDragging, setIsDragging] = useState(false);
