@@ -84,12 +84,12 @@ const OptionalPatches: React.FC = () => {
       
       {!romFile ? (
         <div className="">
-          <p className="">Please upload your FF4Ultima ROM to customize it with optional features.</p>
+          <p className="">Please upload your FF4 Ultima Plus ROM to customize it with optional features.</p>
           <ExtensibleRomVerifier 
             onValidRom={handleValidRom}
             validationRules={validationRules}
             title="Drop your FF4Ultima ROM here"
-            description="Only accepts FF4Ultima patched ROMs"
+            description="Only accepts FF4 Ultima Plus patched ROMs"
           />
         </div>
       ) : (

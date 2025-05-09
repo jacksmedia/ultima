@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import Image from "next/image";
 
 export interface RomValidationRule {
   validateFile: (file: File, fileData: ArrayBuffer) => Promise<boolean>;
@@ -119,21 +120,14 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
         className="hidden-input"
       />
       
-      <div className="dropfile-cloud">
-        <svg 
-          className="w-12 h-12 mx-auto mb-4 text-gray-400 dropfile-cloud"
-          xmlns="http://www.w3.org/2000/svg" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          stroke="currentColor"
-        >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" 
-          />
-        </svg>
+      <div className='p-2'>
+        <Image 
+          src="/cloud-upload.svg"
+          width={138}
+          height={130}
+          color="white"
+          alt="cloud upload icon"
+        />
         
         {fileName ? (
           <p className="mb-2 text-sm text-gray-300">

@@ -24,7 +24,7 @@ a.primary {
   gap: 8px;
 }
 
-body, h1, h2, p, button, a .nav {
+body, h1, h2, h3, h4, h5, h6, p, button, a .nav {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
@@ -129,17 +129,14 @@ main div {
   height: 224px;
   max-height: 224px;
 }
-.dropfile-cloud {
-  width: 8em;
-  max-width: 8em;
-  height: 7em;
-  max-height: 7em;
-  stroke: white;
-}
 
 /* patcher styling */
 .hidden-input {
   visibility: hidden;
+}
+
+.kard {
+  background-color: #112;
 }
 
 
