@@ -43,6 +43,11 @@ main div {
   max-width: 100vw;
   height: auto;
   min-height: 100vh;
+
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center
 }
 
 .nav, button {
@@ -133,14 +138,14 @@ main div {
 
 /* per page styling */
 .plus-patcher-bg {
-  background: linear-gradient(#60c, #112);
+  background: linear-gradient(#112,#60c);
 }
 .plus-optional-patcher-bg {
-  background: linear-gradient(#09c, #112);
+  background: linear-gradient(#112,#09c);
 }
 .discord-bg {
-  background: linear-gradient(#000, #112);
+  background: linear-gradient(#112,#000);
 }
 .guides-bg {
-  background: linear-gradient(#606, #112);
+  background: linear-gradient(#112,#606);
 }

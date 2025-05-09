@@ -46,7 +46,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             ))}
           </ul>
-          <main className="d-flex justify-content-center">{children}</main>
+          <main>{children}</main>
         </body>
       </html>
   );

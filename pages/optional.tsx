@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import Layout from '@/layout';
 import Head from 'next/head';
-import Image from "next/image";
+import PlusTitle from "@/components/PlusTitle";
 import OptionalPatches from '@/components/OptionalPatches';
 
 
@@ -14,14 +14,7 @@ const Optional: NextPage = () => {
       </Head>
       <div className='plus-optional-patcher-bg'>
         <h1 className="">FF4 Ultima Plus Optional Features</h1>
-        <Image
-            className=""
-            src="/Title.png"
-            alt="FF4 Ultima logo"
-            width={256}
-            height={224}
-            priority
-        />
+        <PlusTitle />
         <OptionalPatches />
       </div>
     </Layout>
