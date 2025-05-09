@@ -76,13 +76,12 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         className="hidden-input"
       />
       
-      <div className="dropfile-cloud">
+      <div>
         <svg 
           className="w-12 h-12 mx-auto mb-4 text-gray-400 dropfile-cloud"
           xmlns="http://www.w3.org/2000/svg" 
           fill="none" 
           viewBox="0 0 24 24" 
-          stroke="currentColor"
         >
           <path 
             strokeLinecap="round" 

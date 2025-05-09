@@ -7,7 +7,7 @@ const HomePage: NextPage = () => {
   return (
     <Layout>
       <div className='plus-patcher-bg'>
-        <h1 className="">FF4 Ultima Patcher</h1>
+        <h1 className="">FF4 Ultima Plus Patcher</h1>
         <PlusTitle />
         <PlusPatcher />
         </div>
