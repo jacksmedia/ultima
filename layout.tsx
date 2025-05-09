@@ -31,7 +31,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
       </Head>
 
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>
           <nav className="nav d-flex justify-content-left ">
             {navLinks.map(({ href, label }) => (
               <Link key={href} href={href} passHref>
