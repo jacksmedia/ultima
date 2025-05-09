@@ -17,7 +17,8 @@ const geistMono = Geist_Mono({
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/optional', label: 'Optional' },
-  { href: '/discord', label: 'Discord' },
+  { href: '/guides', label: 'Guides' },
+  { href: '/discord', label: 'Discord' }
 ];
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -32,19 +33,19 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Head>
 
       <body>
-          <nav className="nav d-flex justify-content-left ">
+          <ul className="nav d-flex justify-content-center">
             {navLinks.map(({ href, label }) => (
               <Link key={href} href={href} passHref>
-                <span
+                <li
                   className={`nav-item  ${
-                    router.pathname === href ? '' : ''
+                    router.pathname === href ? 'nav-link active' : 'nav-link'
                   }`}
                 >
                   {label}
-                </span>
+                </li>
               </Link>
             ))}
-          </nav>
+          </ul>
           <main className="d-flex justify-content-center">{children}</main>
         </body>
       </html>

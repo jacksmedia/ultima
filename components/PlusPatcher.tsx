@@ -158,7 +158,7 @@ export default function PatchPage() {
   };
 
   return (
-    <div className="w-100">      
+    <div className="">      
       <p className="">
         Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.
       </p>

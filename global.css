@@ -130,12 +130,17 @@ main div {
   visibility: hidden;
 }
 
+
+/* per page styling */
 .plus-patcher-bg {
-  background: linear-gradient(#90f, #112);
+  background: linear-gradient(#60c, #112);
 }
 .plus-optional-patcher-bg {
   background: linear-gradient(#09c, #112);
 }
 .discord-bg {
   background: linear-gradient(#000, #112);
+}
+.guides-bg {
+  background: linear-gradient(#606, #112);
 }
