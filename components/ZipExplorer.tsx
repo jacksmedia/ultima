@@ -1,11 +1,13 @@
 import JSZip from 'jszip';
 import { useEffect, useState } from 'react';
+// import Image from "next/image";
 
 // Define tree node shape
 type TreeNode = {
   name: string;
   children?: TreeNode[];
   isFolder: boolean;
+  fullPath: string;
 };
 
 // Build nested tree from flat paths
@@ -22,10 +24,12 @@ function buildTree(paths: string[]): TreeNode[] {
       if (existing) {
         currentLevel = existing.children!;
       } else {
+        const fullPath = segments.slice(0, index + 1).join('/');
         const newNode: TreeNode = {
           name: segment,
           isFolder: index < segments.length - 1,
           children: index < segments.length - 1 ? [] : undefined,
+          fullPath,
         };
         currentLevel.push(newNode);
         if (newNode.children) {
@@ -38,7 +42,7 @@ function buildTree(paths: string[]): TreeNode[] {
   return root;
 }
 
-// Recursive f for tree rendering
+// Recursive tree renderer with image previews
 function TreeView({ nodes }: { nodes: TreeNode[] }) {
   const [open, setOpen] = useState<Record<string, boolean>>({});
 
@@ -48,23 +52,40 @@ function TreeView({ nodes }: { nodes: TreeNode[] }) {
   return (
     <ul className="pl-4">
       {nodes.map((node) => (
-        <li key={node.name}>
+        <li key={node.fullPath} className="mb-2">
           {node.isFolder ? (
             <div>
               <button
-                onClick={() => toggle(node.name)}
-                className=""
+                onClick={() => toggle(node.fullPath)}
+                className="text-white hover:text-blue-400 font-semibold"
               >
-                {open[node.name] ? '📂' : '📁'} {node.name}
+                {open[node.fullPath] ? '📂' : '📁'} {node.name}
               </button>
-              {open[node.name] && node.children && (
+              {open[node.fullPath] && node.children && (
                 <TreeView nodes={node.children} />
               )}
             </div>
           ) : (
-            <span className="">
-              🩹 {node.name}
-            </span>
+            <div className="text-white hover:text-blue-400 ml-4">
+              {node.name.endsWith('.ips') && (
+                <div className="mb-2 text-center">
+                  <div className="w-32 h-32 mx-auto relative mb-1">
+                    <img
+                      src={`/${node.fullPath.replace(/\.ips$/, '.png')}`}
+                      alt={`Preview for ${node.name}`}
+                      layout="fill"
+                      objectFit="contain"
+                      className="rounded border border-white"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none'; // hide on error
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+              📄 {node.name}
+            </div>
           )}
         </li>
       ))}
@@ -84,13 +105,10 @@ export default function ZipExplorer() {
 
         const paths: string[] = [];
         zip.forEach((relativePath) => {
-          // ignore empty folders? seems unneeded
-          if (relativePath.endsWith('/')) return;
-          paths.push(relativePath);
+          if (!relativePath.endsWith('/')) paths.push(relativePath);
         });
 
-        const builtTree = buildTree(paths);
-        setTree(builtTree);
+        setTree(buildTree(paths));
       } catch (err) {
         console.error('Failed to parse zip:', err);
       }
@@ -101,7 +119,7 @@ export default function ZipExplorer() {
 
   return (
     <div className="">
-      <h2 className="mb-4">📦 Patch Archive Explorer</h2>
+      <h2 className="mb-4 text-white text-xl font-bold">📦 Patch Archive Explorer</h2>
       <TreeView nodes={tree} />
     </div>
   );
