@@ -32,7 +32,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Head>
         <title>FF4 Ultima Patcher</title>
         <meta name="description" content="Get FF4 Ultima Plus" title="FF4 Ultima Patcher" />
-        <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
+        <link rel="icon" href="https://ff4ultima.vercel.app/img/favicon.png" sizes="any" />
       </Head>
 
       <body>
