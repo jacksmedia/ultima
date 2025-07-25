@@ -16,8 +16,11 @@ const geistMono = Geist_Mono({
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/optional', label: 'Optional' },
-  { href: '/guides', label: 'Guides' },
+  { href: 'https://ultima-plus.vercel.app/guides.html', label: 'Guides' },
+  { href: 'https://ultima-plus.vercel.app/fonts.html', label: 'Fonts' },
+  { href: 'https://ultima-plus.vercel.app/styles.html', label: 'Hero Styles' },
+  { href: 'https://ultima-plus.vercel.app/ulti.html', label: 'Custom' },
+  { href: 'https://ultima-plus.vercel.app/indev.html', label: 'In Dev.' },
   { href: '/discord', label: 'Discord' }
 ];
 
@@ -38,7 +41,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Link key={href} href={href} passHref>
                 <li
                   className={`nav-item  ${
-                    router.pathname === href ? 'nav-link active' : 'nav-link'
+                    router.pathname === href ? 'nav-l1nk active' : 'nav-l1nk'
                   }`}
                 >
                   {label}

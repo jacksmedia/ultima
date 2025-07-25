@@ -15,11 +15,6 @@ body {
   color: #ededed;
 }
 
-a {
-  color: #09c;
-  text-decoration: none;
-}
-
 a.primary {
   gap: 8px;
 }
@@ -47,7 +42,17 @@ main div {
 }
 
 .nav, button {
-  background-color: #112;
+  background-color: #212529;
+}
+
+.nav-l1nk {
+  color: #eef;
+  text-decoration: none;
+}
+
+.nav-item {
+  text-decoration: none;
+  padding: 0.6rem;
 }
 
 .footer {
