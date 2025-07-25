@@ -17,7 +17,7 @@ export interface PatchOption {
 
 // ROM validation functions
 export const validateFF4OriginalRom = async (file: File, fileData: ArrayBuffer): Promise<boolean> => {
-  const expectedCrc32 = '97C92761'; // FF4 original ROM CRC32 (hexadecimal)
+  const expectedCrc32 = '1F373E00'; // FF4 original ROM CRC32 (hexadecimal)
   const calculatedCrc32 = calculateCrc32(fileData).toUpperCase();
   return calculatedCrc32 === expectedCrc32;
 };
@@ -48,7 +48,7 @@ export const extractRomInfo = async (file: File): Promise<RomInfo> => {
   // Determine ROM type based on CRC32
   if (crc32Hex === '65D0A825' || '23084FCD' || '6CDA700C' || 'CAA15E97') {
     type = 'original';
-  } else if (crc32Hex === '97C92761') { // Replace with actual FF4Ultima ROM CRC32
+  } else if (crc32Hex === '1F373E00') { // Replace with actual FF4Ultima ROM CRC32
     type = 'patched';
   }
   

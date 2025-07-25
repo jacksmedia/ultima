@@ -83,7 +83,7 @@ export default function PatchPage() {
   }, []);
   
   // current Ultima CRC32
-  const EXPECTED_CRC32 = '97C92761';
+  const EXPECTED_CRC32 = '1F373E00';
   
   // Helper to detect and remove SMC/SFC header if present
   const removeHeaderIfPresent = (romData: Uint8Array): Uint8Array => {

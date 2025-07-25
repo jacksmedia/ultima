@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ExtensibleRomVerifier, { RomValidationRule } from './ExtensibleRomVerifier';
-import ZipExplorer from './ZipExplorer';
+// import ZipExplorer from './ZipExplorer';
 import { validateFF4UltimaRom, getAvailablePatchOptions, PatchOption, extractRomInfo, RomInfo } from '@/lib/RomUtilities';
 import { applyIpsPatches } from '@/lib/IpsPatcher';
 
@@ -82,7 +82,7 @@ const OptionalPatches: React.FC = () => {
 
   return (
     <div className="">
-      <ZipExplorer />
+      {/* <ZipExplorer /> */}
       {!romFile ? (
         <div className="">
           <p className="">Please upload your FF4 Ultima Plus ROM to customize it with optional features.</p>
