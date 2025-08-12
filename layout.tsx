@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: 'https://ultima-plus.vercel.app/guides.html', label: 'Guides' },
-  { href: 'https://ultima-plus.vercel.app/fonts.html', label: 'Fonts' },
-  { href: 'https://ultima-plus.vercel.app/styles.html', label: 'Hero Styles' },
-  { href: 'https://ultima-plus.vercel.app/ulti.html', label: 'Custom' },
-  { href: 'https://ultima-plus.vercel.app/indev.html', label: 'In Dev.' },
+  { href: 'https://ff4ultima-plus.vercel.app/guides.html', label: 'Guides' },
+  { href: 'https://ff4ultima-plus.vercel.app/fonts.html', label: 'Fonts' },
+  { href: 'https://ff4ultima-plus.vercel.app/styles.html', label: 'Hero Styles' },
+  { href: 'https://ff4ultima-plus.vercel.app/ulti.html', label: 'Custom' },
+  { href: 'https://ff4ultima-plus.vercel.app/indev.html', label: 'In Dev.' },
   { href: '/discord', label: 'Discord' }
 ];
 
@@ -32,7 +32,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Head>
         <title>FF4 Ultima Patcher</title>
         <meta name="description" content="Get FF4 Ultima Plus" title="FF4 Ultima Patcher" />
-        <link rel="icon" href="https://ff4ultima.vercel.app/img/favicon.png" sizes="any" />
+        <link rel="icon" href="https://ultima-plus.vercel.app/img/favicon.png" sizes="any" />
       </Head>
 
       <body>
