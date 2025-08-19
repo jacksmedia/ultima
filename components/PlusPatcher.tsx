@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+// developed with Claude Sonnet 4
+import React, { useEffect, useMemo, useState } from 'react';
 import JSZip from 'jszip';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
 import DownloadRomButton from '@/components/DownloadRomButton';
 import RomVerifier from '@/components/RomVerifier';
+import CustomOptionsPanel from '@/components/CustomOptionsPanel';
 import { applyIPS } from '@/lib/patcher';
 import computeCRC32 from '@/lib/crc32';
+import { useOptionalPatches } from '@/hooks/useOptionalPatches';
 
 type Patch = {
   name: string;
@@ -19,8 +22,39 @@ export default function PatchPage() {
   const [error, setError] = useState<string | null>(null);
   const [crcInfo, setCrcInfo] = useState<string | null>(null);
   const [loadingPatches, setLoadingPatches] = useState(true);
+  const [selectedOptionalPatches, setSelectedOptionalPatches] = useState<string[]>([]);
 
-  // Load and unzip patches only once
+  // Optional patches by category
+  const optionalPatchesConfig = useMemo(() => ({
+    categories : [
+      {
+        id: 'styles',
+        title: 'Hero Styles',
+        description: 'Changes battle & map sprites, and portraits',
+        allowMultiple: false,
+        zipFile: 'Styles.zip',
+        // filePattern: /Style/i // commented out bc not working as desired to filter and can be omitted
+        // the images can added in one one big zip and filtered by filePattern, tho!
+      },
+      {
+        id: 'fonts',
+        title: 'Alt Fonts (+ Item Names)',
+        description: 'Alternate Fonts, + Alt. Item Names with SBG',
+        allowMultiple: false,
+        zipFile: 'Fonts.zip',
+        // filePattern: /i
+      }
+    ]
+  }), []);
+
+  const {
+    categories: optionalCategories,
+    loading: loadingOptional,
+    error: optionalError,
+    getSelectedPatches
+  } = useOptionalPatches(optionalPatchesConfig);
+
+  // Loads main Ultima patches
   useEffect(() => {
     const loadPatches = async () => {
       try {
@@ -69,11 +103,11 @@ export default function PatchPage() {
           })
         );
 
-        console.log(`Successfully loaded ${patchEntries.length} IPS patches`);
+        console.log(`Successfully loaded ${patchEntries.length} main project patches`);
         setPatches(patchEntries);
       } catch (err) {
-        console.error('Failed to load patches:', err);
-        setError('Failed to load patch files.');
+        console.error('Failed to load main patches:', err);
+        setError('Failed to load main patch files.');
       } finally {
         setLoadingPatches(false);
       }
@@ -81,15 +115,15 @@ export default function PatchPage() {
 
     loadPatches();
   }, []);
-  
+
   // current Ultima CRC32
   const EXPECTED_CRC32 = '1F373E00';
-  
-  // Helper to detect and remove SMC/SFC header if present
+
+  // Helper to detect and remove SMC/SFC copier header if present
   const removeHeaderIfPresent = (romData: Uint8Array): Uint8Array => {
-    // Check if ROM size is odd (likely has a 512-byte header)
+    // Check if ROM has the 512-byte copier header ( % only looks at the remainder after division)
     if (romData.length % 1024 === 512) {
-      console.log('ROM header detected, removing 512 bytes');
+      console.log('ROM copier header detected, removing 512 bytes');
       return romData.slice(512);
     }
     return romData;
@@ -104,25 +138,23 @@ export default function PatchPage() {
     try {
       // Load the ROM bytes
       const romBytes = new Uint8Array(await romFile.arrayBuffer());
-      
+
       // Check and remove header if present
       const headerlessRom = removeHeaderIfPresent(romBytes);
-      
+
       // Calculate original ROM CRC32
       const romCRC32 = computeCRC32(headerlessRom);
-      
+
       // Debug log
       console.log(`ROM CRC32: ${romCRC32}`);
-      
-      // Find matching patch by CRC32
+
+      // Find matching main patch by CRC32
       const matchingPatch = patches.find(patch => patch.name === romCRC32);
-      
       if (!matchingPatch) {
         throw new Error(`No matching patch found for ROM with CRC32: ${romCRC32}`);
       }
-      
       console.log(`Found matching patch: ${matchingPatch.originalName}`);
-      
+
       // Expand to 2MB if needed
       const expandedRom = headerlessRom.length < 2 * 1024 * 1024
         ? (() => {
@@ -131,24 +163,39 @@ export default function PatchPage() {
             return newRom;
           })()
         : headerlessRom;
-      
-      // Apply patch
-      const patched = applyIPS(expandedRom, matchingPatch.data);
+
+      // Apply main patch
+      let patchedRom = applyIPS(expandedRom, matchingPatch.data);
+      console.log(`Applied main patch: ${matchingPatch.originalName}`);
 
       // Calculate patched ROM CRC32
-      const patchedCRC32 = computeCRC32(patched);
-      
-      // Debug logging
-      setCrcInfo(`Original: ${romCRC32}, Patched: ${patchedCRC32}`);
-      console.log(`Patched ROM CRC32: ${patchedCRC32}`);
-      console.log(`Expected CRC32: ${EXPECTED_CRC32}`);
-      console.log(`CRC32 match: ${patchedCRC32 === EXPECTED_CRC32}`);
-      
-      if (patchedCRC32 !== EXPECTED_CRC32) {
-        console.warn(`CRC32 mismatch: expected ${EXPECTED_CRC32}, got ${patchedCRC32}`);
+      const patchedCRC32 = computeCRC32(patchedRom);
+
+      // Apply optional patches in order of selection
+      const selectedOptionals = getSelectedPatches(selectedOptionalPatches);
+      for (const optionalPatch of selectedOptionals) {
+        console.log(`Applying optional patch: ${optionalPatch.name}`);
+        patchedRom = applyIPS(patchedRom, optionalPatch.data);
       }
 
-      setPatchedRom(patched);
+      // Re-calculate patched ROM CRC32
+      const finalCRC32 = computeCRC32(patchedRom);
+
+      // Update info display
+      const optionalInfo = selectedOptionals.length > 0 
+        ? ` + ${selectedOptionals.length} optional patch${selectedOptionals.length > 1 ? 'es' : ''}` 
+        : '';
+      setCrcInfo(`Original: ${romCRC32}, Final: ${finalCRC32}${optionalInfo}`);
+      
+      console.log(`Final patched ROM CRC32: ${finalCRC32}`);
+      console.log(`Applied ${selectedOptionals.length} optional patches`);
+
+      // With any optional patches, the final CRC32 will not match the expected base patch CRC32
+      if (selectedOptionals.length === 0 && finalCRC32 !== EXPECTED_CRC32) {
+        console.warn(`Base patch CRC32 mismatch: expected ${EXPECTED_CRC32}, got ${finalCRC32}`);
+      }
+
+      setPatchedRom(patchedRom);
     } catch (err: any) {
       console.error('Error during patching:', err);
       setError(err.message || 'An unknown error occurred.');
@@ -157,34 +204,67 @@ export default function PatchPage() {
     }
   };
 
+  const isReady = !loadingPatches && patches.length > 0; // handling for optional patches
+  const hasOptionalPatches = optionalCategories.length > 0; // ditto
+
   return (
     <div className="">      
-      <p className="">
-        Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.
+      <p className="max-w-md text-center mb-4">
+        Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
+        Choose alternate fonts and graphics if you wish!
       </p>
 
       {loadingPatches ? (
-        <p>Loading patches...</p>
-      ) : patches.length > 0 ? (
+        <p>Loading main patches...</p>
+      ) : isReady ? (
         <RomVerifier onMatch={handleMatch} />
       ) : (
-        <p className="">No patches could be loaded. Please refresh the page.</p>
+        <p className="text-red-500">No patches could be loaded. Please refresh the page.</p>
       )}
 
-      {error && <p className="">{error}</p>}
-      
-      {crcInfo && (
-        <div className="">
-          <h2 className="">CRC32 Information:</h2>
-          <p className="">{crcInfo}</p>
-        </div>
-      )}
-
+      {/* Download Button */}
       {patchedRom && (
         <DownloadRomButton
           romData={patchedRom}
           filename="FF4 Ultima Plus.sfc"
         />
+      )}
+
+      {/* Optional Patches Panel */}
+      {isReady && hasOptionalPatches && (
+        <CustomOptionsPanel
+          categories={optionalCategories}
+          selectedPatches={selectedOptionalPatches}
+          onSelectionChange={setSelectedOptionalPatches}
+          isDisabled={isPatching}
+        />
+      )}
+
+      {/* Loading state for optional patches */}
+      {loadingOptional && (
+        <p className="text-gray-400 text-sm">Loading optional patches...</p>
+      )}
+
+      {/* Errors */}
+      {error && <p className="text-red-500 font-medium">{error}</p>}
+      {optionalError && <p className="text-yellow-500 font-medium">Optional patches: {optionalError}</p>}
+      
+      {/* CRC32 Information */}
+      {crcInfo && (
+        <div className="p-4 bg-gray-800 rounded-lg">
+          <h2 className="text-xl mb-2">Patch Information:</h2>
+          <p className="font-mono text-sm">{crcInfo}</p>
+          {selectedOptionalPatches.length > 0 && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-300">Selected options:</p>
+              <ul className="text-xs text-gray-400 mt-1">
+                {getSelectedPatches(selectedOptionalPatches).map(patch => (
+                  <li key={patch.id}>{patch.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       )}
 
       {isPatching && <SpinnerOverlay />}
