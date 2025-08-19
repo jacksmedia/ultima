@@ -8,6 +8,8 @@ import CustomOptionsPanel from '@/components/CustomOptionsPanel';
 import { applyIPS } from '@/lib/patcher';
 import computeCRC32 from '@/lib/crc32';
 import { useOptionalPatches } from '@/hooks/useOptionalPatches';
+import PlusTitle from "@/components/PlusTitle";
+
 
 type Patch = {
   name: string;
@@ -208,27 +210,36 @@ export default function PatchPage() {
   const hasOptionalPatches = optionalCategories.length > 0; // ditto
 
   return (
-    <div className="">      
-      <p className="max-w-md text-center mb-4">
-        Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
-        Choose alternate fonts and graphics if you wish!
-      </p>
+    <>
+    <div className="two-column-layout">
+    {/* 2 column layout on tablet and larger */}
+      <div className='d-flex justify-content-center align-items-center h-100'>
+        <PlusTitle />
+        <p className="text-center mb-2">
+          Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
+          Choose alternate fonts and graphics if you wish!
+        </p>
+        <DownloadRomButton
+          romData={patchedRom}
+          filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
+          disabled={!patchedRom || isPatching}
+        />
+      </div>
 
-      {loadingPatches ? (
-        <p>Loading main patches...</p>
-      ) : isReady ? (
-        <RomVerifier onMatch={handleMatch} />
-      ) : (
-        <p className="text-red-500">No patches could be loaded. Please refresh the page.</p>
-      )}
+      <div className='d-flex justify-content-center align-items-center h-100'
+      style={{backgroundColor: 'rgba(255,0,0,0.5)'}}>
+        {loadingPatches ? (
+          <p>Loading main patches...</p>
+        ) : isReady ? (
+          <RomVerifier onMatch={handleMatch} />
+        ) : (
+          <p className="text-danger">No patches could be loaded. Please refresh the page.</p>
+        )}
+      </div>
+    </div>
 
-      {/* Download Button */}
-      <DownloadRomButton
-        romData={patchedRom}
-        filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
-        disabled={!patchedRom || isPatching}
-      />
-
+    {/* custom options with previews */}
+    <div className='d-flex justify-content-center align-items-center h-100'>
       {/* Optional Patches Panel */}
       {isReady && hasOptionalPatches && (
         <CustomOptionsPanel
@@ -268,5 +279,7 @@ export default function PatchPage() {
 
       {isPatching && <SpinnerOverlay />}
     </div>
+
+    </>
   );
 }

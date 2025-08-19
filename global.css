@@ -71,6 +71,33 @@ main div {
   flex-shrink: 0;
 }
 
+
+/* RomVerifier */
+.dotted-border {
+  border-radius: 20%;
+  border:#ededed 8 dotted;
+}
+.active-border {
+  border:#ae7517 8 dotted;
+}
+.passive-border {
+  border:#ededed 8 dotted;
+}
+
+/* Workaround for the overhyped garbage that is Bootstrap columns */
+.two-column-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 576px) {
+  .two-column-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {

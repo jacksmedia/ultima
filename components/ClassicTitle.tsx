@@ -4,7 +4,7 @@ const PlusTitle = () => {
   return(
     <Image
         className=""
-        src="/classicTitle.png"
+        src="/img/classicTitle.png"
         alt="FF4 Ultima logo"
         width={256}
         height={224}

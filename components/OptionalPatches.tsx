@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ExtensibleRomVerifier, { RomValidationRule } from './ExtensibleRomVerifier';
-// import ZipExplorer from './ZipExplorer';
 import { validateFF4UltimaRom, getAvailablePatchOptions, PatchOption, extractRomInfo, RomInfo } from '@/lib/RomUtilities';
 import { applyIpsPatches } from '@/lib/IpsPatcher';
 

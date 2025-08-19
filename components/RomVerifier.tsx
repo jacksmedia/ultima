@@ -60,10 +60,9 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
 
   return (
     <div
-      className={`
-        w-full max-w-md p-8 border-2 border-dashed rounded-lg
-        ${isDragging ? 'border-blue-500 bg-blue-950' : 'border-gray-600 bg-gray-900'}
-        transition-colors flex flex-col items-center justify-center
+      className={`w-100 text-center p-4 
+        ${isDragging ? 'active-border' : 'passive-border'}
+        dotted-border
       `}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -77,7 +76,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         className="hidden-input"
       />
       
-      <div>
+      <div className=''>
         <Image 
           src="/cloud-upload.svg"
           width={138}
@@ -86,23 +85,22 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
           alt="cloud upload icon"
         />
         {fileName ? (
-          <p className="mb-2 text-sm text-gray-300">
+          <p className="mb-2">
             Selected: <span className="font-semibold">{fileName}</span>
           </p>
         ) : (
-          <p className="mb-2 text-sm text-gray-400">
+          <p className="mb-2">
             Drop your ROM file here or
           </p>
         )}
         
         <button
           onClick={handleBrowseClick}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
+          className="px-4 py-2">
           Browse Files
         </button>
         
-        <p className="mt-2 text-xs text-gray-500">
+        <p className="mt-2 text-xs">
           Supported formats: .sfc, .smc
         </p>
       </div>
