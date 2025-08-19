@@ -33,22 +33,25 @@ export const useOptionalPatches = (config: OptionalPatchesConfig) => {
           for (const categoryConfig of config.categories) {
             const patches: OptionalPatch[] = [];
             
-            if (categoryConfig.zipFile) {
+            if (categoryConfig.zipFile) { // zip handling
               try {
                 const response = await fetch(`/${categoryConfig.zipFile}`);
                 const zipData = await response.arrayBuffer();
+                if (zipData.byteLength === 0) { // log for empty zip
+                  console.warn(`Empty ZIP file: ${categoryConfig.zipFile}`);
+                  continue;
+                }
+                console.log(`Loading ${categoryConfig.zipFile} (${zipData.byteLength} bytes)`);
                 const zip = await JSZip.loadAsync(zipData);
 
                 await Promise.all(
                   Object.keys(zip.files).map(async (filename) => {
                     const file = zip.files[filename];
-                    
                     // Skip directories and non-IPS files
                     if (file.dir || !file.name.toLowerCase().endsWith('.ips')) {
                       return;
                     }
-
-                    // Apply file pattern filter if specified
+                    // Apply file pattern filter if available
                     if (categoryConfig.filePattern && !categoryConfig.filePattern.test(file.name)) {
                       return;
                     }
@@ -57,26 +60,31 @@ export const useOptionalPatches = (config: OptionalPatchesConfig) => {
                       const originalName = file.name.split('/').pop() || file.name;
                       const data = new Uint8Array(await file.async('arraybuffer'));
                       
-                      // Verify it's a valid IPS file
+                      // Verification for IPS file
                       const header = new TextDecoder().decode(data.slice(0, 5));
-                      if (header !== 'PATCH') {
+                      if (header !== 'PATCH') { // they rly do start with 'PATCH' internally
                         console.warn(`Skipping invalid IPS file: ${file.name}`);
                         return;
                       }
 
-                      // Create a user-friendly name from filename
+                      // Creates clean UI name from filename
                       const displayName = originalName
-                        .replace(/\.ips$/i, '')
-                        .replace(/[-_]/g, ' ')
-                        .replace(/\b\w/g, l => l.toUpperCase());
+                        .replace(/\.ips$/i, '') // excise file extension
+                        .replace(/[-_]/g, ' ') // dashes to spaces
+                        .replace(/\b\w/g, l => l.toUpperCase()); // capitalize each word
+                      // Generates preview image path (public/previews/)
+                      const previewImagePath = `/previews/${originalName.replace(/\.ips$/i, '')}.png`;
 
+                      
+                      
                       patches.push({
                         id: `${categoryConfig.id}-${originalName}`,
                         name: displayName,
                         description: `Apply ${displayName} modifications`,
                         filename: originalName,
                         data,
-                        category: categoryConfig.id
+                        category: categoryConfig.id,
+                        previewImage: previewImagePath
                       });
 
                       console.log(`Loaded optional patch: ${displayName} from ${originalName}`);
@@ -126,9 +134,9 @@ export const useOptionalPatches = (config: OptionalPatchesConfig) => {
                     }
 
                     const displayName = originalName
-                      .replace(/\.ips$/i, '')
-                      .replace(/[-_]/g, ' ')
-                      .replace(/\b\w/g, l => l.toUpperCase());
+                      .replace(/\.ips$/i, '') // excise file extension
+                      .replace(/[-_]/g, ' ') // dashes to spaces
+                      .replace(/\b\w/g, l => l.toUpperCase()); // capitalize each word
 
                     patches.push({
                       id: originalName,

@@ -1,5 +1,6 @@
-// code authored by Claude Sonnet 4
+// code co-authored by Claude Sonnet 4
 import React, { useState } from 'react';
+import ImagePreviewModal from './ImagePreviewModal';
 
 export interface OptionalPatch {
   id: string;
@@ -8,6 +9,7 @@ export interface OptionalPatch {
   filename: string;
   data: Uint8Array;
   category?: string;
+  previewImage?: string;
 }
 
 export interface PatchCategory {
@@ -22,6 +24,7 @@ interface CustomOptionsPanelProps {
   categories: PatchCategory[];
   selectedPatches: string[]; // Array of patch IDs
   onSelectionChange: (selectedPatchIds: string[]) => void;
+  onPreviewImage?: (imageSrc: string, title: string, description: string) => void;
   isDisabled?: boolean;
 }
 
@@ -29,9 +32,27 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
   categories,
   selectedPatches,
   onSelectionChange,
+  onPreviewImage,
   isDisabled = false
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState<{
+    src: string;
+    title: string;
+    description: string;
+  } | null>(null);
+
+  const handlePreviewClick = (patch: OptionalPatch) => {
+    if (patch.previewImage) {
+      setModalImage({
+        src: patch.previewImage,
+        title: patch.name,
+        description: patch.description
+      });
+      setModalOpen(true);
+    }
+  };
 
   const handlePatchToggle = (patchId: string, categoryId: string) => {
     const category = categories.find(cat => cat.id === categoryId);
@@ -76,17 +97,17 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
         className={`
           w-full px-6 py-4 rounded-lg font-medium text-lg transition-all
           ${isDisabled 
-            ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
-            : 'bg-blue-700 hover:bg-blue-800 text-white'
+            ? 'text-gray cursor-not-allowed' 
+            : 'text-white'
           }
           ${isExpanded ? 'rounded-b-none' : ''}
         `}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between p-2">
           <span>Do You Want Custom Options?</span>
           <div className="flex items-center space-x-2">
             {getSelectedCount() > 0 && (
-              <span className="px-2 py-1 bg-blue-900 rounded-full text-sm">
+              <span className="px-2 py-1 text-sm">
                 {getSelectedCount()} selected
               </span>
             )}
@@ -124,7 +145,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                     <label 
                       key={patch.id}
                       className={`
-                        flex items-start space-x-3 p-3 rounded-lg cursor-pointer transition-colors
+                        flex items-start p-3 option-box
                         ${isPatchSelected(patch.id) 
                           ? 'bg-blue-900 border border-blue-600' 
                           : 'bg-gray-700 hover:bg-gray-600'
@@ -138,7 +159,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                         checked={isPatchSelected(patch.id)}
                         onChange={() => handlePatchToggle(patch.id, category.id)}
                         disabled={isDisabled}
-                        className="mt-1 w-4 h-4 text-blue-600 bg-gray-900 border-gray-600 focus:ring-blue-500"
+                        className={category.allowMultiple ? "hidden-checkbox" : "hidden-radio"}
                       />
                       
                       <div className="flex-1">
@@ -152,6 +173,20 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                           File: {patch.filename}
                         </div>
                       </div>
+                      {/* Preview button, loaded from public/previews */}
+                      {patch.previewImage && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handlePreviewClick(patch);
+                          }}
+                          disabled={isDisabled}
+                          className="ml-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Preview
+                        </button>
+                      )}
                     </label>
                   ))}
                 </div>
@@ -175,6 +210,19 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
               </button>
             </div>
           )}
+
+          {/* Image Preview Modal! */}
+            {modalImage && (
+              <ImagePreviewModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                imageSrc={modalImage.src}
+                imageAlt={modalImage.title}
+                title={modalImage.title}
+                description={modalImage.description}
+              />
+            )}
+
         </div>
       )}
     </div>

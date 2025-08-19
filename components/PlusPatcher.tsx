@@ -226,8 +226,7 @@ export default function PatchPage() {
         />
       </div>
 
-      <div className='d-flex justify-content-center align-items-center h-100'
-      style={{backgroundColor: 'rgba(255,0,0,0.5)'}}>
+      <div className='d-flex justify-content-center align-items-center h-100'>
         {loadingPatches ? (
           <p>Loading main patches...</p>
         ) : isReady ? (
