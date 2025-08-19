@@ -223,12 +223,11 @@ export default function PatchPage() {
       )}
 
       {/* Download Button */}
-      {patchedRom && (
-        <DownloadRomButton
-          romData={patchedRom}
-          filename="FF4 Ultima Plus.sfc"
-        />
-      )}
+      <DownloadRomButton
+        romData={patchedRom}
+        filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
+        disabled={!patchedRom || isPatching}
+      />
 
       {/* Optional Patches Panel */}
       {isReady && hasOptionalPatches && (
