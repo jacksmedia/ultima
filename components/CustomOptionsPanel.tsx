@@ -126,8 +126,8 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
 
       {/* Options Panel */}
       {isExpanded && (
-        <div className="bg-gray-800 border-2 border-t-0 border-blue-700 rounded-b-lg max-h-96 overflow-y-auto">
-          <div className="p-4 space-y-6">
+        <div className="">
+          <div className="p-3 m-2">
             {categories.map((category) => (
               <div key={category.id} className="border-b border-gray-700 last:border-b-0 pb-4 last:pb-0">
                 <h3 className="text-xl font-semibold text-white mb-2">
@@ -140,15 +140,15 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                   </p>
                 )}
 
-                <div className="space-y-2">
+                <div className="d-flex flex-row flex-wrap justify-content-evenly">
                   {category.patches.map((patch) => (
                     <label 
                       key={patch.id}
                       className={`
-                        flex items-start p-3 option-box
+                        p-2 d-flex flex-column option-box
                         ${isPatchSelected(patch.id) 
-                          ? 'bg-blue-900 border border-blue-600' 
-                          : 'bg-gray-700 hover:bg-gray-600'
+                          ? 'chosen-box' 
+                          : 'unchosen-box'
                         }
                         ${isDisabled ? 'cursor-not-allowed opacity-50' : ''}
                       `}
@@ -162,16 +162,13 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                         className={category.allowMultiple ? "hidden-checkbox" : "hidden-radio"}
                       />
                       
-                      <div className="flex-1">
+                      <div className="">
                         <div className="font-medium text-white">
                           {patch.name}
                         </div>
-                        <div className="text-sm text-gray-300 mt-1">
+                        {/* <div className="text-sm text-gray-300 mt-1">
                           {patch.description}
-                        </div>
-                        <div className="text-xs text-gray-400 mt-1">
-                          File: {patch.filename}
-                        </div>
+                        </div> */}
                       </div>
                       {/* Preview button, loaded from public/previews */}
                       {patch.previewImage && (
@@ -182,7 +179,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                             handlePreviewClick(patch);
                           }}
                           disabled={isDisabled}
-                          className="ml-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="mx-auto px-2 py-2 text-white"
                         >
                           Preview
                         </button>

@@ -84,6 +84,33 @@ main div {
   border:#ededed 8 dotted;
 }
 
+/* CustomOptionsPanel */
+.hidden-radio {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+}
+.option-box {
+  background: linear-gradient(rgba(0,0,0,0.5),rgba(255,255,255,0.5));
+}
+
+.chosen-box {
+  border: 5px red groove;
+}
+.unchosen-box {
+  border: 2px black solid;
+}
+
+
+/* ImagePreviewModal */
+.modal-image {
+  width: 300%;
+  max-width: 90vw;
+  height: 300%;
+  max-height: 90vh;
+}
+
+
 /* Workaround for the overhyped garbage that is Bootstrap columns */
 .two-column-layout {
   display: grid;
@@ -96,24 +123,6 @@ main div {
     grid-template-columns: 1fr;
   }
 }
-
-
-/* CustomOptionsPanel */
-.hidden-radio {
-  position: fixed;
-  opacity: 0;
-  pointer-events: none;
-}
-.option-box {
-  background: linear-gradient(rgba(0,0,0,0.5),rgba(255,255,255,0.5));
-}
-
-
-
-
-
-
-
 
 
 /* Enable hover only on non-touch devices */

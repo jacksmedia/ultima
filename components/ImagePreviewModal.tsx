@@ -100,7 +100,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
 
         .modal-container {
           position: relative;
-          background: white;
+          background: #444;
           border-radius: 12px;
           max-width: 95vw;
           max-height: 95vh;
@@ -130,24 +130,24 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
 
         .modal-close-btn:hover {
           background: rgba(0, 0, 0, 0.9);
-          transform: scale(1.1);
+          transform: scale(1.2);
         }
 
         .modal-header {
           padding: 20px 20px 10px 20px;
-          border-bottom: 1px solid #e5e5e5;
+          border-bottom: 1px solid #666666;
           text-align: center;
         }
 
         .modal-header h2 {
           margin: 0 0 8px 0;
-          color: #333;
+          color: #e5e5e5;
           font-size: 1.5rem;
         }
 
         .modal-header p {
           margin: 0;
-          color: #666;
+          color: #ddd;
           font-size: 0.95rem;
         }
 
@@ -162,19 +162,20 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
         }
 
         .modal-image {
-          max-width: 100%;
-          max-height: 100%;
-          width: auto;
-          height: auto;
+          width: 300%;
+          max-width: 90vw;
+          height: 300%;
+          max-height: 90vh;
           object-fit: contain;
           border-radius: 8px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          background: black;
         }
 
         .modal-footer {
           padding: 10px 20px;
-          background: #f8f9fa;
-          border-top: 1px solid #e5e5e5;
+          background: #555555;
+          border-top: 1px solid #666666;
           text-align: center;
           color: #666;
         }
