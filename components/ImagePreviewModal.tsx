@@ -69,7 +69,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
     if (isOpen) {
       document.addEventListener('keydown', handleEsc);
       // Prevent body scrolling when modal is open
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'scroll';
     }
 
     return () => {
@@ -177,7 +177,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           max-height: 95vh;
           display: flex;
           flex-direction: column;
-          overflow: hidden;
+          overflow: overlay;
           box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
@@ -229,7 +229,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           display: grid;
           grid-template-columns: 1fr;
           min-height: 0;
-          overflow: hidden;
+          overflow: scroll;
         }
 
         .modal-content.with-manifest {
@@ -274,7 +274,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           grid-column: 2;
           background: rgba(0, 0, 0, 0.3);
           border-left: 1px solid #666;
-          overflow: hidden;
+          overflow: overlay;
         }
 
         .manifest-header {
@@ -293,7 +293,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
         .manifest-content {
           flex: 1;
           padding: 15px 20px;
-          overflow-y: auto;
+          overflow-y: overlay;
           overflow-x: hidden;
           min-height: 0; /* needed for flex shrinking */
           max-height: 100%; /* locked to parent element */

@@ -1,28 +1,28 @@
-_map sprites FF4-WS (by tsushiy, gvdn).ips
-classic map pal03 restore.ips
-DKC (classic, portrait colors, by xJ4cks).ips
-Edge (classic, Menu colors, by xJ4cks).ips
-Edward (Classic, manga colors, by xJ4cks).ips
-Final Fantasy IV Ultima - Sylph-Bloodfeast Fix.ips
-FuSoYa (classic, lunar magic, by xJ4cks).ips
-Golbez (classic, Alt Colors, by tsushiy).ips
-Kain (classic, portrait colors, by xJ4cks).ips
-Kydia (classic, portrait colors, pink magic, by xJ4cks).ips
-map Yang (Red Pants, by xJ4cks and red man).ips
-Palom & Porom original map colors fix.ips
-PC (classic, portrait colors, by xJ4cks).ips
-Porom (classic, brighter, by xJ4cks).ips
-portrait Cid (better, by xJ4cks).ips
-portrait Edge (better, by xJ4cks).ips
-portrait FuSoYa (battle color, by xJ4cks).ips
-portrait Golbez (alt, red gold, by tsushiy).ips
-portrait Palom (RK, battle color, by xJ4cks).ips
-portrait PC (better, by xJ4cks).ips
-portrait Porom (RK, battle color, by xJ4cks).ips
-portrait Rosa (PR ponytail, by FlamePurge).ips
-portrait Rydia (better, by xJ4cks).ips
-portrait Tellah (better, by xJ4cks).ips
-Rosa (Classic, purple armor, by tsushiy).ips
-Rydia (Classic, Menu colors, pink magic, by xJ4cks).ips
-window-color-iron.ips
+_map sprites FF4-WS (by tsushiy, gvdn).ips\n
+classic map pal03 restore.ips\n
+DKC (classic, portrait colors, by xJ4cks).ips\n
+Edge (classic, Menu colors, by xJ4cks).ips\n
+Edward (Classic, manga colors, by xJ4cks).ips\n
+Final Fantasy IV Ultima - Sylph-Bloodfeast Fix.ips\n
+FuSoYa (classic, lunar magic, by xJ4cks).ips\n
+Golbez (classic, Alt Colors, by tsushiy).ips\n
+Kain (classic, portrait colors, by xJ4cks).ips\n
+Kydia (classic, portrait colors, pink magic, by xJ4cks).ips\n
+map Yang (Red Pants, by xJ4cks and red man).ips\n
+Palom & Porom original map colors fix.ips\n
+PC (classic, portrait colors, by xJ4cks).ips\n
+Porom (classic, brighter, by xJ4cks).ips\n
+portrait Cid (better, by xJ4cks).ips\n
+portrait Edge (better, by xJ4cks).ips\n
+portrait FuSoYa (battle color, by xJ4cks).ips\n
+portrait Golbez (alt, red gold, by tsushiy).ips\n
+portrait Palom (RK, battle color, by xJ4cks).ips\n
+portrait PC (better, by xJ4cks).ips\n
+portrait Porom (RK, battle color, by xJ4cks).ips\n
+portrait Rosa (PR ponytail, by FlamePurge).ips\n
+portrait Rydia (better, by xJ4cks).ips\n
+portrait Tellah (better, by xJ4cks).ips\n
+Rosa (Classic, purple armor, by tsushiy).ips\n
+Rydia (Classic, Menu colors, pink magic, by xJ4cks).ips\n
+window-color-iron.ips\n
 Yang (classic, portrait colors, by xJ4cks).ips

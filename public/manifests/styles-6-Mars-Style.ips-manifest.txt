@@ -1,39 +1,39 @@
-_Golbez (PR battle + map sprites, by MObreck).ips
-Cid (PR, by xJ4cks).ips
-DKC (PR, storm armor, by Nicoc1991).ips
-Edge (PR, classic colors, by Nicoc1991).ips
-Edward (PR, by xJ4cks).ips
-FF4 Ultima Enemy Graphics 4bpp upgrade v2 (SNES-size enemies), by Gedankenschild.ips
-Final Fantasy IV Ultima - Sylph-Bloodfeast Fix.ips
-FuSoYa (PR, by xJ4cks).ips
-Golbez (PR+, by Nicoc1991).ips
-Kain (PR, twilight armor, by Nicoc1991).ips
-Kydia (PR, by MObreck and red man).ips
-map Cid (PR, by xJ4cks).ips
-map DKC (closed helmet, by Nicoc1991).ips
-map Edge (better, by xJ4cks).ips
-map Edward (PR, by xJ4cks).ips
-map Kain (darker, by xJ4cks).ips
-map Kydia (PR, by MObreck).ips
-map Palom (PR, by MObreck).ips
-map Porom (PR, by MObreck).ips
-map Rosa (PR, by MObreck).ips
-map Rydia (PR, by MObreck).ips
-map Tellah (PR, by xJ4cks).ips
-map Yang (PR, by xJ4cks).ips
-Palom (PR, by MObreck).ips
-PC (PR, by xJ4cks and redman).ips
-Porom (PR, by MObreck).ips
-portrait Cid (better, by xJ4cks).ips
-portrait Kydia (battle color, by xJ4cks).ips
-portrait Palom (RK, battle color, by xJ4cks).ips
-portrait PC (better, by xJ4cks).ips
-portrait Porom (RK, battle color, by xJ4cks).ips
-portrait Rosa (PR ponytail, by FlamePurge).ips
-portrait Tellah (battle color, by xJ4cks).ips
-portrait Yang (battle color, by xJ4cks).ips
-Rosa (PR, by MObreck and red man).ips
-Rydia (PR, by MObreck).ips
-Tellah (PR, by xJ4cks).ips
-window-color-rust.ips
+_Golbez (PR battle + map sprites, by MObreck).ips\n
+Cid (PR, by xJ4cks).ips\n
+DKC (PR, storm armor, by Nicoc1991).ips\n
+Edge (PR, classic colors, by Nicoc1991).ips\n
+Edward (PR, by xJ4cks).ips\n
+FF4 Ultima Enemy Graphics 4bpp upgrade v2 (SNES-size enemies), by Gedankenschild.ips\n
+Final Fantasy IV Ultima - Sylph-Bloodfeast Fix.ips\n
+FuSoYa (PR, by xJ4cks).ips\n
+Golbez (PR+, by Nicoc1991).ips\n
+Kain (PR, twilight armor, by Nicoc1991).ips\n
+Kydia (PR, by MObreck and red man).ips\n
+map Cid (PR, by xJ4cks).ips\n
+map DKC (closed helmet, by Nicoc1991).ips\n
+map Edge (better, by xJ4cks).ips\n
+map Edward (PR, by xJ4cks).ips\n
+map Kain (darker, by xJ4cks).ips\n
+map Kydia (PR, by MObreck).ips\n
+map Palom (PR, by MObreck).ips\n
+map Porom (PR, by MObreck).ips\n
+map Rosa (PR, by MObreck).ips\n
+map Rydia (PR, by MObreck).ips\n
+map Tellah (PR, by xJ4cks).ips\n
+map Yang (PR, by xJ4cks).ips\n
+Palom (PR, by MObreck).ips\n
+PC (PR, by xJ4cks and redman).ips\n
+Porom (PR, by MObreck).ips\n
+portrait Cid (better, by xJ4cks).ips\n
+portrait Kydia (battle color, by xJ4cks).ips\n
+portrait Palom (RK, battle color, by xJ4cks).ips\n
+portrait PC (better, by xJ4cks).ips\n
+portrait Porom (RK, battle color, by xJ4cks).ips\n
+portrait Rosa (PR ponytail, by FlamePurge).ips\n
+portrait Tellah (battle color, by xJ4cks).ips\n
+portrait Yang (battle color, by xJ4cks).ips\n
+Rosa (PR, by MObreck and red man).ips\n
+Rydia (PR, by MObreck).ips\n
+Tellah (PR, by xJ4cks).ips\n
+window-color-rust.ips\n
 Yang (PR, by Nicoc1991).ips

@@ -1,38 +1,38 @@
 A Fool's Reckoning Alt Style by Guysons
 
 ● Battle Sprites:
-- Cid (RK, T92)
-- DKC (URK, closed helm, Nicoc1991)
-- Edge (URK, king of Elban, Nicoc1991)
-- Edward (URK, alt cape, Nicoc1991)
-- FuSoYa (URK, Nicoc1991)
-- Kain (RK, portrait colors, evil eyes, Nicoc1991)
-- Kydia (URK, Nicoc1991 and redman)
-- Palom (URK, messy blue, redman and Nicoc1991)
-- PC (URK, cosmic, redman and xJ4cks)
-- Porom (URK, messy red, redman and Nicoc1991)
-- Rosa (URK, Nicoc1991 and redman)
-- Rydia (URK, festival, by redman, Nicoc1991 and xJ4cks)
-- Tellah (URK, Nicoc1991)
-- Yang (URK, Nicoc1991)
-- Golbez & Anna (RK, T92)
+- Cid (RK, T92).ips\n
+- DKC (URK, closed helm, Nicoc1991).ips\n
+- Edge (URK, king of Elban, Nicoc1991).ips\n
+- Edward (URK, alt cape, Nicoc1991).ips\n
+- FuSoYa (URK, Nicoc1991).ips\n
+- Kain (RK, portrait colors, evil eyes, Nicoc1991).ips\n
+- Kydia (URK, Nicoc1991 and redman).ips\n
+- Palom (URK, messy blue, redman and Nicoc1991).ips\n
+- PC (URK, cosmic, redman and xJ4cks).ips\n
+- Porom (URK, messy red, redman and Nicoc1991).ips\n
+- Rosa (URK, Nicoc1991 and redman).ips\n
+- Rydia (URK, festival, by redman, Nicoc1991 and xJ4cks).ips\n
+- Tellah (URK, Nicoc1991).ips\n
+- Yang (URK, Nicoc1991).ips\n
+- Golbez & Anna (RK, T92).ips\n
 ● Map Sprites:
-- Cid (PR, xJ4cks)
-- DKC (PR, xJ4cks)
-- Edge (PR, xJ4cks and redman)
-- Edward (PR, xJ4cks)
-- Kain (PR, xJ4cks)
-- Kydia (PR, MObreck)
-- Palom (PR, blue, xJ4cks)
-- PC (PR, xJ4cks)
-- Porom (PR, better, xJ4cks)
-- Rosa (PR, MObreck)
-- Rydia (PR, MObreck)
-- Tellah (PR, xJ4cks)
-- Yang (PR, xJ4cks)
-- Golbez (PR, MObreck)
+- Cid (PR, xJ4cks).ips\n
+- DKC (PR, xJ4cks).ips\n
+- Edge (PR, xJ4cks and redman).ips\n
+- Edward (PR, xJ4cks).ips\n
+- Kain (PR, xJ4cks).ips\n
+- Kydia (PR, MObreck).ips\n
+- Palom (PR, blue, xJ4cks).ips\n
+- PC (PR, xJ4cks).ips\n
+- Porom (PR, better, xJ4cks).ips\n
+- Rosa (PR, MObreck).ips\n
+- Rydia (PR, MObreck).ips\n
+- Tellah (PR, xJ4cks).ips\n
+- Yang (PR, xJ4cks).ips\n
+- Golbez (PR, MObreck).ips\n
 ● Portraits:
-- All FF4UP PSP Portraits by tsushiy & Gens
+- All FF4UP PSP Portraits (by tsushiy & Gens).ips\n
 ● Miscellaneous:
-- FF4 Ultima Enemy Graphics 4bpp Upgrade v2 SNES-sized by Gedankenschild
-- Squish B' Gone by Flamepurge - Stick Font by ChillyFee
+- FF4 Ultima Enemy Graphics 4bpp Upgrade v2 SNES-sized by Gedankenschild.ips\n
+- Squish B' Gone by Flamepurge - Stick Font by ChillyFeez.ips\n

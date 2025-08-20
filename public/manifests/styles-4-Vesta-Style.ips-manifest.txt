@@ -1,36 +1,36 @@
-_map Cecil n Rosa Cosmic Colors.ips
-_map sprites FF4-WS (by tsushiy, gvdn).ips
-Cid (Classic, DS, by xJ4cks).ips
-DKC (Classic, DS colors, by xJ4cks).ips
-Edge (Classic, DS, by xJ4cks).ips
-Edward (Classic, DS colors, by xJ4cks).ips
-FF4 Ultima Enemy Graphics 4bpp upgrade v2 (SNES-size enemies), by Gedankenschild.ips
-Final Fantasy IV Ultima - Sylph-Bloodfeast Fix.ips
-FuSoYa (classic, lunar magic, by xJ4cks).ips
-Kain (Classic, DS, by xJ4cks).ips
-Kydia (classic, portrait colors, pink magic, by xJ4cks).ips
-map DKC (Custom, Cosmic, by xJ4cks & gvdn).ips
-map Edge (WS, Cosmic, by tsushiy, gvdn, xJ4cks).ips
-map PC (WS, Cosmic, by gvdn).ips
-map Yang (WS, Rose, by xJ4cks & tsushiy).ips
-Palom (Classic, DS, by xJ4cks).ips
-PC (Classic, DS colors, by xJ4cks).ips
-Porom (Classic, DS, by xJ4cks).ips
-portrait Cid (better, by xJ4cks).ips
-portrait DKC (closed helmet, by Nicoc1991).ips
-portrait Edge (better, by xJ4cks).ips
-portrait FuSoYa (battle color, by xJ4cks).ips
-portrait Kain (battle color, by xJ4cks).ips
-portrait Kydia (battle color, by xJ4cks).ips
-portrait Palom (RK, battle color, by xJ4cks).ips
-portrait PC (DS colors, by xJ4cks).ips
-portrait Porom (RK, battle color, by xJ4cks).ips
-portrait Rosa (better, by xJ4cks).ips
-portrait Rydia (DS colors, by xJ4cks).ips
-portrait Tellah (better, by xJ4cks).ips
-portrait Yang (DS colors, by xJ4cks).ips
-Rosa (Classic, DS, by tsushiy & xJ4cks).ips
-Rydia (Classic, DS, by xJ4cks).ips
-Tellah (Classic, Darker, by xJ4cks).ips
-window-color-burgundy.ips
+_map Cecil n Rosa Cosmic Colors.ips\n
+_map sprites FF4-WS (by tsushiy, gvdn).ips\n
+Cid (Classic, DS, by xJ4cks).ips\n
+DKC (Classic, DS colors, by xJ4cks).ips\n
+Edge (Classic, DS, by xJ4cks).ips\n
+Edward (Classic, DS colors, by xJ4cks).ips\n
+FF4 Ultima Enemy Graphics 4bpp upgrade v2 (SNES-size enemies), by Gedankenschild.ips\n
+Final Fantasy IV Ultima - Sylph-Bloodfeast Fix.ips\n
+FuSoYa (classic, lunar magic, by xJ4cks).ips\n
+Kain (Classic, DS, by xJ4cks).ips\n
+Kydia (classic, portrait colors, pink magic, by xJ4cks).ips\n
+map DKC (Custom, Cosmic, by xJ4cks & gvdn).ips\n
+map Edge (WS, Cosmic, by tsushiy, gvdn, xJ4cks).ips\n
+map PC (WS, Cosmic, by gvdn).ips\n
+map Yang (WS, Rose, by xJ4cks & tsushiy).ips\n
+Palom (Classic, DS, by xJ4cks).ips\n
+PC (Classic, DS colors, by xJ4cks).ips\n
+Porom (Classic, DS, by xJ4cks).ips\n
+portrait Cid (better, by xJ4cks).ips\n
+portrait DKC (closed helmet, by Nicoc1991).ips\n
+portrait Edge (better, by xJ4cks).ips\n
+portrait FuSoYa (battle color, by xJ4cks).ips\n
+portrait Kain (battle color, by xJ4cks).ips\n
+portrait Kydia (battle color, by xJ4cks).ips\n
+portrait Palom (RK, battle color, by xJ4cks).ips\n
+portrait PC (DS colors, by xJ4cks).ips\n
+portrait Porom (RK, battle color, by xJ4cks).ips\n
+portrait Rosa (better, by xJ4cks).ips\n
+portrait Rydia (DS colors, by xJ4cks).ips\n
+portrait Tellah (better, by xJ4cks).ips\n
+portrait Yang (DS colors, by xJ4cks).ips\n
+Rosa (Classic, DS, by tsushiy & xJ4cks).ips\n
+Rydia (Classic, DS, by xJ4cks).ips\n
+Tellah (Classic, Darker, by xJ4cks).ips\n
+window-color-burgundy.ips\n
 Yang (Classic, Rose, by xJ4cks).ips
