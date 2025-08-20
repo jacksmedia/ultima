@@ -1,23 +1,63 @@
 // code authored by Claude Sonnet 4
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface ImagePreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  imageSrc: string;
+  src: string;
   imageAlt: string;
   title?: string;
   description?: string;
+  manifestPath?: string; // optional path to manifest file
 }
 
 const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
   isOpen,
   onClose,
-  imageSrc,
+  src,
   imageAlt,
   title,
-  description
+  manifestPath
 }) => {
+  const [manifestContent, setManifestContent] = useState<string | null>(null);
+  const [loadingManifest, setLoadingManifest] = useState(false);
+  const [manifestError, setManifestError] = useState(false);
+
+  // Load manifest content when modal opens and manifestPath is provided
+  useEffect(() => {
+    if (!isOpen || !manifestPath) {
+      setManifestContent(null);
+      setManifestError(false);
+      return;
+    }
+
+    const loadManifest = async () => {
+      setLoadingManifest(true);
+      setManifestError(false);
+      
+      try {
+        console.log(`Loading manifest from: ${manifestPath}`);
+        const response = await fetch(manifestPath);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to load manifest: ${response.status}`);
+        }
+        
+        const content = await response.text();
+        setManifestContent(content);
+        console.log('Manifest loaded successfully');
+      } catch (error) {
+        console.error('Error loading manifest:', error);
+        setManifestError(true);
+        setManifestContent(null);
+      } finally {
+        setLoadingManifest(false);
+      }
+    };
+
+    loadManifest();
+  }, [isOpen, manifestPath]);
+
   // Handle ESC key to close modal
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -40,10 +80,12 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
 
   if (!isOpen) return null;
 
+  const hasManifest = manifestPath && !manifestError;
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        {/* Close button */}
+        {/* Close button, lightly animated w local CSS */}
         <button
           className="modal-close-btn"
           onClick={onClose}
@@ -59,21 +101,50 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
         {title && (
           <div className="modal-header">
             <h2>{title}</h2>
-            {/* {description && <p>{description}</p>} */}
+            {/* {description && <p>{description}</p>} maybe worthwhile, but manifest is better*/}
           </div>
         )}
 
-        {/* Image container */}
-        <div className="modal-image-container">
-          <img
-            src={imageSrc}
-            alt={imageAlt}
-            className="modal-image"
-            onError={(e) => {
-              console.error('Failed to load preview image:', imageSrc);
-              e.currentTarget.src = '/placeholder-image.png'; // Fallback image
-            }}
-          />
+        {/* Main content area: 2-column layout when manifest exists! */}
+        <div className={`modal-content ${hasManifest ? 'with-manifest' : ''}`}>
+          {/* Image container */}
+          <div className="modal-image-container">
+            <img
+              src={src}
+              alt={imageAlt}
+              className="modal-image"
+              onError={(e) => {
+                console.error('Failed to load preview image:', src);
+                e.currentTarget.src = '/placeholder-image.png'; // fallback image
+              }}
+            />
+          </div>
+
+          {/* .txt manifest container */}
+          {hasManifest && (
+            <div className="manifest-container">
+              <div className="manifest-header">
+                <h3>Credits & Attribution</h3>
+              </div>
+              <div className="manifest-content">
+                {loadingManifest ? (
+                  <div className="manifest-loading">
+                    <div className="spinner"></div>
+                    <p>Loading credits...</p>
+                  </div>
+                ) : manifestContent ? (
+                  <div className="manifest-text">
+                    {manifestContent.split('\\n').map((line, index) => (
+                      <div key={index}>{line || '\\u00A0'}</div>
+                      // forcing line breaks; <pre> element wasn't visible so can't be used
+                    ))}
+                  </div>
+                ) : (
+                  <p className="manifest-error">Unable to load credits information</p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer with filename */}
@@ -93,7 +164,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           display: flex;
           justify-content: center;
           align-items: center;
-          z-index: 9999;
+          z-index: 8999;
           padding: 20px;
           box-sizing: border-box;
         }
@@ -152,14 +223,32 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           font-size: 0.95rem;
         }
 
-        .modal-image-container {
+        /* main content container */
+        .modal-content {
           flex: 1;
+          display: grid;
+          grid-template-columns: 1fr;
+          min-height: 0;
+          overflow: hidden;
+        }
+
+        .modal-content.with-manifest {
+          grid-template-columns: 60% 40%; /* Two columns with manifest */
+          gap: 0;
+        }
+
+        .modal-image-container {
           display: flex;
           justify-content: center;
           align-items: center;
           padding: 20px;
-          min-height: 0; /* Important for flex child to shrink */
           overflow: hidden;
+          grid-column: 1;
+        }
+
+        .modal-content.with-manifest .modal-image-container {
+          grid-column: 1;
+          padding-right: 10px;
         }
 
         .modal-image {
@@ -173,6 +262,92 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           background: black;
         }
 
+        .modal-content.with-manifest .modal-image {
+          max-width: 100%;
+          max-height: 70vh;
+        }
+
+        /* optional manifest */
+        .manifest-container {
+          display: flex;
+          flex-direction: column;
+          grid-column: 2;
+          background: rgba(0, 0, 0, 0.3);
+          border-left: 1px solid #666;
+          overflow: hidden;
+        }
+
+        .manifest-header {
+          padding: 15px 20px 10px 20px;
+          border-bottom: 1px solid #666;
+          background: rgba(0, 0, 0, 0.2);
+        }
+
+        .manifest-header h3 {
+          margin: 0;
+          color: #e5e5e5;
+          font-size: 1.1rem;
+          text-align: center;
+        }
+
+        .manifest-content {
+          flex: 1;
+          padding: 15px 20px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          min-height: 0; /* needed for flex shrinking */
+          max-height: 100%; /* locked to parent element */
+        }
+
+        .manifest-text {
+          color: white;
+          font-family: 'Courier New', monospace;
+          font-size: 0.85rem;
+          line-height: 1.4;
+          margin: 0;
+          padding: 0;
+          max-width: 100%;
+          display: block;
+          box-sizing: border-box;
+        }
+        .manifest-text div {
+          margin: 0;
+          padding: 0;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+
+        .manifest-loading {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100px;
+          color: #ccc;
+        }
+
+        .spinner {
+          width: 24px;
+          height: 24px;
+          border: 2px solid #666;
+          border-top: 2px solid #ae7517;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .manifest-error {
+          color: #ff9999;
+          font-style: italic;
+          text-align: center;
+          margin: 20px 0;
+        }
+
         .modal-footer {
           padding: 10px 20px;
           background: #555555;
@@ -181,7 +356,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           color: #666;
         }
 
-        /* Mobile optimizations */
+        /* mobile responsive display */
         @media (max-width: 768px) {
           .modal-overlay {
             padding: 10px;
@@ -190,6 +365,21 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           .modal-container {
             max-width: 98vw;
             max-height: 98vh;
+          }
+
+          .modal-content.with-manifest {
+            flex-direction: column;
+          }
+
+          .modal-content.with-manifest .modal-image-container {
+            flex: 0 0 50%;
+            padding-right: 20px;
+          }
+
+          .manifest-container {
+            flex: 0 0 50%;
+            border-left: none;
+            border-top: 1px solid #666;
           }
           
           .modal-header {
@@ -210,11 +400,33 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
             width: 35px;
             height: 35px;
           }
+
+          .manifest-text {
+            font-size: 0.75rem;
+          }
         }
 
-        /* Ensure modal appears above everything */
+        /* ensures modal appears above everything */
         .modal-overlay {
           backdrop-filter: blur(4px);
+        }
+
+        /* scrollbar for manifest */
+        .manifest-content::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .manifest-content::-webkit-scrollbar-track {
+          background: #333;
+        }
+
+        .manifest-content::-webkit-scrollbar-thumb {
+          background: #666;
+          border-radius: 3px;
+        }
+
+        .manifest-content::-webkit-scrollbar-thumb:hover {
+          background: #888;
         }
       `}</style>
     </div>

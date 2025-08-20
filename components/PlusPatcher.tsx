@@ -41,6 +41,8 @@ export default function PatchPage() {
         description: 'Changes battle & map sprites, and portraits',
         allowMultiple: false,
         zipFile: 'Styles.zip',
+        hasManifest: true,
+        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
         // filePattern: /Style/i // can be used filter a multi-catergory archive
       },
       {
@@ -49,6 +51,7 @@ export default function PatchPage() {
         description: 'Alternate Fonts, + Alt. Item Names with SBG',
         allowMultiple: false,
         zipFile: 'Fonts.zip',
+        hasManifest: false
       }
     ]
   }), []);

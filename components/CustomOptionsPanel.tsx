@@ -37,22 +37,29 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalImage, setModalImage] = useState<{
+  const [modalProps, setModalProps] = useState<{
     src: string;
     title: string;
     description: string;
+    manifestPath: string;
   } | null>(null);
 
   const handlePreviewClick = (patch: OptionalPatch) => {
-    if (patch.previewImage) {
-      setModalImage({
-        src: patch.previewImage,
-        title: patch.name,
-        description: patch.description
-      });
-      setModalOpen(true);
-    }
-  };
+  if (patch.previewImage) {
+    // Creates manifest path for styles category
+    const manifestPath = patch.category === 'styles' 
+      ? `/manifests/${patch.id}-manifest.txt`  // Pattern for patch.id matches manifest title
+      : undefined;
+    console.log(`Generated ${manifestPath} for manifest text file name.`)
+    setModalProps({
+      src: patch.previewImage,
+      title: patch.name,
+      description: patch.description,
+      manifestPath: manifestPath
+    });
+    setModalOpen(true);
+  }
+};
 
   const handlePatchToggle = (patchId: string, categoryId: string) => {
     const category = categories.find(cat => cat.id === categoryId);
@@ -209,14 +216,15 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
           )}
 
           {/* Image Preview Modal! */}
-            {modalImage && (
+            {modalOpen && modalProps && (
               <ImagePreviewModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
-                imageSrc={modalImage.src}
-                imageAlt={modalImage.title}
-                title={modalImage.title}
-                description={modalImage.description}
+                src={modalProps.src}
+                imageAlt={modalProps.title}
+                title={modalProps.title}
+                manifestPath={modalProps.manifestPath}
+                // description={modalProps.description} unused currently
               />
             )}
 
