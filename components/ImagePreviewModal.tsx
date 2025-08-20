@@ -59,7 +59,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
         {title && (
           <div className="modal-header">
             <h2>{title}</h2>
-            {description && <p>{description}</p>}
+            {/* {description && <p>{description}</p>} */}
           </div>
         )}
 
@@ -100,7 +100,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
 
         .modal-container {
           position: relative;
-          background: #444;
+          background: linear-gradient(#444,#444,#533608);
           border-radius: 12px;
           max-width: 95vw;
           max-height: 95vh;
@@ -131,6 +131,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
         .modal-close-btn:hover {
           background: rgba(0, 0, 0, 0.9);
           transform: scale(1.2);
+          border: 3px #ae7517 solid;
         }
 
         .modal-header {

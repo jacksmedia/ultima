@@ -53,8 +53,7 @@ const DownloadRomButton: React.FC<DownloadRomButtonProps> = ({
     <button
       onClick={handleDownload}
       disabled={isButtonDisabled}
-      className={`
-        px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200
+      className={`nicer-btn px-8 py-4
         ${isButtonDisabled
           ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50' 
           : 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'

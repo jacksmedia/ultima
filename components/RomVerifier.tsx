@@ -97,7 +97,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         
         <button
           onClick={handleBrowseClick}
-          className="px-4 py-2">
+          className="px-4 py-2 nicer-btn">
           Browse Files
         </button>
         

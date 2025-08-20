@@ -92,6 +92,7 @@ main div {
 }
 .option-box {
   background: linear-gradient(rgba(0,0,0,0.5),rgba(255,255,255,0.5));
+  border-radius: 5px;
 }
 
 .chosen-box {
@@ -104,6 +105,15 @@ main div {
 
 /* ImagePreviewModal */
 /* all styling is local! */
+
+
+/* all buttons: FileUploader, CustomOptionsPanel, DownloadRomButton */
+.nicer-btn {
+  border-radius: 5px;
+  border: #ae7517 3px groove;
+  /* background: linear-gradient(#7f5511, #333, #333, #7f5511); */
+  background: radial-gradient(#333, #333,#533608);
+}
 
 
 /* Workaround for the overhyped garbage that is Bootstrap columns */
@@ -173,7 +183,8 @@ main div {
   }
 }
 
-/* component adjustments */
+
+/* BothTitles */
 .both-titles {
   display: flex;
   flex-flow: row wrap;
@@ -184,7 +195,20 @@ main div {
   max-height: 224px;
 }
 
-/* patcher styling */
+
+
+/* index.tsx title styling */
+.app-title {
+  line-height: 1;
+  color: #e8a216;
+  font-size: 50px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 1), 4px 4px 0px #e87f16;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+
+/* older styling */
 .hidden-input {
   visibility: hidden;
 }
@@ -196,10 +220,7 @@ main div {
 
 /* per page styling */
 .plus-patcher-bg {
-  background: linear-gradient(#112,#60c, #000);
-}
-.plus-optional-patcher-bg {
-  background: linear-gradient(#112,#09c, #000);
+  background: radial-gradient(#187291, #237195, #000);
 }
 .discord-bg {
   background: linear-gradient(#112,#000, #000);

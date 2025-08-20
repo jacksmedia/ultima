@@ -209,7 +209,7 @@ export default function PatchPage() {
         <PlusTitle />
         <p className="text-center mb-2">
           Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
-          Choose alternate fonts and graphics if you wish!
+          Choose alternate graphics & a different font if you wish!
         </p>
         <DownloadRomButton
           onGenerateRom={generatePatchedRom} // Now uses generator function
@@ -251,11 +251,11 @@ export default function PatchPage() {
         <div className="p-4 bg-gray-800 rounded-lg">
           <h2 className="text-xl mb-2">ROM Ready:</h2>
           <p className="font-mono text-sm">
-            Original CRC32: {romState!.originalCRC32}
+            Uploaded CRC32: {romState!.originalCRC32}
           </p>
-          <p className="text-sm text-gray-300">
+          {/* <p className="text-sm text-gray-300">
             Matching patch: {romState!.matchingPatch.originalName}
-          </p>
+          </p> */}
           {selectedOptionalPatches.length > 0 && (
             <div className="mt-2">
               <p className="text-sm text-gray-300">Selected options:</p>

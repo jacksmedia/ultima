@@ -89,13 +89,13 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
   }
 
   return (
-    <div className="w-full max-w-2xl">
+    <div className="w-full max-w-2xl ">
       {/* Toggle Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         disabled={isDisabled}
         className={`
-          w-full px-6 py-4 rounded-lg font-medium text-lg transition-all
+          w-full px-6 py-4 rounded-lg font-medium text-lg transition-all nicer-btn
           ${isDisabled 
             ? 'text-gray cursor-not-allowed' 
             : 'text-white'
@@ -179,7 +179,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                             handlePreviewClick(patch);
                           }}
                           disabled={isDisabled}
-                          className="mx-auto px-2 py-2 text-white"
+                          className="mx-auto px-2 py-2 text-white nicer-btn"
                         >
                           Preview
                         </button>
@@ -201,7 +201,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
               <button
                 onClick={() => onSelectionChange([])}
                 disabled={isDisabled}
-                className="text-sm text-gray-300 hover:text-white underline disabled:cursor-not-allowed disabled:opacity-50"
+                className="mx-auto px-2 py-2 text-white nicer-btn"
               >
                 Clear All Selections
               </button>
