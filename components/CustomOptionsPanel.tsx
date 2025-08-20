@@ -49,7 +49,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
     // Creates manifest path for styles category
     const manifestPath = patch.category === 'styles' 
       ? `/manifests/${patch.id}-manifest.txt`  // Pattern for patch.id matches manifest title
-      : undefined;
+      : ``;
     console.log(`Generated ${manifestPath} for manifest text file name.`)
     setModalProps({
       src: patch.previewImage,
