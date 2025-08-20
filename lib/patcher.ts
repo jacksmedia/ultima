@@ -4,9 +4,9 @@
  * @param patchData - The IPS patch data
  * @returns The patched ROM data
  */
-export function applyIPS(rom: Uint8Array, patchData: Uint8Array): Uint8Array {
+export function applyIPS(romData: Uint8Array, patchData: Uint8Array): Uint8Array {
   // Create a copy of the ROM to avoid modifying the original
-  const patchedRom = new Uint8Array(rom);
+  const patchedRom = new Uint8Array(romData);
   
   // Check for IPS header "PATCH"
   const header = new TextDecoder().decode(patchData.slice(0, 5));

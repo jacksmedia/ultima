@@ -139,7 +139,8 @@ export default function PatchPage() {
 
     try {
       // Loads ROM bytes
-      const romBytes = new Uint8Array(await romFile.arrayBuffer());
+      const arrayBuffer = await romFile.arrayBuffer();
+      const romBytes = new Uint8Array(arrayBuffer); // needed for specificity in Type
       // Checks, removes header if present
       const headerlessRom = removeHeaderIfPresent(romBytes);
       // Calculates original ROM CRC32
@@ -186,9 +187,9 @@ export default function PatchPage() {
     }
     console.log('Generating patched ROM...');
     // Starts with the processed ROM...
-    let patchedRom = new Uint8Array(romState.processedRom);
+    let patchedRom = new Uint8Array(romState.processedRom.buffer.slice(0)); // snaps the Type into conformity! What madness!
     // Applies main patch
-    patchedRom = applyIPS(patchedRom, romState.matchingPatch.data);
+    patchedRom = applyIPS(patchedRom, romState.matchingPatch.data as Uint8Array);
     console.log(`Applied main patch: ${romState.matchingPatch.originalName}`);
     // Applies optional patches (in order of selection)
     const selectedOptionals = getSelectedPatches(selectedOptionalPatches);
