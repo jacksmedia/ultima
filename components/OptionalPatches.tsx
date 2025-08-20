@@ -1,3 +1,4 @@
+// OptionalPatches.tsx developed with Claude Sonnet 4
 import React, { useState, useEffect } from 'react';
 import ExtensibleRomVerifier, { RomValidationRule } from './ExtensibleRomVerifier';
 import { validateFF4UltimaRom, getAvailablePatchOptions, PatchOption, extractRomInfo, RomInfo } from '@/lib/RomUtilities';

@@ -1,3 +1,4 @@
+// RomVerifier.tsx developed with Claude Sonnet 4
 import React, { useState, useRef } from 'react';
 import Image from "next/image";
 

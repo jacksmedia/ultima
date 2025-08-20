@@ -1,4 +1,4 @@
-// developed with Claude Sonnet 4
+// PlusPatcher.tsx developed with Claude Sonnet 4
 import React, { useEffect, useMemo, useState } from 'react';
 import JSZip from 'jszip';
 import SpinnerOverlay from '@/components/SpinnerOverlay';

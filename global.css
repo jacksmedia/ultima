@@ -103,12 +103,7 @@ main div {
 
 
 /* ImagePreviewModal */
-.modal-image {
-  width: 300%;
-  max-width: 90vw;
-  height: 300%;
-  max-height: 90vh;
-}
+/* all styling is local! */
 
 
 /* Workaround for the overhyped garbage that is Bootstrap columns */
