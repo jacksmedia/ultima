@@ -1,5 +1,5 @@
-A Fool's Reckoning Alt Style by Guysons
-
+A Fool's Reckoning Alt Style by Guysons\n
+---------------------------------------\n
 ● Battle Sprites:
 - Cid (RK, T92).ips\n
 - DKC (URK, closed helm, Nicoc1991).ips\n

@@ -1,5 +1,5 @@
-A Fool's Reckoning Style by Guysons
-
+A Fool's Reckoning Style by Guysons\n
+-----------------------------------\n
 _FF4 SR Portraits 1.2.2 Main Patch.ips\n
 Cid (RK, from T92).ips\n
 DKC (RK, darkest, by tsushiy).ips\n

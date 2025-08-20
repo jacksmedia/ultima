@@ -1,3 +1,5 @@
+Curated by xJ4cks\n
+-----------------\n
 Final Fantasy IV Ultima - Sylph-Bloodfeast Fix.ips\n
 map Edward (better, by xJ4cks).ips\n
 map Yang (red pants, moustache, by xJ4cks).ips\n

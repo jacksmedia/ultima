@@ -51,6 +51,7 @@ const OptionalPatches: React.FC = () => {
       const selectedPatchPaths = patchOptions
         .filter(option => selectedPatches.includes(option.id))
         .map(option => option.patchPath);
+      
 
       // Apply all selected patches!
       const patchedRomData = await applyIpsPatches(romFile, selectedPatchPaths);

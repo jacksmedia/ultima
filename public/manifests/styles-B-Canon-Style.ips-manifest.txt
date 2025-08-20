@@ -1,5 +1,5 @@
-FF4 Ultima Canon Style by epigonone
-
+FF4 Ultima Canon Style by epigonone\n
+-----------------------------------\n
 Menu Portraits:
 1. FF4UP PSP portraits (from tsushiy & Gens).ips\n
 2. Edited both the colors of Cid's Beard

@@ -1,3 +1,5 @@
+Curated by xJ4cks\n
+-----------------\n
 _Golbez (PR battle + map sprites, by MObreck).ips\n
 Cid (PR, by xJ4cks).ips\n
 DKC (PR, storm armor, by Nicoc1991).ips\n
