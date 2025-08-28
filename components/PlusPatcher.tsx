@@ -62,16 +62,16 @@ export default function PatchPage() {
         hasManifest: true,
         manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
       },
-       {
-        id: 'styles',
-        title: 'Styles',
-        description: 'Changes all hero graphics',
-        allowMultiple: false,
-        zipFile: 'Styles.zip',
-        hasManifest: true,
-        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
-        // filePattern: /Style/i // can be used filter a multi-catergory archive
-      },
+      // {
+      //   id: 'styles',
+      //   title: 'Styles',
+      //   description: 'Changes all hero graphics',
+      //   allowMultiple: false,
+      //   zipFile: 'Styles.zip',
+      //   hasManifest: true,
+      //   manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
+      //   // filePattern: /Style/i // can be used filter a multi-catergory archive
+      // },
       {
         id: 'fonts',
         title: 'Alt Fonts (+ Item Names)',
