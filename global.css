@@ -85,6 +85,13 @@ main div {
 }
 
 /* CustomOptionsPanel */
+.custom-options-butto {
+  width: 50vw;
+  max-width: 50vw;
+  height: 25vh;
+  max-height: 25vh;
+}
+
 .hidden-radio {
   position: fixed;
   opacity: 0;

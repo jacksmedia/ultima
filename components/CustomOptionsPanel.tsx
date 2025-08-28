@@ -99,13 +99,13 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
   }
 
   return (
-    <div className="w-full max-w-2xl ">
+    <div className="">
       {/* Toggle Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         disabled={isDisabled}
         className={`
-          w-full px-6 py-4 rounded-lg font-medium text-lg transition-all nicer-btn
+          px-2 py-2 mt-3 custom-options-button nicer-btn
           ${isDisabled 
             ? 'text-gray cursor-not-allowed' 
             : 'text-white'
@@ -114,7 +114,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
         `}
       >
         <div className="flex items-center justify-between p-2">
-          <span>Do You Want Custom Options?</span>
+          <span>Want Custom Options?</span>
           <div className="flex items-center space-x-2">
             {getSelectedCount() > 0 && (
               <span className="px-2 py-1 text-sm">
