@@ -1,7 +1,0 @@
-FF4UP PSP portraits (from tsushiy & Gens).ips
-portrait Cid (PSP Style, from tsushiy & xJ4cks).ips
-portrait Palom (PSP Style Alt, by tsushiy & xJ4cks).ips
-portrait Porom (PSP Style Alt, by tsushiy & xJ4cks).ips
-portrait Rosa (PSP Style Serious, by gvdn).ips
-portrait Rydia (PSP Style Alt, by gvdn).ips
-portrait Tellah (PSP Style, from tsushiy & xJ4cks).ips

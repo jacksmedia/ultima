@@ -81,7 +81,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
   if (!isOpen) return null;
 
   const hasManifest = manifestPath && !manifestError;
-
+  console.log(manifestPath);
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
