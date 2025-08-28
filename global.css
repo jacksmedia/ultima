@@ -92,7 +92,10 @@ main div {
 }
 .option-box {
   background: linear-gradient(rgba(0,0,0,0.5),rgba(255,255,255,0.5));
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   border-radius: 5px;
+  min-width: 140px;
 }
 
 .chosen-box {

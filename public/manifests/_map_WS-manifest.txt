@@ -1,0 +1,3 @@
+_map sprites FF4 WS (by tsushiy, gvdn).ips
+map Cecil n Rosa Cosmic Colors.ips
+map Golbez (Custom Black, by AerospaceCoot35).ips

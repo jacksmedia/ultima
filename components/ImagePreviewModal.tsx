@@ -165,7 +165,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
           justify-content: center;
           align-items: center;
           z-index: 8999;
-          padding: 20px;
+          padding: 8px;
           box-sizing: border-box;
         }
 
@@ -206,7 +206,7 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
         }
 
         .modal-header {
-          padding: 20px 20px 10px 20px;
+          padding: 4px 8px 4px 8px;
           border-bottom: 1px solid #666666;
           text-align: center;
         }
@@ -214,13 +214,13 @@ const ImagePreviewModal: React.FC<ImagePreviewModalProps> = ({
         .modal-header h2 {
           margin: 0 0 8px 0;
           color: #e5e5e5;
-          font-size: 1.5rem;
+          font-size: 1.1rem;
         }
 
         .modal-header p {
           margin: 0;
           color: #ddd;
-          font-size: 0.95rem;
+          font-size: 0.85rem;
         }
 
         /* main content container */

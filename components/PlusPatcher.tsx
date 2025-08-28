@@ -36,13 +36,33 @@ export default function PatchPage() {
   const optionalPatchesConfig = useMemo(() => ({
     categories : [
       {
-        id: 'styles',
-        title: 'Hero Styles',
-        description: 'Changes battle & map sprites, and portraits',
+        id: 'battle',
+        title: 'Battle Sprites',
+        description: 'Changes hero graphics in battle',
         allowMultiple: false,
-        zipFile: 'Styles.zip',
+        zipFile: 'Battles.zip',
         hasManifest: true,
-        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
+        manifestPath: (patchName: string) => `/manifests/_${patchName}-manifest.txt`
+        // filePattern: /Style/i // can be used filter a multi-catergory archive
+      },
+      {
+        id: 'maps',
+        title: 'Map Sprites',
+        description: 'Changes the heroes\' map avatars',
+        allowMultiple: false,
+        zipFile: 'Maps.zip',
+        hasManifest: true,
+        manifestPath: (patchName: string) => `/manifests/_${patchName}-manifest.txt`
+        // filePattern: /Style/i // can be used filter a multi-catergory archive
+      },
+      {
+        id: 'portraits',
+        title: 'Portraits',
+        description: 'Changes the hero faces in the menu',
+        allowMultiple: false,
+        zipFile: 'Portraits.zip',
+        hasManifest: true,
+        manifestPath: (patchName: string) => `/manifests/_${patchName}-manifest.txt`
         // filePattern: /Style/i // can be used filter a multi-catergory archive
       },
       {
