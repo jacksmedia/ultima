@@ -1,0 +1,19 @@
+It would be ideal to have more people learn how to actually make patches!
+
+Either use STK to inject the PNG files,
+OR copy paste changes made from the ff6tools imports to a clean Ultima rom,
+then make a patch from that.
+
+I write guides explaining how to do *exactly what I do*. You can learn to do it, too.
+
+:dart: Specific ff6tools Notes
+https://www.notion.so/xj4cks/FF4-Edits-ff6tools-Notes-1fe6bad314298019aa8ee74e167016d0
+
+:bookmark_tabs: Specific Tiles Kitten notes
+https://www.notion.so/xj4cks/Export-Import-Tiles-w-STK-1fd6bad3142980b58106e4f168f391be?pvs=26&qid=&origin=#1fd6bad3142980e18cc4f224a6cf1b78
+
+:notebook:  Full notebook of FFIV & FFV work
+https://www.notion.so/xj4cks/Work-in-Progress-Notes-5219b3b46a9a4da78dbe0c56dc193afc
+
+
+- xJ4cks, 2025
