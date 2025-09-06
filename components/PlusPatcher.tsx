@@ -73,6 +73,14 @@ export default function PatchPage() {
       //   // filePattern: /Style/i // can be used filter a multi-catergory archive
       // },
       {
+        id: 'tweaks',
+        title: 'Game Adjustments',
+        description: 'Tweaks to the battle or menu systems',
+        allowMultiple: true,
+        zipFile: 'Tweaks.zip',
+        hasManifest: false
+      },
+      {
         id: 'fonts',
         title: 'Alt Fonts (+ Item Names)',
         description: 'Alternate Fonts, + Alt. Item Names with SBG',
