@@ -173,8 +173,16 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                       />
                       
                       <div className="">
-                        <div className="font-medium text-white">
-                          {patch.name}
+                        <h5>{patch.name}</h5>
+                        <div
+                          className={`mx-auto px-2 py-2 text-white nicer-btn 
+                            ${isPatchSelected(patch.id) 
+                              ? 'chosen-box' 
+                              : 'unchosen-box'
+                            }
+                          `}
+                            >
+                          Select
                         </div>
                         {/* <div className="text-sm text-gray-300 mt-1">
                           {patch.description}

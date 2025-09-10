@@ -97,6 +97,12 @@ main div {
   opacity: 0;
   pointer-events: none;
 }
+.hidden-checkbox {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .option-box {
   background: linear-gradient(rgba(0,0,0,0.5),rgba(255,255,255,0.5));
   margin-bottom: 1rem;

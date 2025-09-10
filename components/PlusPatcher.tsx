@@ -75,7 +75,7 @@ export default function PatchPage() {
       {
         id: 'tweaks',
         title: 'Game Adjustments',
-        description: 'Tweaks to the battle or menu systems',
+        description: 'Tweaks to the battle or menu systems (Multiple possible)',
         allowMultiple: true,
         zipFile: 'Tweaks.zip',
         hasManifest: false
