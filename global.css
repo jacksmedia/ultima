@@ -145,6 +145,22 @@ main div {
   }
 }
 
+/* Ulti.tsx */
+
+/* Ulti container styling */
+.per-patch-select {
+  border: 'dotted 1px red';
+  background: '#6663';
+  padding: '3px';
+  margin-bottom: '5px';
+}
+
+
+
+
+
+
+
 
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
