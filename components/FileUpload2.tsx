@@ -35,7 +35,8 @@ const FileUpload2: React.FC<FileUploadProps> = ({ onFileUpload, onChecksumError 
   return (
     <div>
       <h3>Upload a binary file (.smc or .sfc)</h3>
-      <input type="file" accept=".smc,.sfc" onChange={handleFileChange} />
+      <input className="bg-gray-500 p-4 rounded shadow-md m-2"
+      type="file" accept=".smc,.sfc" onChange={handleFileChange} />
     </div>
   );
 };

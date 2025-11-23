@@ -22,7 +22,7 @@ const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }
       setLoading(true);
       try {
         // const patchFiles = await fetchPatches(category);
-        const response = await fetch(`/patches/${category}`);
+        const response = await fetch(`/patches/${category}.json`);
         const { patchFiles } = await response.json();
         const patches = patchFiles.map((patchFile) => ({
           id: patchFile,
