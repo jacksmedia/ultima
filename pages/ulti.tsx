@@ -34,7 +34,8 @@ const Ulti: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 bg-indigo-700 h-screen">
-      <h1 className="text-3xl font-bold mb-4">Binary Patching Tool</h1>
+      <h1 className="text-3xl font-bold mb-4">FF4 Ultima Options</h1>
+      <h4>The "Ulti Patcher"</h4>
       <FileUpload onFileUpload={handleFileUpload} onChecksumError={handleChecksumError} />
       {file && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">

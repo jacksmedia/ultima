@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchPatches } from '../lib/patchFetch';
+// import { fetchPatches } from '../lib/patchFetch';
 
 interface Patch {
   id: string;
@@ -15,11 +15,15 @@ interface PatchSelectorProps {
 const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }) => {
   const [patches, setPatches] = useState<Patch[]>([]);
   const [selectedPatch, setSelectedPatch] = useState<Patch | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const loadPatches = async () => {
+      setLoading(true);
       try {
-        const patchFiles = await fetchPatches(category);
+        // const patchFiles = await fetchPatches(category);
+        const response = await fetch(`/patches/${category}`);
+        const { patchFiles } = await response.json();
         const patches = patchFiles.map((patchFile) => ({
           id: patchFile,
           name: patchFile,
@@ -28,6 +32,8 @@ const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }
         setPatches(patches);
       } catch (err) {
         console.error('Failed to load patches:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,12 +51,12 @@ const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }
 
   return (
     <div className="bg-gray-500 p-4 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-2">{category} Patches</h3>
+      <h3 className="text-lg font-semibold mb-2">{category} options</h3>
       <select
         className="w-full p-2 border border-gray-300 rounded-md"
         onChange={handlePatchChange}
       >
-        <option value="">Select a patch</option>
+        <option value="">Select an option</option>
         {patches.map((patch) => (
           <option key={patch.id} value={patch.id}>
             {patch.name}
