@@ -13,7 +13,8 @@ const ApplyPatches: React.FC<ApplyPatchesProps> = ({ selectedPatches, onPatchesA
 
   return (
     <div>
-      <button onClick={handleApplyPatches}>Apply Patches</button>
+      <button className="bg-gray-500 p-4 rounded shadow-md m-2"
+      onClick={handleApplyPatches}>Apply Patches</button>
     </div>
   );
 };

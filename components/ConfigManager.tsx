@@ -34,7 +34,8 @@ const ConfigManager: React.FC<ConfigManagerProps> = ({ selectedPatches, onConfig
 
   return (
     <div>
-      <button onClick={handleGenerateConfig}>Generate Config</button>
+      <button className="bg-gray-500 p-4 rounded shadow-md m-2"
+      onClick={handleGenerateConfig}>Generate Config</button>
       <input type="file" accept=".txt" onChange={handleUploadConfig} />
     </div>
   );

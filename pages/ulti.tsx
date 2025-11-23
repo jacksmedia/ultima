@@ -33,15 +33,15 @@ const Ulti: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-indigo-700 h-screen">
       <h1 className="text-3xl font-bold mb-4">Binary Patching Tool</h1>
       <FileUpload onFileUpload={handleFileUpload} onChecksumError={handleChecksumError} />
       {file && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-          <PatchSelector category="A" onPatchSelect={(patch) => handlePatchSelect({ ...patch, category: 'A' })} />
-          <PatchSelector category="B" onPatchSelect={(patch) => handlePatchSelect({ ...patch, category: 'B' })} />
-          <PatchSelector category="C" onPatchSelect={(patch) => handlePatchSelect({ ...patch, category: 'C' })} />
-          <PatchSelector category="D" onPatchSelect={(patch) => handlePatchSelect({ ...patch, category: 'D' })} />
+          <PatchSelector category="battle" onPatchSelect={(patch) => handlePatchSelect({ ...patch, category: 'battle' })} />
+          <PatchSelector category="map" onPatchSelect={(patch) => handlePatchSelect({ ...patch, category: 'map' })} />
+          <PatchSelector category="portrait" onPatchSelect={(patch) => handlePatchSelect({ ...patch, category: 'portrait' })} />
+          <PatchSelector category="game" onPatchSelect={(patch) => handlePatchSelect({ ...patch, category: 'game' })} />
         </div>
       )}
       {file && (

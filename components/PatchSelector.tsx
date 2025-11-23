@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { fetchPatches } from '../lib/patchFetch';
 
 interface Patch {
   id: string;
@@ -16,14 +17,13 @@ const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }
   const [selectedPatch, setSelectedPatch] = useState<Patch | null>(null);
 
   useEffect(() => {
-    const fetchPatches = async () => {
+    const loadPatches = async () => {
       try {
-        const response = await fetch(`/patches/${category}/manifest.json`);
-        const patchList = await response.json();
-        const patches = patchList.map((patch: string) => ({
-          id: patch,
-          name: patch,
-          previewUrl: `/patches/${category}/${patch.replace('.ips', '.png')}`,
+        const patchFiles = await fetchPatches(category);
+        const patches = patchFiles.map((patchFile) => ({
+          id: patchFile,
+          name: patchFile,
+          previewUrl: `/patches/${category}/${patchFile.replace('.ips', '.png')}`,
         }));
         setPatches(patches);
       } catch (err) {
@@ -31,7 +31,7 @@ const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }
       }
     };
 
-    fetchPatches();
+    loadPatches();
   }, [category]);
 
   const handlePatchChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -44,7 +44,7 @@ const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }
   };
 
   return (
-    <div className="bg-gray-100 p-4 rounded-lg shadow-md">
+    <div className="bg-gray-500 p-4 rounded-lg shadow-md">
       <h3 className="text-lg font-semibold mb-2">{category} Patches</h3>
       <select
         className="w-full p-2 border border-gray-300 rounded-md"
