@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-// import { fetchPatches } from '../lib/patchFetch';
 
-interface Patch {
+interface PatchFile {
   id: string;
   name: string;
   previewUrl: string;
@@ -9,21 +8,23 @@ interface Patch {
 
 interface PatchSelectorProps {
   category: string;
-  onPatchSelect: (patch: Patch) => void;
+  onPatchSelect: (patch: PatchFile) => void;
 }
 
 const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }) => {
-  const [patches, setPatches] = useState<Patch[]>([]);
-  const [selectedPatch, setSelectedPatch] = useState<Patch | null>(null);
+  const [patches, setPatches] = useState<PatchFile[]>([]);
+  const [selectedPatch, setSelectedPatch] = useState<PatchFile | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const loadPatches = async () => {
       setLoading(true);
       try {
-        // const patchFiles = await fetchPatches(category);
         const response = await fetch(`/patches/${category}.json`);
-        const { patchFiles } = await response.json();
+        if (!response.ok) {
+          throw new Error(`Failed to fetch patches for category: ${category}`);
+        }
+        const patchFiles = await response.json() as string[];
         const patches = patchFiles.map((patchFile) => ({
           id: patchFile,
           name: patchFile,
