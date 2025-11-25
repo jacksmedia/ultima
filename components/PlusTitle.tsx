@@ -3,7 +3,7 @@ import Image from "next/image";
 const PlusTitle = () => {
   return(
     <Image
-        className=""
+        className="nicer-btn"
         src="/img/Title.png"
         alt="FF4 Ultima logo"
         width={256}

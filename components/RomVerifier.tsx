@@ -78,27 +78,34 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
       />
       
       <div className=''>
-        <Image 
+        {/* <Image 
           src="/cloud-upload.svg"
           width={138}
           height={130}
           color="white"
           alt="cloud upload icon"
-        />
+        /> */}
         {fileName ? (
-          <p className="mb-2">
+          <p className="mb-5">
             Selected: <span className="font-semibold">{fileName}</span>
           </p>
         ) : (
-          <p className="mb-2">
+          <h3 className="mb-5">
             Drop your ROM file here or
-          </p>
+          </h3>
         )}
         
         <button
           onClick={handleBrowseClick}
-          className="px-4 py-2 nicer-btn">
-          Browse Files
+          className="grid place-items-center px-4 py-2 mx-auto nicer-btn">
+          <h5>Upload a File</h5> 
+          <Image 
+            src="/cloud-upload.svg"
+            width={42}
+            height={39}
+            color="white"
+            alt="cloud upload icon"
+          />
         </button>
         
         <p className="mt-2 text-xs">

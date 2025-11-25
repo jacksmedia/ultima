@@ -87,10 +87,10 @@ main div {
 }
 
 /* CustomOptionsPanel */
-.custom-options-butto {
+.custom-options-button {
   width: 50vw;
   max-width: 50vw;
-  height: 25vh;
+  height: 15vh;
   max-height: 25vh;
 }
 
