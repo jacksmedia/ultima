@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: 'https://ff4ultima-plus.vercel.app/guides.html', label: 'Guides' },
+  { href: '/guides', label: 'Guides' },
   { href: 'https://ff4ultima-plus.vercel.app/classic.html', label: 'Ultima Classic' },
   { href: 'https://ff4ultima-plus.vercel.app/ulti.html', label: 'Custom' },
   { href: 'https://ff4ultima-plus.vercel.app/indev.html', label: 'In Dev.' },
