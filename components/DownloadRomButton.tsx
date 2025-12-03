@@ -2,7 +2,10 @@
 import React, { useState } from 'react';
 
 interface DownloadRomButtonProps {
-  onGenerateRom: () => Promise<Uint8Array>; // NEW: Function to generate patched ROM
+  onGenerateRom: () => Promise<{
+    patchedRom: Uint8Array;
+    readmesToDownload: { filename: string; content: string }[]
+  }>; // now offers readme on pattern match to filename
   filename: string;
   disabled?: boolean;
 }
@@ -17,28 +20,41 @@ const DownloadRomButton: React.FC<DownloadRomButtonProps> = ({
   const handleDownload = async () => {
     if (disabled) return;
     
-    setIsGenerating(true);
-    
     try {
-      // NEW: Generate the patched ROM when download is clicked
+      setIsGenerating(true);
+
+      // Generate patched rom; retrieve any readmes
       console.log('Generating patched ROM for download...');
-      const romData = await onGenerateRom();
+      const { patchedRom, readmesToDownload } = await onGenerateRom();
       
       // Create and trigger download
-      const blob = new Blob([romData], { type: 'application/octet-stream' });
-      const url = URL.createObjectURL(blob);
+      const romBlob = new Blob([patchedRom], { type: 'application/octet-stream' });
+      const romUrl = URL.createObjectURL(romBlob);
       
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const romLink = document.createElement('a');
+      romLink.href = romUrl;
+      romLink.download = filename;
+      document.body.appendChild(romLink); // DOM interacting w link object
+      romLink.click();
+      document.body.removeChild(romLink);
+      URL.revokeObjectURL(romUrl); // Cleans up object URL
+      console.log('ROM download completed.');
+
+      // Readme download if available
+      for (const readme of readmesToDownload) {
+        const readmeBlob = new Blob([readme.content], { type: 'text/plain' });
+        const readmeUrl = URL.createObjectURL(readmeBlob);
+        const readmeLink = document.createElement('a');
+        readmeLink.href = readmeUrl;
+        readmeLink.download = readme.filename;
+        document.body.appendChild(readmeLink); // DOM interacting w link object
+        readmeLink.click();
+        document.body.removeChild(readmeLink);
+        URL.revokeObjectURL(readmeUrl); // Clean up objet URL
+        console.log(`Downloaded readme file: ${readme.filename}`)
+      }
+
       
-      // Clean up the object URL
-      URL.revokeObjectURL(url);
-      
-      console.log('Download completed successfully');
     } catch (error) {
       console.error('Error generating ROM for download:', error);
       alert(`Failed to generate patched ROM: ${error instanceof Error ? error.message : 'Unknown error'}`);

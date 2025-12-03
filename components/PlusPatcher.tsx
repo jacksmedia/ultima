@@ -9,6 +9,7 @@ import { applyIPS } from '@/lib/patcher';
 import computeCRC32 from '@/lib/crc32';
 import { useOptionalPatches } from '@/hooks/useOptionalPatches';
 import PlusTitle from "@/components/PlusTitle";
+import OptionalPatches from './OptionalPatches';
 
 type Patch = {
   name: string;
@@ -216,7 +217,10 @@ export default function PatchPage() {
   };
 
   // Generates patched ROM (called by DownloadRomButton)
-  const generatePatchedRom = async (): Promise<Uint8Array> => {
+  const generatePatchedRom = async (): Promise<{
+    patchedRom: Uint8Array;
+    readmesToDownload: {filename: string; content: string }[]
+  }> => {
     if (!romState) {
       throw new Error('No ROM loaded');
     }
@@ -226,14 +230,44 @@ export default function PatchPage() {
     // Applies main patch
     patchedRom = applyIPS(patchedRom, romState.matchingPatch.data as Uint8Array);
     console.log(`Applied main patch: ${romState.matchingPatch.originalName}`);
+
+
+
     // Applies optional patches (in order of selection)
     const selectedOptionals = getSelectedPatches(selectedOptionalPatches);
+    // Newest feature to conditionally download readme for SBG patches
+    const readmesToDownload: { filename: string; content: string }[] = [];
+
     for (const optionalPatch of selectedOptionals) {
       console.log(`Applying optional patch: ${optionalPatch.name}`);
       patchedRom = applyIPS(patchedRom, optionalPatch.data);
+      
+      // Check to see if readme required
+      if (optionalPatch.filename.includes('SBG')) {
+        try{
+          // Construct readme filename (same as .ips but .txt)
+          const readmeFilename = optionalPatch.filename.replace(/\.ips$/i, '.txt');
+          const readmePath = `/readmes/${readmeFilename}`;
+          
+          // Fetch the readme content
+          const readmeResponse = await fetch(readmePath);
+          if (readmeResponse.ok) {
+            const readmeContent = await readmeResponse.text();
+            readmesToDownload.push({
+              filename: readmeFilename,
+              content: readmeContent
+            });
+            console.log(`Queued readme for download: ${readmeFilename}`);
+          }
+        } catch(err){
+          console.warn(`Failed to load readme for ${optionalPatch.filename}:`, err);
+          // Non-blocking error, readme fail is not critical
+        }
+      }
     }
+
     console.log(`Final patched ROM generated with ${selectedOptionals.length} optional patches`);
-    return patchedRom;
+    return { patchedRom, readmesToDownload };
   };
 
   // Control checks
@@ -251,7 +285,7 @@ export default function PatchPage() {
           Choose alternate graphics & a different font if you wish!
         </p>
         <DownloadRomButton
-          onGenerateRom={generatePatchedRom} // Now uses generator function
+          onGenerateRom={generatePatchedRom} // Upgraded to offer readme files conditionally
           filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
           disabled={!hasValidRom || isPatching}
         />
