@@ -1,13 +1,19 @@
    FINAL FANTASY IV - ULTIMA PLUS
-     SQUISHBGONE v1.14 CHANGELOG
+     SQUISHBGONE v1.15 CHANGELOG
            by FlamePurge
 
 
+CHANGES: Menu text related to items and spells, as well as pieces of dialogue that reference those items and spells.
+
+EFFECT: Removes usage of most squish tiles (2-3+ letters shrunk together into 1-2+ letter's width, to circumvent letter limitations) through various means for a clean, appealing aesthetic. At times, this involved renaming items and spells. This was made sheerly due to the script supervisor's preference to, more or less, work within the original letter constraints the game was developed with.
+
 CHANGELOG
 ---------
-- v1.14   Compliant with FFIV - Ultima Plus v1.08.
-          Corrected reference of Magus (Sorcerer) class in dialogue for consistency.
+- v1.15   Compliant with FF4UP v1.09.
 
+
+- v1.14   Compliant with FF4UP v1.08.
+          Corrected reference of Magus (Sorcerer) class in dialogue for consistency.
 
 - v1.13   Compliant with altered Training Room tutorials.
 
@@ -82,7 +88,7 @@ WhiteRobe    -> White (Robe)
 Black Belt   -> Blk.Belt // SHORT FOR "Black Belt"
 
 ARM-WEAR:       12345678
-ThiefRing    -> Thief (Ring)
+SneakRing    -> Sneak (Ring)
 BerserkRing  -> Berserk (Ring)
 OmegaRing    -> Omega (Ring)
 Ruby Ring    -> RubyRing
