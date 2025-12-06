@@ -46,12 +46,12 @@ const DownloadRomButton: React.FC<DownloadRomButtonProps> = ({
         const readmeUrl = URL.createObjectURL(readmeBlob);
         const readmeLink = document.createElement('a');
         readmeLink.href = readmeUrl;
-        readmeLink.download = readme.filename;
-        document.body.appendChild(readmeLink); // DOM interacting w link object
+        readmeLink.download = `/readmes/SquishBGone_Changelog_${readme.filename}_vsStandardFF4UP.txt`;
+        document.body.appendChild(readmeLink); 
         readmeLink.click();
         document.body.removeChild(readmeLink);
-        URL.revokeObjectURL(readmeUrl); // Clean up objet URL
-        console.log(`Downloaded readme file: ${readme.filename}`)
+        URL.revokeObjectURL(readmeUrl);
+        console.log(`Downloaded readme file: ${readmeLink.download}`)
       }
 
       

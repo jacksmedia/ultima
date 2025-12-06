@@ -60,7 +60,7 @@ const Guides: NextPage = () => {
 				</a>
 			</li>
 		</ul>
-		<h4>Bestiary omissions</h4>
+		<h4>Bestiary Omissions</h4>
 		<ul>
 			<li>The 4 Fiends fight in the Giant</li>
 			<li>The Golbez fought by Tellah in his cutscene</li>
@@ -69,6 +69,23 @@ const Guides: NextPage = () => {
 			<li>The shadow dragon summoned by Golbez</li>
 			<li>Dark Elf when you show up WITHOUT Whisperweed</li>
 			<li>The Zeromus fought by Golbez & FuSoYa in the cutscene at the end</li>
+		</ul>
+		<h4>Rom Offsets for Sprite Hacking</h4>
+		<ul>
+			<li>
+				<a target="_blank" href="/ff4u-hero-offsets.json">
+					<h3>
+						Cecil, Kain, Rosa, Rydia/Kydia,<br/>Edge, Yang, Edward,<br/>Palom, Porom, Edward,<br/>Tellah, Cid, FuSoYa
+					</h3>
+				</a>
+			</li>
+			<li>
+				<a target="_blank" href="/ff4u-extra-offsets.json">
+					<h3>
+						Golbez & Anna
+					</h3>
+				</a>
+			</li>
 		</ul>
       </div>
     </Layout>

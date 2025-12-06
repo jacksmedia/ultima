@@ -132,7 +132,10 @@ main div {
   /* background: linear-gradient(#7f5511, #333, #333, #7f5511); */
   background: radial-gradient(#333, #333,#533608);
 }
-
+.blue-border { /* similar to above, only for Ultima Classic title image */
+  border-radius: 5px;
+  border: #1788ae 3px groove;
+}
 
 /* Workaround for the overhyped garbage that is Bootstrap columns */
 .two-column-layout {

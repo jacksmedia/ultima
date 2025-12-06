@@ -4,7 +4,7 @@ const ClassicTitle = () => {
   return(
     <a target="_blank" href="https://ff4ultima-plus.vercel.app/classic.html">
       <Image
-        className=""
+        className="blue-border"
         src="/img/classicTitle.png"
         alt="FF4 Ultima logo"
         width={256}
