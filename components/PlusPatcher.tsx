@@ -284,6 +284,7 @@ export default function PatchPage() {
           Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
           Choose alternate graphics & a different font if you wish!
         </p>
+        <h5>Version 1.1, December 2025</h5>
         <DownloadRomButton
           onGenerateRom={generatePatchedRom} // Upgraded to offer readme files conditionally
           filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
