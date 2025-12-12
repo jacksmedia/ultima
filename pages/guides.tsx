@@ -8,7 +8,7 @@ const Guides: NextPage = () => {
       <div className='guides-bg'>
         <h1 className="">FF4 Ultima Guides</h1>
           <BothTitles />
-        <h3>Guides written by Lily 420 69 😎 of Team Ultima</h3>
+        <h3>Guides written by Lily of Team Ultima</h3>
         <ul>
         	<li>
 			    <a target="_blank" href="https://docs.google.com/document/d/1O77TDKTG1dWDrHaT40NECik6Cz3rtYmUoazxTQPxnIY/edit?tab=t.0">
