@@ -105,10 +105,10 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
         onClick={() => setIsExpanded(!isExpanded)}
         disabled={isDisabled}
         className={`
-          px-2 py-2 mt-3 custom-options-button nicer-btn
+          px-2 py-2 mt-3 custom-options-button 
           ${isDisabled 
-            ? 'text-gray cursor-not-allowed' 
-            : 'text-white'
+            ? 'text-gray cursor-not-allowed nicer-btn' 
+            : 'text-white nicer-btn2'
           }
           ${isExpanded ? 'rounded-b-none' : ''}
         `}

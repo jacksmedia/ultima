@@ -131,7 +131,12 @@ main div {
   border: #ae7517 3px groove;
   background: radial-gradient(#333, #333,#533608);
 }
-.nicer-btn:hover {
+.nicer-btn2{
+  border-radius: 5px;
+  border: #ae7517 3px groove;
+  background: radial-gradient(#333, #333,#533608);
+}
+.nicer-btn2:hover {
   background: radial-gradient(#275de6,#00f);
   border: #275de6 3px groove;
 }
