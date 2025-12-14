@@ -21,6 +21,7 @@ const navLinks = [
   { href: 'https://ff4ultima-plus.vercel.app/classic.html', label: 'Ultima Classic' },
   { href: 'https://ff4ultima-plus.vercel.app/ulti.html', label: 'Custom' },
   { href: 'https://ff4ultima-plus.vercel.app/indev.html', label: 'In Dev.' },
+  { href: '/patches', label: 'Patches' },
   { href: '/discord', label: 'Discord' }
 ];
 

@@ -129,8 +129,11 @@ main div {
 .nicer-btn {
   border-radius: 5px;
   border: #ae7517 3px groove;
-  /* background: linear-gradient(#7f5511, #333, #333, #7f5511); */
   background: radial-gradient(#333, #333,#533608);
+}
+.nicer-btn:hover {
+  background: radial-gradient(#275de6,#00f);
+  border: #275de6 3px groove;
 }
 .blue-border { /* similar to above, only for Ultima Classic title image */
   border-radius: 5px;
@@ -226,7 +229,7 @@ main div {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  margin: 0;
+  margin-bottom: 15px;
   padding: 0;
   height: 224px;
   max-height: 224px;
