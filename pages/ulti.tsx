@@ -33,7 +33,7 @@ const Ulti: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-indigo-700 h-screen">
+    <div className="container mx-auto p-4 bg-indigo-800 h-screen">
       <h1 className="text-3xl font-bold mb-4">FF4 Ultima Options</h1>
       <h4>The "Ulti Patcher"</h4>
       <FileUpload onFileUpload={handleFileUpload} onChecksumError={handleChecksumError} />

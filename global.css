@@ -159,7 +159,9 @@ main div {
 }
 
 /* Ulti.tsx */
-
+option span {
+  color:#6e044e;
+}
 /* Ulti container styling */
 .per-patch-select {
   border: 'dotted 1px red';

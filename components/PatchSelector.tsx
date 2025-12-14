@@ -51,15 +51,15 @@ const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }
   };
 
   return (
-    <div className="bg-gray-500 p-4 rounded-lg shadow-md">
+    <div className="bg-indigo-600 p-4 rounded-lg shadow-md">
       <h3 className="text-lg font-semibold mb-2">{category} options</h3>
       <select
-        className="w-full p-2 border border-gray-300 rounded-md"
+        className="w-full p-2 border bg-indigo-700 rounded-md"
         onChange={handlePatchChange}
       >
         <option value="">Select an option</option>
         {patches.map((patch) => (
-          <option key={patch.id} value={patch.id}>
+          <option key={patch.id} value={patch.id} className="text-slate-500">
             {patch.name}
           </option>
         ))}
@@ -70,7 +70,7 @@ const PatchSelector: React.FC<PatchSelectorProps> = ({ category, onPatchSelect }
           <img
             src={selectedPatch.previewUrl}
             alt={selectedPatch.name}
-            className="w-full mt-2 rounded-md"
+            className="w-full mt-2 rounded-md bg-slate-900"
           />
         </div>
       )}
