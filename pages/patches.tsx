@@ -13,7 +13,7 @@ const Patches: NextPage = () => {
         <p>If you have any questions, feedback, or ideas, please join us in Discord!</p>
         <a href="./Final Fantasy 4 Ultima Plus patch archive.zip" target='blank'>
           <button
-            className="nicer-btn px-5 py-3 hover:bg-blue-700"
+            className="nicer-btn-blue px-5 py-3 hover:bg-blue-700"
           >
             Download
           </button>

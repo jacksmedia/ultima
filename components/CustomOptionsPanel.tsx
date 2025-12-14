@@ -107,14 +107,16 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
         className={`
           px-2 py-2 mt-3 custom-options-button 
           ${isDisabled 
-            ? 'text-gray cursor-not-allowed nicer-btn' 
-            : 'text-white nicer-btn2'
+            ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 nicer-btn' 
+            : 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 nicer-btn-blue'
           }
           ${isExpanded ? 'rounded-b-none' : ''}
         `}
       >
         <div className="flex items-center justify-between p-2">
-          <span>Want Custom Options?</span>
+          <span>
+            Want Custom Options?
+          </span>
           <div className="flex items-center space-x-2">
             {getSelectedCount() > 0 && (
               <span className="px-2 py-1 text-sm">
@@ -175,7 +177,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
                       <div className="">
                         <h5>{patch.name}</h5>
                         <div
-                          className={`mx-auto px-2 py-2 text-white nicer-btn 
+                          className={`mx-auto px-2 py-2 text-white nicer-btn-blue 
                             ${isPatchSelected(patch.id) 
                               ? 'chosen-box' 
                               : 'unchosen-box'

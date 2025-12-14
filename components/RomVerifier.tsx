@@ -97,7 +97,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         
         <button
           onClick={handleBrowseClick}
-          className="grid place-items-center px-4 py-2 mx-auto nicer-btn2">
+          className="grid place-items-center px-4 py-2 mx-auto nicer-btn-blue">
           <h5>Upload a File</h5> 
           <Image 
             src="/cloud-upload.svg"
