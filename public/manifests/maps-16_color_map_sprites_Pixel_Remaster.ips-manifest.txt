@@ -1,0 +1,3 @@
+Custom NPC sprites sourced from FFIV Pixel Remaster and repurposed by Anderson Vianna.
+
+Original 16 color sprite hacking by Gedankenschild.
