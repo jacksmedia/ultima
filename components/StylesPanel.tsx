@@ -115,11 +115,6 @@ const StylesPanel: React.FC<StylesPanelProps> = ({
             New Visual Styles?
           </span>
           <div className="flex items-center space-x-2">
-            {getSelectedCount() > 0 && (
-              <span className="px-2 py-1 text-sm">
-                {getSelectedCount()} selected
-              </span>
-            )}
             <svg 
               className={`w-5 h-5 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}
               xmlns="http://www.w3.org/2000/svg" 

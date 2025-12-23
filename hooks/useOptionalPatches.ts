@@ -179,7 +179,7 @@ export const useOptionalPatches = (config: OptionalPatchesConfig) => {
   }, [config]);
 
   // Helper function to get selected patch objects by their IDs
-  const getSelectedPatches = (selectedIds: string[]): OptionalPatch[] => {
+  const getSelectedOptionalPatches = (selectedIds: string[]): OptionalPatch[] => {
     const allPatches = categories.flatMap(cat => cat.patches);
     return selectedIds
       .map(id => allPatches.find(patch => patch.id === id))
@@ -190,6 +190,6 @@ export const useOptionalPatches = (config: OptionalPatchesConfig) => {
     categories,
     loading,
     error,
-    getSelectedPatches
+    getSelectedOptionalPatches
   };
 };

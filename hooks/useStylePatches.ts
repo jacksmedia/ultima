@@ -75,8 +75,6 @@ export const useStylePatches = (config: StylePatchesConfig) => {
                       // Generates preview image path (public/previews/)
                       const previewImagePath = `/previews/${originalName.replace(/\.ips$/i, '')}.png`;
 
-                      
-                      
                       patches.push({
                         id: `${categoryConfig.id}-${originalName}`,
                         name: displayName,
@@ -97,7 +95,6 @@ export const useStylePatches = (config: StylePatchesConfig) => {
                 console.error(`Failed to load patches from ${categoryConfig.zipFile}:`, err);
               }
             }
-
             loadedCategories.push({
               id: categoryConfig.id,
               title: categoryConfig.title,
@@ -113,7 +110,7 @@ export const useStylePatches = (config: StylePatchesConfig) => {
               const response = await fetch(`/${zipFile}`);
               const zipData = await response.arrayBuffer();
               const zip = await JSZip.loadAsync(zipData);
-              const patches: OptionalPatch[] = [];
+              const patches: StylePatch[] = [];
 
               await Promise.all(
                 Object.keys(zip.files).map(async (filename) => {
@@ -154,7 +151,7 @@ export const useStylePatches = (config: StylePatchesConfig) => {
               if (patches.length > 0) {
                 loadedCategories.push({
                   id: `patches-${zipFile}`,
-                  title: `Optional Patches from ${zipFile}`,
+                  title: `Style Patches from ${zipFile}`,
                   patches: patches.sort((a, b) => a.name.localeCompare(b.name)),
                   allowMultiple: true
                 });
@@ -179,7 +176,7 @@ export const useStylePatches = (config: StylePatchesConfig) => {
   }, [config]);
 
   // Helper function to get selected patch objects by their IDs
-  const getSelectedPatches = (selectedIds: string[]): StylePatch[] => {
+  const getSelectedStylePatches = (selectedIds: string[]): StylePatch[] => {
     const allPatches = categories.flatMap(cat => cat.patches);
     return selectedIds
       .map(id => allPatches.find(patch => patch.id === id))
@@ -190,6 +187,6 @@ export const useStylePatches = (config: StylePatchesConfig) => {
     categories,
     loading,
     error,
-    getSelectedPatches
+    getSelectedStylePatches
   };
 };

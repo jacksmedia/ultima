@@ -252,6 +252,38 @@ export default function PatchPage() {
     // Newest feature to conditionally download readme for SBG patches
     const readmesToDownload: { filename: string; content: string }[] = [];
 
+    for (const stylePatch of selectedStyles) {
+      console.log(`Applying optional patch: ${stylePatch.name}`);
+      patchedRom = applyIPS(patchedRom, stylePatch.data);
+      
+      // Check to see if readme required
+      if (stylePatch.filename.includes('SBG')) {
+        try{
+          // Construct readme filename (same as .ips but .txt)
+          const readmeFilename = stylePatch.filename.replace(/\.ips$/i, '.txt');
+          const readmePath = `/readmes/${readmeFilename}`;
+          
+          // Fetch the readme content
+          const readmeResponse = await fetch(readmePath);
+          if (readmeResponse.ok) {
+            const readmeContent = await readmeResponse.text();
+            readmesToDownload.push({
+              filename: readmeFilename,
+              content: readmeContent
+            });
+            console.log(`Queued readme for download: ${readmeFilename}`);
+          }
+        } catch(err){
+          console.warn(`Failed to load readme for ${stylePatch.filename}:`, err);
+          // Non-blocking error, readme fail is not critical
+        }
+      }
+    }
+
+    // Optionals patched on after Styles;
+    // need to add a block to only allow one of these,
+    // they are not compatible
+
     for (const optionalPatch of selectedOptionals) {
       console.log(`Applying optional patch: ${optionalPatch.name}`);
       patchedRom = applyIPS(patchedRom, optionalPatch.data);
@@ -316,7 +348,7 @@ export default function PatchPage() {
         </p>
       </div>
     </div>
-{/* Optional Patches Panel */}
+    {/* Styles & Optional Patches */}
     <div className='d-flex justify-content-center align-items-center h-100'>
       {isReady && hasOptionalPatches && (
         <><StylesPanel
@@ -325,6 +357,8 @@ export default function PatchPage() {
           onSelectionChange={setSelectedStylePatches}
           isDisabled={isPatching || !hasValidRom}
         />
+        <h4>Styles are meant to be used without extra Options.</h4>
+        <p>Feel free to experiment, yet keep in mind they are not supported together.</p>
         <CustomOptionsPanel
           categories={optionalCategories}
           selectedPatches={selectedOptionalPatches}
@@ -352,7 +386,12 @@ export default function PatchPage() {
           </p> */}
           {selectedOptionalPatches.length > 0 && (
             <div className="mt-2">
-              <p className="text-sm text-gray-300">Selected options:</p>
+              <p className="text-sm text-gray-300">Selected patches:</p>
+              <ul className="text-xs text-gray-400 mt-1">
+                {getSelectedStylePatches(selectedStylePatches).map(patch => (
+                  <li key={patch.id}>{patch.name}</li>
+                ))}
+              </ul>
               <ul className="text-xs text-gray-400 mt-1">
                 {getSelectedOptionalPatches(selectedOptionalPatches).map(patch => (
                   <li key={patch.id}>{patch.name}</li>
