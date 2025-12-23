@@ -21,7 +21,7 @@ export const useStylePatches = (config: StylePatchesConfig) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadOptionalPatches = async () => {
+    const loadStylePatches = async () => {
       try {
         setLoading(true);
         setError(null);
@@ -175,7 +175,7 @@ export const useStylePatches = (config: StylePatchesConfig) => {
       }
     };
 
-    loadPatches();
+    loadStylePatches();
   }, [config]);
 
   // Helper function to get selected patch objects by their IDs
