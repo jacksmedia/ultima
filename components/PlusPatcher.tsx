@@ -4,12 +4,14 @@ import JSZip from 'jszip';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
 import DownloadRomButton from '@/components/DownloadRomButton';
 import RomVerifier from '@/components/RomVerifier';
+import StylesPanel from '@/components/StylesPanel';
 import CustomOptionsPanel from '@/components/CustomOptionsPanel';
 import { applyIPS } from '@/lib/patcher';
 import computeCRC32 from '@/lib/crc32';
 import { useOptionalPatches } from '@/hooks/useOptionalPatches';
+import { useStylePatches } from '@/hooks/useStylePatches';
 import PlusTitle from "@/components/PlusTitle";
-import OptionalPatches from './OptionalPatches';
+
 
 type Patch = {
   name: string;
@@ -31,11 +33,34 @@ export default function PatchPage() {
   const [isPatching, setIsPatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loadingPatches, setLoadingPatches] = useState(true);
+  const [selectedStylePatches, setSelectedStylePatches] = useState<string[]>([]);
   const [selectedOptionalPatches, setSelectedOptionalPatches] = useState<string[]>([]);
+
+  // Available styles (groups of options)
+  const stylePatchesConfig = useMemo(() => ({
+    categories: [
+      {
+        id: 'styles',
+        title: 'Styles',
+        description: 'Changes to many graphics',
+        allowMultiple: false,
+        zipFile: 'Styles.zip',
+        hasManifest: true,
+        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
+        // filePattern: /Style/i // can be used filter a multi-catergory archive
+      }
+    ]
+  }), []);
+  const {
+    categories: styleCategories,
+    loading: loadingStyle,
+    error: styleError,
+    getSelectedStylePatches
+  } = useStylePatches(stylePatchesConfig);
 
   // Optional patches by category
   const optionalPatchesConfig = useMemo(() => ({
-    categories : [
+    categories: [
       {
         id: 'battles',
         title: 'Battle Sprites',
@@ -63,16 +88,6 @@ export default function PatchPage() {
         hasManifest: true,
         manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
       },
-      // {
-      //   id: 'styles',
-      //   title: 'Styles',
-      //   description: 'Changes all hero graphics',
-      //   allowMultiple: false,
-      //   zipFile: 'Styles.zip',
-      //   hasManifest: true,
-      //   manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
-      //   // filePattern: /Style/i // can be used filter a multi-catergory archive
-      // },
       {
         id: 'tweaks',
         title: 'Game Adjustments',
@@ -96,7 +111,7 @@ export default function PatchPage() {
     categories: optionalCategories,
     loading: loadingOptional,
     error: optionalError,
-    getSelectedPatches
+    getSelectedOptionalPatches
   } = useOptionalPatches(optionalPatchesConfig);
 
   // Loads main Ultima patches
@@ -154,9 +169,7 @@ export default function PatchPage() {
 
     loadPatches();
   }, []);
-//////////////////////////////////////
-  const EXPECTED_CRC32 = '1F373E00';  // current Ultima Plus CRC32
-////////////////////////////////////// obv this changes per update
+
 
   // Detects & removes SMC/SFC copier header if present
   const removeHeaderIfPresent = (romData: Uint8Array): Uint8Array => {
@@ -232,9 +245,10 @@ export default function PatchPage() {
     console.log(`Applied main patch: ${romState.matchingPatch.originalName}`);
 
 
-
     // Applies optional patches (in order of selection)
-    const selectedOptionals = getSelectedPatches(selectedOptionalPatches);
+    const selectedStyles = getSelectedStylePatches(selectedStylePatches);
+    // Applies optional patches (in order of selection)
+    const selectedOptionals = getSelectedOptionalPatches(selectedOptionalPatches);
     // Newest feature to conditionally download readme for SBG patches
     const readmesToDownload: { filename: string; content: string }[] = [];
 
@@ -280,10 +294,6 @@ export default function PatchPage() {
     <div className="two-column-layout">
       <div className='d-flex justify-content-center align-items-center h-100'>
         <PlusTitle />
-        <p className="text-center mb-2">
-          Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
-          Choose alternate graphics & a different font if you wish!
-        </p>
         <h5>Version 1.1, December 2025</h5>
         <DownloadRomButton
           onGenerateRom={generatePatchedRom} // Upgraded to offer readme files conditionally
@@ -300,17 +310,27 @@ export default function PatchPage() {
         ) : (
           <p className="text-danger">No patches could be loaded. Please refresh the page.</p>
         )}
+         <p className="text-center mb-2">
+          Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
+          Choose a new visual style, or pick and choose<br/>alternate graphics & a new font if you wish!
+        </p>
       </div>
     </div>
 {/* Optional Patches Panel */}
     <div className='d-flex justify-content-center align-items-center h-100'>
       {isReady && hasOptionalPatches && (
+        <><StylesPanel
+          categories={styleCategories}
+          selectedPatches={selectedStylePatches}
+          onSelectionChange={setSelectedStylePatches}
+          isDisabled={isPatching || !hasValidRom}
+        />
         <CustomOptionsPanel
           categories={optionalCategories}
           selectedPatches={selectedOptionalPatches}
           onSelectionChange={setSelectedOptionalPatches}
           isDisabled={isPatching || !hasValidRom}
-        />
+        /></>
       )}
       {/* Loading state for optional patches */}
       {loadingOptional && (
@@ -334,7 +354,7 @@ export default function PatchPage() {
             <div className="mt-2">
               <p className="text-sm text-gray-300">Selected options:</p>
               <ul className="text-xs text-gray-400 mt-1">
-                {getSelectedPatches(selectedOptionalPatches).map(patch => (
+                {getSelectedOptionalPatches(selectedOptionalPatches).map(patch => (
                   <li key={patch.id}>{patch.name}</li>
                 ))}
               </ul>
