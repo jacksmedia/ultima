@@ -173,10 +173,6 @@ option span {
 
 
 
-
-
-
-
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {
@@ -270,8 +266,8 @@ option span {
   background: linear-gradient(#000, #237195);
 }
 .discord-bg {
-  background: linear-gradient(#112,#000, #000);
+  background: linear-gradient(#000, #112);
 }
 .guides-bg {
-  background: linear-gradient(#112,#606, #000);
+  background: linear-gradient(#000, #112,#606);
 }
