@@ -37,7 +37,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Head>
 
       <body>
-          <ul className="nav d-flex justify-content-center">
+          <ul className="nav d-flex bg-black justify-content-center">
             {navLinks.map(({ href, label }) => (
               <Link key={href} href={href} passHref>
                 <li

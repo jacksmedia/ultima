@@ -376,7 +376,7 @@ export default function PatchPage() {
       
       {/* ROM Information */}
       {hasValidRom && (
-        <div className="p-4 bg-gray-800 rounded-lg">
+        <div className="p-4 bg-black rounded-lg">
           <h2 className="text-xl mb-2">ROM Ready:</h2>
           <p className="font-mono text-sm">
             Uploaded CRC32: {romState!.originalCRC32}

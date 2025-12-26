@@ -267,7 +267,7 @@ option span {
 
 /* per page styling */
 .plus-patcher-bg {
-  background: radial-gradient(#187291, #237195, #000);
+  background: linear-gradient(#000, #237195);
 }
 .discord-bg {
   background: linear-gradient(#112,#000, #000);
