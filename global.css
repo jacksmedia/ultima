@@ -266,7 +266,7 @@ option span {
   background: linear-gradient(#000, #237195);
 }
 .discord-bg {
-  background: linear-gradient(#000, #112);
+  background: linear-gradient(#000, #112, #000);
 }
 .guides-bg {
   background: linear-gradient(#000, #112,#606);
