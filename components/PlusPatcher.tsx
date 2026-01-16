@@ -239,7 +239,7 @@ export default function PatchPage() {
     }
     console.log('Generating patched ROM...');
     // Starts with the processed ROM...
-    let patchedRom = new Uint8Array(romState.processedRom.buffer.slice(0)); // snaps the Type into conformity! What madness!
+    let patchedRom = new Uint8Array(romState.processedRom.buffer);
     // Applies main patch
     patchedRom = applyIPS(patchedRom, romState.matchingPatch.data as Uint8Array);
     console.log(`Applied main patch: ${romState.matchingPatch.originalName}`);
