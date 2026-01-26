@@ -94,7 +94,27 @@ const StylesPanel: React.FC<StylesPanelProps> = ({
   if (categories.length === 0) {
     return null;
   }
+  
+  // sorts the title property based on number values; if no number, it's listed after
+  function sortPatchCategoriesByName(categories: PatchCategory[]): PatchCategory[] {
+    return categories.map(category => ({
+    ...category,
+    patches: category.patches.sort((a, b) => {
+      // Extract the numeric part from each name
+      const numA = parseInt(a.name.match(/^\d+/)?.[0] || "0", 10);
+      const numB = parseInt(b.name.match(/^\d+/)?.[0] || "0", 10);
 
+      if (numA !== numB) {
+        return numA - numB;
+      }
+
+      // If numeric parts are equal, sort by the rest of the name
+      return a.name.localeCompare(b.name);
+    })
+  }));
+  }
+  const sortedCategories = sortPatchCategoriesByName(categories);
+  console.log(sortedCategories)
   return (
     <div className="">
       {/* Toggle Button */}
@@ -132,7 +152,7 @@ const StylesPanel: React.FC<StylesPanelProps> = ({
       {isExpanded && (
         <div className="">
           <div className="p-3 m-2">
-            {categories.map((category) => (
+            {sortedCategories.map((category) => (
               <div key={category.id} className="border-b border-gray-700 last:border-b-0 pb-4 last:pb-0">
                 <h3 className="text-xl font-semibold text-white mb-2">
                   {category.title}
@@ -149,7 +169,7 @@ const StylesPanel: React.FC<StylesPanelProps> = ({
                     <label 
                       key={patch.id}
                       className={`
-                        p-2 d-flex flex-column option-box
+                        p-2 m-3 d-flex flex-column option-box
                         ${isPatchSelected(patch.id) 
                           ? 'chosen-box' 
                           : 'unchosen-box'
