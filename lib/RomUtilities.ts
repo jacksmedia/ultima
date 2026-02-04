@@ -46,7 +46,8 @@ export const extractRomInfo = async (file: File): Promise<RomInfo> => {
   let type: 'original' | 'patched' | 'unknown' = 'unknown';
   
   // Determine ROM type based on CRC32
-  if (crc32Hex === '65D0A825' || '23084FCD' || '6CDA700C' || 'CAA15E97') {
+  const originalCRCs = ['65D0A825', '23084FCD', '6CDA700C', 'CAA15E97'];
+  if (originalCRCs.includes(crc32Hex)) {
     type = 'original';
   } else if (crc32Hex === '1F373E00') { // Replace with actual FF4Ultima ROM CRC32
     type = 'patched';
