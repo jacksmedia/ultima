@@ -37,22 +37,22 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Head>
 
       <body>
-          <ul className="nav d-flex bg-black justify-content-center">
-            {navLinks.map(({ href, label }) => (
-              <Link key={href} href={href} passHref>
-                <li
-                  className={`nav-item  ${
-                    router.pathname === href ? 'nav-l1nk active' : 'nav-l1nk'
-                  }`}
-                >
-                  {label}
-                </li>
-              </Link>
-            ))}
-          </ul>
-          <main>{children}</main>
-        </body>
-      </html>
+        <ul className="nav d-flex bg-black justify-content-center">
+          {navLinks.map(({ href, label }) => (
+            <Link key={href} href={href} passHref>
+              <li
+                className={`nav-item  ${
+                  router.pathname === href ? 'nav-l1nk active' : 'nav-l1nk'
+                }`}
+              >
+                {label}
+              </li>
+            </Link>
+          ))}
+        </ul>
+        <main>{children}</main>
+      </body>
+    </html>
   );
 };
 

@@ -4,6 +4,7 @@ import JSZip from 'jszip';
 import { useZipPatches, ZipPatch } from '@/hooks/useZipPatches';
 import { applyIPS } from '@/lib/patcher';
 import computeCRC32 from '@/lib/crc32';
+import Layout from '@/layout';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
 import BothTitles from '@/components/BothTitles';
 
@@ -358,94 +359,98 @@ const Ulti: React.FC = () => {
                         patchConfig.portraits || patchConfig.tweaks.length > 0;
 
   return (
-    <div className="container mx-auto p-4 bg-indigo-800 min-h-screen">
-      <BothTitles />
-      <h1 className="text-3xl font-bold mb-2 text-center">The Ulti Patcher</h1>
-      <p className="text-center mb-4 text-gray-300">
-        Build your custom FF4 Ultima with modular patch options
-      </p>
+    <div>
+      {/* <Layout> */}
+      <div className="container mx-auto bg-indigo-800 min-h-screen">
+        <BothTitles />
+        <h1 className="text-3xl font-bold mb-2 text-center">The Ulti Patcher</h1>
+        <p className="text-center mb-4 text-gray-300">
+          Build your custom FF4 Ultima with modular patch options
+        </p>
 
-      {/* ROM Upload */}
-      <div className="bg-indigo-700 p-4 rounded-lg mb-4">
-        <h3 className="text-lg font-semibold mb-2">1. Upload your ROM</h3>
-        <input
-          className="bg-gray-600 p-3 rounded shadow-md w-full"
-          type="file"
-          accept=".smc,.sfc"
-          onChange={handleFileUpload}
-          disabled={loadingMain || isPatching}
-        />
-        {loadingMain && <p className="text-gray-300 mt-2">Loading patch database...</p>}
-        {romState && (
-          <p className="text-green-400 mt-2">
-            ROM verified - CRC32: {romState.originalCRC32}
-          </p>
-        )}
-        {error && <p className="text-red-400 mt-2">{error}</p>}
-      </div>
+        {/* ROM Upload */}
+        <div className="bg-indigo-700 p-4 rounded-lg mb-4">
+          <h3 className="text-lg font-semibold mb-2">1. Upload your FF4 Ultima ROM</h3>
+          <input
+            className="bg-gray-600 p-3 rounded shadow-md w-full"
+            type="file"
+            accept=".smc,.sfc"
+            onChange={handleFileUpload}
+            disabled={loadingMain || isPatching}
+          />
+          {loadingMain && <p className="text-gray-300 mt-2">Loading patch database...</p>}
+          {romState && (
+            <p className="text-green-400 mt-2">
+              ROM verified - CRC32: {romState.originalCRC32}
+            </p>
+          )}
+          {error && <p className="text-red-400 mt-2">{error}</p>}
+        </div>
 
-      {/* Patch Selectors - 4 modular options */}
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2">2. Choose your options</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          {renderPatchSelector('Battle Sprites', battlesPatches, patchConfig.battles,
-            (id) => handleSingleSelect('battles', id), loadingBattles)}
-          {renderPatchSelector('Map Sprites', mapsPatches, patchConfig.maps,
-            (id) => handleSingleSelect('maps', id), loadingMaps)}
-          {renderPatchSelector('Portraits', portraitsPatches, patchConfig.portraits,
-            (id) => handleSingleSelect('portraits', id), loadingPortraits)}
-        </div>
-        <div className="grid grid-cols-1 gap-4">
-          {renderTweaksSelector()}
-        </div>
-      </div>
-
-      {/* Config Management */}
-      <div className="bg-indigo-700 p-4 rounded-lg mb-4">
-        <h3 className="text-lg font-semibold mb-2">3. Save/Load Config (optional)</h3>
-        <div className="flex flex-wrap gap-2">
-          <button
-            className="bg-gray-600 hover:bg-gray-500 p-3 rounded shadow-md disabled:opacity-50"
-            onClick={handleGenerateConfig}
-            disabled={!hasSelections}
-          >
-            Save Config
-          </button>
-          <label className="bg-gray-600 hover:bg-gray-500 p-3 rounded shadow-md cursor-pointer">
-            Load Config
-            <input
-              type="file"
-              accept=".json,.txt"
-              onChange={handleLoadConfig}
-              className="hidden"
-            />
-          </label>
-        </div>
-        {hasSelections && (
-          <div className="mt-2 text-sm text-gray-300">
-            Selected: {[
-              patchConfig.battles && 'Battle',
-              patchConfig.maps && 'Map',
-              patchConfig.portraits && 'Portrait',
-              patchConfig.tweaks.length > 0 && `${patchConfig.tweaks.length} Tweak(s)`
-            ].filter(Boolean).join(', ')}
+        {/* Patch Selectors - 4 modular options */}
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold mb-2">2. Choose your options</h3>
+          <div className="grid grid-cols-3 md:grid-cols-2 gap-4 mb-4">
+            {renderPatchSelector('Battle Sprites', battlesPatches, patchConfig.battles,
+              (id) => handleSingleSelect('battles', id), loadingBattles)}
+            {renderPatchSelector('Map Sprites', mapsPatches, patchConfig.maps,
+              (id) => handleSingleSelect('maps', id), loadingMaps)}
+            {renderPatchSelector('Portraits', portraitsPatches, patchConfig.portraits,
+              (id) => handleSingleSelect('portraits', id), loadingPortraits)}
           </div>
-        )}
-      </div>
+          <div className="grid grid-cols-1 gap-4">
+            {renderTweaksSelector()}
+          </div>
+        </div>
 
-      {/* Download Button */}
-      <div className="bg-indigo-700 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold mb-2">4. Download</h3>
-        <button
-          className="bg-green-600 hover:bg-green-500 p-4 rounded shadow-md text-xl font-bold w-full disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handleDownload}
-          disabled={!romState || isPatching}
-        >
-          {isPatching ? 'Generating...' : 'Download Patched ROM'}
-        </button>
-      </div>
+        {/* Config Management */}
+        <div className="bg-indigo-700 p-4 rounded-lg mb-4">
+          <h3 className="text-lg font-semibold mb-2">3. Save/Load Config (optional)</h3>
+          <div className="flex flex-wrap gap-2">
+            <button
+              className="bg-gray-600 hover:bg-gray-500 p-3 rounded shadow-md disabled:opacity-50"
+              onClick={handleGenerateConfig}
+              disabled={!hasSelections}
+            >
+              Save Config
+            </button>
+            <label className="bg-gray-600 hover:bg-gray-500 p-3 rounded shadow-md cursor-pointer">
+              Load Config
+              <input
+                type="file"
+                accept=".json,.txt"
+                onChange={handleLoadConfig}
+                className="hidden"
+              />
+            </label>
+          </div>
+          {hasSelections && (
+            <div className="mt-2 text-sm text-gray-300">
+              Selected: {[
+                patchConfig.battles && 'Battle',
+                patchConfig.maps && 'Map',
+                patchConfig.portraits && 'Portrait',
+                patchConfig.tweaks.length > 0 && `${patchConfig.tweaks.length} Tweak(s)`
+              ].filter(Boolean).join(', ')}
+            </div>
+          )}
+        </div>
 
-      {isPatching && <SpinnerOverlay />}
+        {/* Download Button */}
+        <div className="bg-indigo-700 p-4 rounded-lg">
+          <h3 className="text-lg font-semibold mb-2">4. Download</h3>
+          <button
+            className="bg-green-600 hover:bg-green-500 p-4 rounded shadow-md text-xl font-bold w-full disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleDownload}
+            disabled={!romState || isPatching}
+          >
+            {isPatching ? 'Generating...' : 'Download Patched ROM'}
+          </button>
+        </div>
+
+        {isPatching && <SpinnerOverlay />}
+      </div>
+    {/* </Layout> */}
     </div>
   );
 };
