@@ -11,8 +11,6 @@ const Classic: NextPage = () => {
           <h1 className='flex w-full justify-center app-title'>FF4 Ultima Patcher</h1>
         </div>
         <ClassicPatcher />
-        {/* row styling exists in above component*/}
-        <Attribution />
       </div>
     </Layout>
   );
