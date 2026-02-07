@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 const patchesDir = join(__dirname, 'public', 'patches');
 
-const categories = ['battle', 'map', 'portrait', 'game'];
+const categories = ['battle', 'map', 'portraits', 'game'];
 
 categories.forEach((category) => {
   const categoryPath = join(patchesDir, category);
