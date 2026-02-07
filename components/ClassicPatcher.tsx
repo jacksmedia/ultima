@@ -203,7 +203,7 @@ export default function PatchPage() {
   return (
   <>
     <div className="two-column-layout">
-      <div className='d-flex justify-content-center align-items-center h-100'>
+      <div className='flex justify-center items-center h-full'>
         <ClassicTitle />
         <h5><a href="Final Fantasy IV Ultima changelog.txt" rel="noopener noreferrer" target="_blank">See changelog</a></h5>
         <DownloadRomButtonClassic
@@ -213,13 +213,13 @@ export default function PatchPage() {
         />
       </div>
 
-      <div className='d-flex justify-content-center align-items-center h-100'>
+      <div className='flex justify-center items-center h-full'>
         {loadingPatches ? (
           <p>Loading main patches...</p>
         ) : isReady ? (
           <RomVerifier onMatch={handleMatch} />
         ) : (
-          <p className="text-danger">No patches could be loaded. Please refresh the page.</p>
+          <p className="text-red-500">No patches could be loaded. Please refresh the page.</p>
         )}
          <p className="text-center mb-2">
           Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima.<br/>
@@ -229,7 +229,7 @@ export default function PatchPage() {
       </div>
     </div>
     {/* Styles & Optional Patches */}
-    <div className='d-flex justify-content-center align-items-center h-100'>
+    <div className='flex justify-center items-center h-full'>
       {isReady && (
         <><StylesPanel
           categories={styleCategories}

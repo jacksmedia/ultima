@@ -164,12 +164,12 @@ const StylesPanel: React.FC<StylesPanelProps> = ({
                   </p>
                 )}
 
-                <div className="d-flex flex-row flex-wrap justify-content-evenly">
+                <div className="flex flex-row flex-wrap justify-evenly">
                   {category.patches.map((patch) => (
-                    <label 
+                    <label
                       key={patch.id}
                       className={`
-                        p-2 m-3 d-flex flex-column option-box
+                        p-2 m-3 flex flex-col option-box
                         ${isPatchSelected(patch.id) 
                           ? 'chosen-box' 
                           : 'unchosen-box'

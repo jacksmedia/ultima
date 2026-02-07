@@ -1,19 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Geist, Geist_Mono } from "next/font/google";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -37,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Head>
 
       <body>
-        <ul className="nav d-flex bg-black justify-content-center">
+        <ul className="flex bg-black justify-center list-none p-0 m-0">
           {navLinks.map(({ href, label }) => (
             <Link key={href} href={href} passHref>
               <li

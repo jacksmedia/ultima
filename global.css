@@ -145,7 +145,7 @@ main div {
   border: #1788ae 3px groove;
 }
 
-/* Workaround for the overhyped garbage that is Bootstrap columns */
+/* Two column responsive grid layout */
 .two-column-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;

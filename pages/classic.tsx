@@ -6,9 +6,9 @@ import Attribution from '@/components/Attribution';
 const Classic: NextPage = () => {
   return (
     <Layout>
-      <div className='plus-patcher-bg container-fluid'>
-        <div className='row'>
-          <h1 className='d-flex col-12 justify-content-center app-title'>FF4 Ultima Patcher</h1>
+      <div className='plus-patcher-bg w-full'>
+        <div className='flex flex-wrap'>
+          <h1 className='flex w-full justify-center app-title'>FF4 Ultima Patcher</h1>
         </div>
         <ClassicPatcher />
         {/* row styling exists in above component*/}
