@@ -360,7 +360,7 @@ const Ulti: React.FC = () => {
 
   return (
     <div>
-      {/* <Layout> */}
+      <Layout>
       <div className="container mx-auto bg-indigo-800 min-h-screen">
         <BothTitles />
         <h1 className="text-3xl font-bold mb-2 text-center">The Ulti Patcher</h1>
@@ -450,7 +450,7 @@ const Ulti: React.FC = () => {
 
         {isPatching && <SpinnerOverlay />}
       </div>
-    {/* </Layout> */}
+    </Layout>
     </div>
   );
 };

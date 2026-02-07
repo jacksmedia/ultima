@@ -296,3 +296,11 @@ option span {
 .guides-bg {
   background: linear-gradient(#000, #112,#606);
 }
+
+button {
+  padding: 9px;
+  margin: 4px;
+}
+a > h3 {
+  color: #cebd70;
+}
