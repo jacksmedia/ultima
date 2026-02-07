@@ -6,9 +6,9 @@ const Guides: NextPage = () => {
   return (
     <Layout>      
       <div className='guides-bg'>
-        <h1 className="">FF4 Ultima Guides</h1>
+        <h1>FF4 Ultima Guides</h1>
           <BothTitles />
-        <div className='dark-grey-panel mobile-layout-title-fix'>
+        <div className='dark-grey-panel'>
 			<h3>Guides written by Lily of Team Ultima</h3>
 			<ul>
 				<li>

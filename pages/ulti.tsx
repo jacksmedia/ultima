@@ -158,13 +158,18 @@ const Ulti: React.FC = () => {
     }
   };
 
-  // Handle multi-select change
-  const handleSelectChange = (categoryId: keyof PatchConfig, event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOptions = Array.from(event.target.selectedOptions, option => option.value);
-    setPatchConfig(prev => ({
-      ...prev,
-      [categoryId]: selectedOptions
-    }));
+  // Toggle a patch selection on/off
+  const togglePatch = (categoryId: keyof PatchConfig, patchPath: string) => {
+    setPatchConfig(prev => {
+      const current = prev[categoryId];
+      const isSelected = current.includes(patchPath);
+      return {
+        ...prev,
+        [categoryId]: isSelected
+          ? current.filter(p => p !== patchPath)
+          : [...current, patchPath]
+      };
+    });
   };
 
   // Fetch and apply a patch file
@@ -254,78 +259,56 @@ const Ulti: React.FC = () => {
     event.target.value = '';
   };
 
-  // Get preview images for selected patches in a category
-  const getSelectedPreviews = (categoryId: keyof PatchConfig): string[] => {
-    const category = categories[categoryId];
-    const selected = patchConfig[categoryId];
-    return selected
-      .map(path => category.patches.find(p => p.path === path)?.previewPath)
-      .filter((p): p is string => !!p);
-  };
-
-  // Render a category with dropdown and preview
+  // Render a category with clickable toggle cards
   const renderCategory = (categoryId: keyof PatchConfig) => {
     const category = categories[categoryId];
-    const selectedPreviews = getSelectedPreviews(categoryId);
-    const selectedCount = patchConfig[categoryId].length;
+    const selectedPaths = patchConfig[categoryId];
+    const selectedCount = selectedPaths.length;
 
     return (
       <div key={categoryId} className="bg-indigo-600 p-4 rounded-lg shadow-md mb-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Left side - Dropdown */}
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
-            <p className="text-xs text-gray-300 mb-2">
-              Hold Ctrl/Cmd to select multiple options
-            </p>
-            {category.loading ? (
-              <p className="text-gray-300">Loading...</p>
-            ) : (
-              <select
-                multiple
-                size={6}
-                className="w-full p-2 bg-indigo-700 border border-indigo-500 rounded-md text-white"
-                value={patchConfig[categoryId]}
-                onChange={(e) => handleSelectChange(categoryId, e)}
-              >
-                {category.patches.map((patch) => (
-                  <option key={patch.path} value={patch.path} className="p-1">
-                    {patch.name}
-                  </option>
-                ))}
-              </select>
-            )}
-            {selectedCount > 0 && (
-              <p className="text-xs text-green-300 mt-2">
-                {selectedCount} selected
-              </p>
-            )}
-          </div>
-
-          {/* Right side - Preview images */}
-          <div className="md:w-48 flex flex-col items-end justify-start">
-            {selectedPreviews.length > 0 ? (
-              <div className="space-y-2">
-                {selectedPreviews.slice(0, 3).map((previewPath, idx) => (
-                  <img
-                    key={idx}
-                    src={previewPath}
-                    alt="Preview"
-                    className="w-32 h-auto rounded border border-indigo-400"
-                    onError={(e) => (e.currentTarget.style.display = 'none')}
-                  />
-                ))}
-                {selectedPreviews.length > 3 && (
-                  <p className="text-xs text-gray-300">+{selectedPreviews.length - 3} more</p>
-                )}
-              </div>
-            ) : (
-              <div className="w-32 h-24 bg-indigo-800 rounded border border-indigo-500 flex items-center justify-center">
-                <span className="text-xs text-gray-400">No preview</span>
-              </div>
-            )}
-          </div>
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="text-lg font-semibold">{category.title}</h3>
+          {selectedCount > 0 && (
+            <span className="text-sm text-green-300 bg-green-900/50 px-2 py-1 rounded">
+              {selectedCount} selected
+            </span>
+          )}
         </div>
+        <p className="text-xs text-gray-300 mb-3">
+          Click to select/deselect patches
+        </p>
+        {category.loading ? (
+          <p className="text-gray-300">Loading...</p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-64 overflow-y-auto p-1">
+            {category.patches.map((patch) => {
+              const isSelected = selectedPaths.includes(patch.path);
+              return (
+                <button
+                  key={patch.path}
+                  onClick={() => togglePatch(categoryId, patch.path)}
+                  className={`
+                    p-2 rounded-lg text-left text-sm transition-all duration-150
+                    ${isSelected
+                      ? 'bg-green-600 hover:bg-green-500 ring-2 ring-green-400'
+                      : 'bg-indigo-700 hover:bg-indigo-500 border border-indigo-500'
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className={`text-lg ${isSelected ? 'text-white' : 'text-gray-400'}`}>
+                      {isSelected ? '✓' : '○'}
+                    </span>
+                    <span className="truncate" title={patch.name}>
+                      {patch.name.length > 25 ? patch.name.slice(0, 23) + '...' : patch.name}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   };

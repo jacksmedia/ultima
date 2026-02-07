@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindplus/elements": "^1.0.22",
     "buffer": "^6.0.3",
     "crc": "^4.3.2",
     "crc-32": "^1.2.2",

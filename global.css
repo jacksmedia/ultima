@@ -232,8 +232,9 @@ option span {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+  margin-top: 45px;
   margin-bottom: 15px;
-  padding: 0;
+  padding: 0px;
   height: 224px;
   max-height: 224px;
 }
@@ -243,11 +244,15 @@ option span {
 /* index.tsx title styling */
 .app-title {
   line-height: 1;
-  color: #e8a216;
+  color: #cebd70;
   font-size: 50px;
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 1), 4px 4px 0px #e87f16;
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 1),
+   2px 2px 0px #e8a216,
+   4px 4px 0px rgba(0, 0, 0, 1);
   font-weight: bold;
   margin-bottom: 1rem;
+  margin-top: 50px;
+  text-align: center;
 }
 
 
@@ -269,8 +274,8 @@ option span {
 /* guides, patches, Discord */
 
 @media (max-width: 507px) {
-  .mobile-layout-title-fix {
-    margin-top: 230px;
+  .both-titles {
+    margin-bottom: 230px;
   }
 }
 
@@ -288,19 +293,32 @@ option span {
 
 /* per page styling */
 .plus-patcher-bg {
-  background: linear-gradient(#000, #237195);
+  background: linear-gradient(#000, #237195, #000);
 }
 .discord-bg {
   background: linear-gradient(#000, #112, #000);
 }
 .guides-bg {
-  background: linear-gradient(#000, #112,#606);
+  background: linear-gradient(#000, #112,#606, #606, #112);
 }
 
 button {
   padding: 9px;
   margin: 4px;
 }
+
+.exta-btn-spacing {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  padding: 2rem;
+
+}
+
 a > h3 {
   color: #cebd70;
+}
+
+.mx-5 {
+  margin-left: 5vw;
+  margin-right: 5vw;
 }

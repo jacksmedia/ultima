@@ -1,19 +1,8 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/guides', label: 'Guides' },
-  { href: '/classic', label: 'Ultima Classic' },
-  { href: 'https://ff4ultima-plus.vercel.app/ulti.html', label: 'Custom' },
-  { href: 'https://ff4ultima-plus.vercel.app/indev.html', label: 'In Dev.' },
-  { href: '/patches', label: 'Patches' },
-  { href: '/discord', label: 'Discord' }
-];
+import Navbar from "@/components/NavBar";
+import Attribution from '@/components/Attribution';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
 
   return (
     <html lang="en">
@@ -24,20 +13,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Head>
 
       <body>
-        <ul className="flex bg-black justify-center list-none p-0 m-0">
-          {navLinks.map(({ href, label }) => (
-            <Link key={href} href={href} passHref>
-              <li
-                className={`nav-item  ${
-                  router.pathname === href ? 'nav-l1nk active' : 'nav-l1nk'
-                }`}
-              >
-                {label}
-              </li>
-            </Link>
-          ))}
-        </ul>
+        <Navbar />
         <main>{children}</main>
+        <Attribution />
       </body>
     </html>
   );
