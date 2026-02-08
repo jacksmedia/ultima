@@ -259,6 +259,15 @@ const Ulti: React.FC = () => {
     event.target.value = '';
   };
 
+  // Get preview images for selected patches in a category
+  const getSelectedPreviews = (categoryId: keyof PatchConfig): string[] => {
+    const category = categories[categoryId];
+    const selected = patchConfig[categoryId];
+    return selected
+      .map(path => category.patches.find(p => p.path === path)?.previewPath)
+      .filter((p): p is string => !!p);
+  };
+
   // Render a category with clickable toggle cards
   const renderCategory = (categoryId: keyof PatchConfig) => {
     const category = categories[categoryId];
@@ -266,7 +275,7 @@ const Ulti: React.FC = () => {
     const selectedCount = selectedPaths.length;
 
     return (
-      <div key={categoryId} className="bg-indigo-600 p-4 rounded-lg shadow-md mb-4">
+      <div key={categoryId} className="bg-indigo-600 p-4 rounded-lg shadow-md gap-y-2">
         <div className="flex justify-between items-center mb-3">
           <h3 className="text-lg font-semibold">{category.title}</h3>
           {selectedCount > 0 && (
@@ -291,18 +300,23 @@ const Ulti: React.FC = () => {
                   className={`
                     p-2 rounded-lg text-left text-sm transition-all duration-150
                     ${isSelected
-                      ? 'bg-green-600 hover:bg-green-500 ring-2 ring-green-400'
-                      : 'bg-indigo-700 hover:bg-indigo-500 border border-indigo-500'
+                      ? 'bg-green-600 hover:bg-green-500 ring-2 ring-green-400 shadow-xl'
+                      : 'bg-indigo-700 hover:bg-indigo-600 border border-indigo-500'
                     }
                   `}
                 >
                   <div className="flex items-center gap-2">
-                    <span className={`text-lg ${isSelected ? 'text-white' : 'text-gray-400'}`}>
-                      {isSelected ? '✓' : '○'}
-                    </span>
-                    <span className="truncate" title={patch.name}>
-                      {patch.name.length > 25 ? patch.name.slice(0, 23) + '...' : patch.name}
-                    </span>
+                    <img src={patch.previewPath}
+                    className={`text-lg ${isSelected ? 'text-white' : 'text-gray-400'}`}
+                    />
+                    <h4>
+                      <span className={`text-lg ${isSelected ? 'text-white' : 'text-gray-400'}`}>
+                        {isSelected ? '✓ ' : '○ '}
+                      </span>
+                      <span className="truncate" title={patch.name}>
+                        {patch.name.length > 45 ? patch.name.slice(0, 43) + '...' : patch.name}
+                      </span>
+                    </h4>
                   </div>
                 </button>
               );
@@ -345,7 +359,7 @@ const Ulti: React.FC = () => {
   return (
     <div>
       <Layout>
-        <div className="container mx-auto bg-indigo-800 min-h-screen">
+        <div className="container mx-auto bg-indigo-900 min-h-screen">
           <BothTitles />
           <h1 className="text-3xl font-bold mb-2 text-center">The Ulti Patcher</h1>
           <p className="text-center mb-4 text-gray-300">
@@ -353,7 +367,7 @@ const Ulti: React.FC = () => {
           </p>
 
           {/* ROM Upload */}
-          <div className="bg-indigo-700 p-4 rounded-lg mb-4">
+          <div className="bg-indigo-700 p-4 rounded-lg gap-y-2">
             <h3 className="text-lg font-semibold mb-2">1. Upload your ROM file</h3>
             <p className="text-sm text-gray-300 mb-2">Upload an .sfc or .smc file to enable patching</p>
             <input
@@ -389,7 +403,7 @@ const Ulti: React.FC = () => {
 
           {/* Persistent Selection Preview Panel */}
           {hasSelections && (
-            <div className="bg-indigo-700 p-4 rounded-lg mb-4">
+            <div className="bg-indigo-700 p-4 rounded-lg">
               <h3 className="text-lg font-semibold mb-2">
                 Your Selections ({totalSelections} patch{totalSelections !== 1 ? 'es' : ''})
               </h3>
@@ -402,10 +416,10 @@ const Ulti: React.FC = () => {
                     <img
                       src={patch.previewPath}
                       alt={patch.name}
-                      className="w-24 h-auto rounded border border-indigo-400 mb-1"
+                      className="w-24 h-auto rounded border border-indigo-600 mb-1"
                       onError={(e) => {
                         e.currentTarget.src = '';
-                        e.currentTarget.className = 'w-24 h-16 bg-indigo-900 rounded border border-indigo-500 mb-1 flex items-center justify-center';
+                        e.currentTarget.className = 'w-24 h-16 bg-indigo-900 rounded border border-indigo-600 mb-1 flex items-center justify-center';
                         e.currentTarget.alt = 'No preview';
                       }}
                     />
@@ -431,7 +445,7 @@ const Ulti: React.FC = () => {
           )}
 
           {/* Config Management */}
-          <div className="bg-indigo-700 p-4 rounded-lg mb-4">
+          <div className="bg-indigo-700 p-4 rounded-lg gap-y-4">
             <h3 className="text-lg font-semibold mb-2">3. Save/Load Config</h3>
             <p className="text-sm text-gray-300 mb-2">
               Save your selections as a config file, or load an existing config to modify

@@ -1,50 +1,21 @@
 @import "tailwindcss";
 
-html,
-body {
-  max-width: 100vw;
-  color: #ededed;
-  background: #000;
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
   color: #ededed;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  background-color: black;
 }
 
 a.primary {
   gap: 8px;
-}
-
-body, h1, h2, h3, h4, h5, h6, p, button, a .nav {
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-
-main {
-  width: 100%;
-  min-width: 100%;
-  max-width: 100vw;
-}
-
-main div {
-  width: 100%;
-  min-width: 100%;
-  max-width: 100vw;
-  height: auto;
-
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.nav, button {
-  background-color: #212529;
 }
 
 .nav-l1nk {

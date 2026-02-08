@@ -6,7 +6,7 @@ import Attribution from '@/components/Attribution';
 const Classic: NextPage = () => {
   return (
     <Layout>
-      <div className='plus-patcher-bg w-full'>
+      <div className='plus-patcher-bg text-center'>
         <div className='flex flex-wrap'>
           <h1 className='flex w-full justify-center app-title'>FF4 Ultima Patcher</h1>
         </div>

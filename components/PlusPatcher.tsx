@@ -323,8 +323,10 @@ export default function PatchPage() {
   
   return (
   <>
-    <div className="two-column-layout">
-      <div className='flex justify-center items-center h-full'>
+    {/* title screen & upload zone */}
+    <div className="">
+
+      <div className='flex justify-center items-center'>
         <PlusTitle />
         <h5><a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">Version 1.1</a>, December 2025</h5>
         <DownloadRomButton
@@ -334,13 +336,13 @@ export default function PatchPage() {
         />
       </div>
 
-      <div className='flex justify-center items-center h-full'>
+      <div className='flex justify-center items-center'>
         {loadingPatches ? (
           <p>Loading main patches...</p>
         ) : isReady ? (
           <RomVerifier onMatch={handleMatch} />
         ) : (
-          <p className="text-red-500">No patches could be loaded. Please refresh the page.</p>
+          <p className="text-red-500 text-center">No patches could be loaded. Please refresh the page.</p>
         )}
          <p className="text-center mb-2">
           Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
@@ -348,8 +350,11 @@ export default function PatchPage() {
         </p>
       </div>
     </div>
+
+
+
     {/* Styles & Optional Patches */}
-    <div className='flex justify-center items-center h-full'>
+    <div className='flex-col justify-center items-center h-full'>
       {isReady && hasOptionalPatches && (
         <><StylesPanel
           categories={styleCategories}

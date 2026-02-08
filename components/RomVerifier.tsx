@@ -61,7 +61,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
 
   return (
     <div
-      className={`w-100 text-center p-4 
+      className={`w-100 flex-col
         ${isDragging ? 'active-border' : 'passive-border'}
         dotted-border
       `}
@@ -77,7 +77,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
         className="hidden-input"
       />
       
-      <div className=''>
+      <div className='flec-col'>
         {/* <Image 
           src="/cloud-upload.svg"
           width={138}

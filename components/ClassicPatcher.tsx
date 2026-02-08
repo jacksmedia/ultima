@@ -202,8 +202,8 @@ export default function PatchPage() {
   
   return (
   <>
-    <div className="two-column-layout">
-      <div className='flex justify-center items-center h-full'>
+    <div className="">
+      <div className='flex justify-center items-center'>
         <ClassicTitle />
         <h5><a href="Final Fantasy IV Ultima changelog.txt" rel="noopener noreferrer" target="_blank">See changelog</a></h5>
         <DownloadRomButtonClassic
@@ -213,7 +213,7 @@ export default function PatchPage() {
         />
       </div>
 
-      <div className='flex justify-center items-center h-full'>
+      <div className='flex justify-center items-center'>
         {loadingPatches ? (
           <p>Loading main patches...</p>
         ) : isReady ? (

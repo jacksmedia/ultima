@@ -5,7 +5,7 @@ import BothTitles from "@/components/BothTitles";
 const Patches: NextPage = () => {
   return (
     <Layout>      
-      <div className='discord-bg'>
+      <div className='discord-bg text-center h-screen'>
         <h1 className="">FF4 Ultima Patches</h1>
         <BothTitles />
         <div className='p-3'>
