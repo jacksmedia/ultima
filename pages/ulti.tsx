@@ -46,6 +46,11 @@ const Ulti: React.FC = () => {
   const [isPatching, setIsPatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Page loading state
+  const [pageReady, setPageReady] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const [loadError, setLoadError] = useState(false);
+
   // Category data loaded from JSON files
   const [categories, setCategories] = useState<Record<string, CategoryData>>({
     battle: { id: 'battle', title: 'Battle Sprites', patches: [], loading: true },
@@ -64,61 +69,88 @@ const Ulti: React.FC = () => {
     game: []
   });
 
-  // Load patches from JSON files on mount
+  // Load patches from JSON files on mount (with retry logic)
   useEffect(() => {
-    const loadCategory = async (category: typeof CATEGORIES[number]) => {
-      try {
-        let patchPaths: string[] = [];
+    let isMounted = true;
 
-        if (category.jsonFile) {
-          // Load from JSON file
-          const response = await fetch(`/patches/${category.jsonFile}`);
-          if (response.ok) {
-            patchPaths = await response.json();
+    const loadCategory = async (category: typeof CATEGORIES[number], retries = 3): Promise<boolean> => {
+      for (let attempt = 0; attempt < retries; attempt++) {
+        try {
+          let patchPaths: string[] = [];
+
+          if (category.jsonFile) {
+            const response = await fetch(`/patches/${category.jsonFile}`);
+            if (response.ok) {
+              patchPaths = await response.json();
+            } else if (attempt < retries - 1) {
+              await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
+              continue;
+            }
+          } else if (category.id === 'fonts') {
+            const response = await fetch('/patches/fonts/manifest.json');
+            if (response.ok) {
+              patchPaths = await response.json();
+            } else if (attempt < retries - 1) {
+              await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
+              continue;
+            }
           }
-        } else if (category.id === 'fonts') {
-          // For fonts, load from manifest.json (direct array format)
-          const response = await fetch('/patches/fonts/manifest.json');
-          if (response.ok) {
-            patchPaths = await response.json();
+
+          // Convert paths to PatchOption objects
+          const patches: PatchOption[] = patchPaths
+            .filter((p: string) => p.toLowerCase().endsWith('.ips'))
+            .map((path: string) => {
+              const filename = path.split(/[\\\/]/).pop() || path;
+              const name = filename.replace(/\.ips$/i, '');
+              const previewPath = `/patches/${category.baseDir}/${path.replace(/\.ips$/i, '.png')}`;
+              return { path, name, previewPath };
+            })
+            .sort((a: PatchOption, b: PatchOption) => a.name.localeCompare(b.name));
+
+          if (isMounted) {
+            setCategories(prev => ({
+              ...prev,
+              [category.id]: { ...prev[category.id], patches, loading: false }
+            }));
+          }
+          return patches.length > 0;
+        } catch (err) {
+          console.error(`Attempt ${attempt + 1} failed for ${category.id}:`, err);
+          if (attempt < retries - 1) {
+            await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
           }
         }
+      }
 
-        // Convert paths to PatchOption objects
-        const patches: PatchOption[] = patchPaths
-          .filter((p: string) => p.toLowerCase().endsWith('.ips'))
-          .map((path: string) => {
-            // Extract filename from path (handle both \ and /)
-            const filename = path.split(/[\\\/]/).pop() || path;
-            const name = filename.replace(/\.ips$/i, '');
-
-            // Build preview path - replace .ips with .png
-            const previewPath = `/patches/${category.baseDir}/${path.replace(/\.ips$/i, '.png')}`;
-
-            return { path, name, previewPath };
-          })
-          .sort((a: PatchOption, b: PatchOption) => a.name.localeCompare(b.name));
-
-        setCategories(prev => ({
-          ...prev,
-          [category.id]: {
-            ...prev[category.id],
-            patches,
-            loading: false
-          }
-        }));
-      } catch (err) {
-        console.error(`Failed to load ${category.id} patches:`, err);
+      // All retries failed
+      if (isMounted) {
         setCategories(prev => ({
           ...prev,
           [category.id]: { ...prev[category.id], loading: false }
         }));
       }
+      return false;
     };
 
-    // Load all categories
-    CATEGORIES.forEach(loadCategory);
-  }, []);
+    const loadAllCategories = async () => {
+      setLoadError(false);
+      const results = await Promise.all(CATEGORIES.map(cat => loadCategory(cat)));
+      const successCount = results.filter(Boolean).length;
+
+      if (isMounted) {
+        if (successCount >= 3) {
+          // At least 3 categories loaded successfully
+          setPageReady(true);
+        } else {
+          setLoadError(true);
+        }
+      }
+    };
+
+    loadAllCategories();
+
+    return () => { isMounted = false; };
+  }, [loadAttempt]);
 
   // Remove ROM copier header if present
   const removeHeaderIfPresent = (romData: Uint8Array): Uint8Array => {
@@ -366,6 +398,51 @@ const Ulti: React.FC = () => {
   };
 
   const allSelectedPatches = getAllSelectedPatches();
+
+  // Loading screen with spinning animation
+  if (!pageReady) {
+    return (
+      <div>
+        <Layout>
+          <div className="container mx-auto bg-indigo-900 min-h-screen flex flex-col items-center justify-center">
+            <BothTitles />
+            <div className="text-center p-8">
+              {/* Spinning ring animation */}
+              <div className="relative w-24 h-24 mx-auto mb-6">
+                <div className="absolute inset-0 border-4 border-indigo-600 rounded-full"></div>
+                <div className="absolute inset-0 border-4 border-transparent border-t-green-400 rounded-full animate-spin"></div>
+                <div className="absolute inset-2 border-4 border-transparent border-b-purple-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+              </div>
+
+              <h1 className="text-2xl font-bold mb-2">Building Ulti Patcher</h1>
+              <p className="text-gray-300 mb-4">Loading patch options...</p>
+
+              {loadError && (
+                <div className="mt-4">
+                  <p className="text-yellow-400 mb-3">Some data failed to load.</p>
+                  <button
+                    onClick={() => {
+                      setCategories({
+                        battle: { id: 'battle', title: 'Battle Sprites', patches: [], loading: true },
+                        map: { id: 'map', title: 'Map Sprites', patches: [], loading: true },
+                        portraits: { id: 'portraits', title: 'Portraits', patches: [], loading: true },
+                        fonts: { id: 'fonts', title: 'Fonts', patches: [], loading: true },
+                        game: { id: 'game', title: 'Game Tweaks', patches: [], loading: true },
+                      });
+                      setLoadAttempt(prev => prev + 1);
+                    }}
+                    className="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg font-semibold transition-colors"
+                  >
+                    Retry Loading
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </Layout>
+      </div>
+    );
+  }
 
   return (
     <div>
