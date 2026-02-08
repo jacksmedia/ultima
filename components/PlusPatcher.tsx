@@ -324,19 +324,20 @@ export default function PatchPage() {
   return (
   <>
     {/* title screen & upload zone */}
-    <div className="">
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 
-      <div className='flex justify-center items-center'>
-        <PlusTitle />
-        <h5><a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">Version 1.1</a>, December 2025</h5>
-        <DownloadRomButton
-          onGenerateRom={generatePatchedRom} // Upgraded to offer readme files conditionally
-          filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
-          disabled={!hasValidRom || isPatching}
-        />
-      </div>
+        <div className='flex-col justify-center items-center'>
+          <PlusTitle />
+          <h5><a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">Version 1.1</a>, December 2025</h5>
+          <DownloadRomButton
+            onGenerateRom={generatePatchedRom} // Upgraded to offer readme files conditionally
+            filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
+            disabled={!hasValidRom || isPatching}
+          />
+        </div>
 
-      <div className='flex justify-center items-center'>
+
+        <div className='flex-col justify-center items-center'>
         {loadingPatches ? (
           <p>Loading main patches...</p>
         ) : isReady ? (
@@ -344,12 +345,15 @@ export default function PatchPage() {
         ) : (
           <p className="text-red-500 text-center">No patches could be loaded. Please refresh the page.</p>
         )}
-         <p className="text-center mb-2">
-          Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
-          Choose a new visual style, or pick and choose<br/>alternate graphics & a new font if you wish!
-        </p>
+        
+
+          <p className="text-center">
+            Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
+            Choose a new visual style, or pick and choose<br/>alternate graphics & a new font if you wish!
+          </p>
+        </div>
+
       </div>
-    </div>
 
 
 

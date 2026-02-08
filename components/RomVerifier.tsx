@@ -61,7 +61,7 @@ const RomVerifier: React.FC<RomVerifierProps> = ({ onMatch }) => {
 
   return (
     <div
-      className={`w-100 justify-center
+      className={`justify-center
         ${isDragging ? 'active-border' : 'passive-border'}
         dotted-border
       `}
