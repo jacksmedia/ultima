@@ -8,7 +8,7 @@ const Guides: NextPage = () => {
       <div className='guides-bg'>
         <h1>FF4 Ultima Guides</h1>
           <BothTitles />
-        <div className='dark-grey-panel'>
+        <div className='dark-grey-panel text-center'>
 			<h3>Guides written by Lily of Team Ultima</h3>
 			<ul>
 				<li>
@@ -68,34 +68,36 @@ const Guides: NextPage = () => {
 				</li>
 			</ul>
 		</div>
-		<h4>Bestiary Omissions</h4>
-		<ul>
-			<li>The 4 Fiends fight in the Giant</li>
-			<li>The Golbez fought by Tellah in his cutscene</li>
-			<li>The waterhag Edward fights solo (called ?)</li>
-			<li>The Titan summoned by Rydia at the beginning</li>
-			<li>The shadow dragon summoned by Golbez</li>
-			<li>Dark Elf when you show up WITHOUT Whisperweed</li>
-			<li>The Zeromus fought by Golbez & FuSoYa in the cutscene at the end</li>
-		</ul>
-		<h3 className='classic-hr>'>ᕦ(ò_óˇ)ᕤ</h3>
-		<h4>Rom Offsets for Sprite Hacking</h4>
-		<ul>
-			<li>
-				<a target="_blank" href="/ff4u-hero-offsets.json">
-					<h3>
-						Cecil, Kain, Rosa, Rydia/Kydia,<br/>Edge, Yang, Edward,<br/>Palom, Porom, Edward,<br/>Tellah, Cid, FuSoYa
-					</h3>
-				</a>
-			</li>
-			<li>
-				<a target="_blank" href="/ff4u-extra-offsets.json">
-					<h3>
-						Golbez & Anna
-					</h3>
-				</a>
-			</li>
-		</ul>
+		<div className=' text-center'>
+			<h4>Bestiary Omissions</h4>
+			<ul>
+				<li>The 4 Fiends fight in the Giant</li>
+				<li>The Golbez fought by Tellah in his cutscene</li>
+				<li>The waterhag Edward fights solo (called ?)</li>
+				<li>The Titan summoned by Rydia at the beginning</li>
+				<li>The shadow dragon summoned by Golbez</li>
+				<li>Dark Elf when you show up WITHOUT Whisperweed</li>
+				<li>The Zeromus fought by Golbez & FuSoYa in the cutscene at the end</li>
+			</ul>
+			<h3 className='classic-hr>'>ᕦ(ò_óˇ)ᕤ</h3>
+			<h4>Rom Offsets for Sprite Hacking</h4>
+			<ul>
+				<li>
+					<a target="_blank" href="/ff4u-hero-offsets.json">
+						<h3>
+							Cecil, Kain, Rosa, Rydia/Kydia,<br/>Edge, Yang, Edward,<br/>Palom, Porom, Edward,<br/>Tellah, Cid, FuSoYa
+						</h3>
+					</a>
+				</li>
+				<li>
+					<a target="_blank" href="/ff4u-extra-offsets.json">
+						<h3>
+							Golbez & Anna
+						</h3>
+					</a>
+				</li>
+			</ul>
+		  </div>
       </div>
     </Layout>
   );
