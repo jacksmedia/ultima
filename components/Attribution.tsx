@@ -3,7 +3,7 @@ const Attribution = () => {
     <>
       <div className='mt-5 w-full block-inline bg-black'>
           <p className="text-center">Not endorsed by Square Enix, and not affiliated with them in any way. 
-          Site built by <a href="https://jacks.media" rel="noopener noreferrer" target="_blank" className="special">Jacks.Media</a>, 2025.</p>
+          Site built by <a href="https://jacks.media" rel="noopener noreferrer" target="_blank" className="special">Jacks.Media</a>, 2026.</p>
           
           <p className="text-center"><a target="_blank" href="https://icons8.com/icon/pfF6HpODcjW0/close">Menu</a> icons by <a target="_blank" href="https://icons8.com">Icons8</a></p>
       </div>

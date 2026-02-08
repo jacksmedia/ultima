@@ -546,7 +546,7 @@ const Ulti: React.FC = () => {
               >
                 Save Config
               </button>
-              <label className="bg-gray-600 hover:bg-gray-500 p-3 rounded shadow-md cursor-pointer">
+              <label className="bg-gray-600 hover:bg-gray-500 label-styling rounded shadow-md cursor-pointer">
                 Load Config
                 <input
                   type="file"

@@ -293,3 +293,8 @@ a > h3 {
   margin-left: 5vw;
   margin-right: 5vw;
 }
+
+.label-styling {
+  padding: 6px;
+  padding-top: 10px;
+}
