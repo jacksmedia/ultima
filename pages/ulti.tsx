@@ -190,8 +190,17 @@ const Ulti: React.FC = () => {
     }
   };
 
+  // Extract character name from patch path (text before first "(")
+  const getCharacterName = (patchPath: string): string => {
+    const filename = patchPath.split(/[\\\/]/).pop() || patchPath;
+    const match = filename.match(/^([^(]+)\s*\(/);
+    return match ? match[1].trim() : filename;
+  };
+
   // Toggle a patch selection on/off
-  // Fonts category is exclusive (single-select), others allow multiple
+  // Fonts: exclusive (single-select)
+  // Battle, map, portraits: one per character name
+  // Game: multi-select
   const togglePatch = (categoryId: keyof PatchConfig, patchPath: string) => {
     setPatchConfig(prev => {
       const current = prev[categoryId];
@@ -205,7 +214,26 @@ const Ulti: React.FC = () => {
         };
       }
 
-      // Other categories: multi-select (toggle behavior)
+      // Battle, map, portraits: one per character name
+      if (categoryId === 'battle' || categoryId === 'map' || categoryId === 'portraits') {
+        if (isSelected) {
+          // Deselecting - just remove it
+          return {
+            ...prev,
+            [categoryId]: current.filter(p => p !== patchPath)
+          };
+        } else {
+          // Selecting - remove any existing patch for same character, then add new one
+          const newCharName = getCharacterName(patchPath);
+          const filtered = current.filter(p => getCharacterName(p) !== newCharName);
+          return {
+            ...prev,
+            [categoryId]: [...filtered, patchPath]
+          };
+        }
+      }
+
+      // Game: multi-select (toggle behavior)
       return {
         ...prev,
         [categoryId]: isSelected
@@ -328,7 +356,10 @@ const Ulti: React.FC = () => {
           )}
         </div>
         <p className="text-xs text-gray-300 mb-3">
-          {categoryId === 'fonts' ? 'Choose one font' : 'Click to select/deselect patches'}
+          {categoryId === 'fonts' && 'Choose one font'}
+          {(categoryId === 'battle' || categoryId === 'map' || categoryId === 'portraits') &&
+            'One per character (selecting replaces previous)'}
+          {categoryId === 'game' && 'Select any combination'}
         </p>
         {category.loading ? (
           <p className="text-gray-300">Loading...</p>
