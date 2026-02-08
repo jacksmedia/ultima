@@ -8,7 +8,7 @@ const navLinks = [
   { href: '/', label: 'Ultima Plus' },
   { href: '/guides', label: 'Guides' },
   { href: '/classic', label: 'Ultima Classic' },
-  { href: 'https://ff4ultima-plus.vercel.app/ulti.html', label: 'Custom' },
+  { href: '/ulti', label: 'Custom' },
   { href: 'https://ff4ultima-plus.vercel.app/indev.html', label: 'In Dev.' },
   { href: '/patches', label: 'Patches' },
   { href: '/discord', label: 'Discord' }
