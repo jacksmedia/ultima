@@ -159,10 +159,21 @@ const Ulti: React.FC = () => {
   };
 
   // Toggle a patch selection on/off
+  // Fonts category is exclusive (single-select), others allow multiple
   const togglePatch = (categoryId: keyof PatchConfig, patchPath: string) => {
     setPatchConfig(prev => {
       const current = prev[categoryId];
       const isSelected = current.includes(patchPath);
+
+      // Fonts: exclusive selection (radio behavior)
+      if (categoryId === 'fonts') {
+        return {
+          ...prev,
+          [categoryId]: isSelected ? [] : [patchPath]
+        };
+      }
+
+      // Other categories: multi-select (toggle behavior)
       return {
         ...prev,
         [categoryId]: isSelected
@@ -285,7 +296,7 @@ const Ulti: React.FC = () => {
           )}
         </div>
         <p className="text-xs text-gray-300 mb-3">
-          Click to select/deselect patches
+          {categoryId === 'fonts' ? 'Choose one font' : 'Click to select/deselect patches'}
         </p>
         {category.loading ? (
           <p className="text-gray-300">Loading...</p>
