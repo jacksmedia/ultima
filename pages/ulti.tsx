@@ -379,18 +379,12 @@ const Ulti: React.FC = () => {
                     }
                   `}
                 >
-                  <div className="flex items-center gap-2">
-                    <img src={patch.previewPath}
-                    className={`text-lg ${isSelected ? 'text-white' : 'text-gray-400'}`}
-                    />
-                    <h4>
-                      <span className={`text-lg ${isSelected ? 'text-white' : 'text-gray-400'}`}>
-                        {isSelected ? '✓ ' : '○ '}
-                      </span>
-                      <span className="truncate" title={patch.name}>
+                  <div className="flex-col items-center gap-2">
+                    <img src={patch.previewPath} className={` ${isSelected ? '' : 'mask-b-from-20% mask-b-to-80%' } `}
+                     />
+                      <p className="truncate" title={patch.name}>
                         {patch.name.length > 45 ? patch.name.slice(0, 43) + '...' : patch.name}
-                      </span>
-                    </h4>
+                      </p>
                   </div>
                 </button>
               );
