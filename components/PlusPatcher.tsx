@@ -328,7 +328,7 @@ export default function PatchPage() {
 
         <div className='flex-col justify-center items-center'>
           <PlusTitle />
-          <h5><a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">Version 1.1</a>, December 2025</h5>
+          <h5><a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">Version 1.11</a>, March 2026</h5>
           <DownloadRomButton
             onGenerateRom={generatePatchedRom} // Upgraded to offer readme files conditionally
             filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}

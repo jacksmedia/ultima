@@ -1,7 +1,19 @@
 Final Fantasy IV - Ultima Plus Changelog
 ------------
-   v2025
-------------
+
+Changelog 2026
+--------------
+
+v1.1.1
+- bugfixed "Double Spell learning" issue discovered by dev team
+- fixed typo in spell description for Burst
+- 2 script edits relating to Damcyan attack and the intro of Palom & Porom
+
+
+
+Changelog 2025
+--------------
+
 v1.1
 - cameo NPC has his own map sprite; 2 soldiers in Baron were slightly modified to achieve this
 - "Form" command in menu modifed slightly; shifting the entire party from front to back row removed
