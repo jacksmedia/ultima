@@ -351,7 +351,7 @@ const Ulti = ({ initialCategories }: InferGetStaticPropsType<typeof getStaticPro
           {/* ROM Upload */}
           <div className="bg-indigo-700 p-4 rounded-lg gap-y-2">
             <h3 className="text-lg font-semibold mb-2">1. Upload your ROM file</h3>
-            <p className="text-sm text-gray-300 mb-2">Upload an .sfc or .smc file to enable patching</p>
+            <p className="text-sm text-gray-300 mb-2">Upload a copy of Ultima or Ultima Plus (.sfc or .smc file) to add custom options</p>
             <input
               className="bg-gray-600 p-3 rounded shadow-md w-full"
               type="file"

@@ -74,6 +74,8 @@ NextJS 15 webapp for the FF4 Ultima romhack community (Final Fantasy IV SNES). A
 
 ## Known Gotchas
 
+- **`<html>`/`<body>` in Layout breaks client-side navigation:** In Next.js Pages Router, never render `<html>` or `<body>` tags in a component — those belong only in `pages/_document`. Doing so causes white-screen crashes on client-side navigation (via `<Link>`) because React tries to reconcile those tags against the live DOM. Direct URL access works because the browser's HTML parser is tolerant; React's DOM reconciler is not. Fixed in `layout.tsx` by replacing with a React fragment (`<>`).
+
 - **generatePatches.js must run before next build:** The `*.json` manifests in `/public/patches/` are generated at build time. If you add new `.ips` files to the patch directories, run `npm run generate-patches` (or just `npm run build` which does it automatically) before deploying. The `fonts` manifest is NOT auto-generated — it's manually maintained at `/public/patches/fonts/manifest.json`.
 - **ulti.tsx getStaticProps uses `require()` not ESM import:** `fs` and `path` are required inside the function body to avoid bundling them into client JS. TypeScript is satisfied with `require('fs') as typeof import('fs')`.
 - **ROM copier header:** `.smc` files may have a 512-byte copier header (detectable by `length % 1024 === 512`). Both patchers strip this before processing.
