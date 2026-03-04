@@ -1,269 +1,197 @@
-// PlusPatcher.tsx developed with Claude Sonnet 4
-import React, { useEffect, useMemo, useState } from 'react';
-import JSZip from 'jszip';
+// ClassicPatcher.tsx — zip-free rewrite: patch lists from build-time static props
+import React, { useMemo, useState } from 'react';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
 import DownloadRomButtonClassic from '@/components/DownloadRomButtonClassic';
 import RomVerifier from '@/components/RomVerifier';
-import StylesPanel from '@/components/StylesPanel';
+import StylesPanel, { StylePatch, PatchCategory as StyleCategory } from '@/components/StylesPanel';
 import { applyIPS } from '@/lib/patcher';
 import computeCRC32 from '@/lib/crc32';
-import { useStylePatches } from '@/hooks/useStylePatches';
-import ClassicTitle from "@/components/ClassicTitle";
-
+import ClassicTitle from '@/components/ClassicTitle';
+import { ExtractedManifest } from '@/components/PlusPatcher';
 
 type Patch = {
-  name: string;
-  data: Uint8Array;
-  originalName: string; // filename without path
+  name: string;         // CRC32 uppercase — used for matching
+  originalName: string; // e.g. "CAA15E97.ips"
 };
 
-// Interface for ROM state mgmt
 type RomState = {
   originalFile: File;
-  processedRom: Uint8Array; // headerless, expanded ROM ready for patching
+  processedRom: Uint8Array;
   matchingPatch: Patch;
-  originalCRC32: string; // previously discrete state
+  originalCRC32: string;
 };
 
-export default function PatchPage() {
-  const [patches, setPatches] = useState<Patch[]>([]);
-  const [romState, setRomState] = useState<RomState | null>(null); // Stores ROM + patch info
+function toDisplayName(filename: string): string {
+  return filename
+    .replace(/\.ips$/i, '')
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+}
+
+function buildStyleCategory(
+  filenames: string[],
+  categoryId: string,
+  title: string,
+  description: string,
+  allowMultiple: boolean
+): StyleCategory {
+  const patches: StylePatch[] = filenames.map(filename => ({
+    id: `${categoryId}-${filename}`,
+    name: toDisplayName(filename),
+    description: `Apply ${toDisplayName(filename)} modifications`,
+    filename,
+    data: new Uint8Array(0), // fetched lazily at download time
+    category: categoryId,
+    previewImage: `/previews/${filename.replace(/\.ips$/i, '')}.png`,
+  }));
+  return { id: categoryId, title, description, patches, allowMultiple };
+}
+
+async function fetchAndApply(
+  rom: Uint8Array,
+  subdir: string,
+  filename: string
+): Promise<Uint8Array> {
+  const url = `/extracted/${subdir}/${encodeURIComponent(filename)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch patch: ${filename}`);
+  return applyIPS(rom, new Uint8Array(await res.arrayBuffer())) as Uint8Array;
+}
+
+export default function ClassicPatcher({ manifest }: { manifest: ExtractedManifest }) {
+  const [romState, setRomState] = useState<RomState | null>(null);
   const [isPatching, setIsPatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [loadingPatches, setLoadingPatches] = useState(true);
   const [selectedStylePatches, setSelectedStylePatches] = useState<string[]>([]);
-  const [selectedOptionalPatches, setSelectedOptionalPatches] = useState<string[]>([]);
+  const [selectedOptionalPatches] = useState<string[]>([]); // kept for filename logic only
 
-  // Available styles (groups of options)
-  const stylePatchesConfig = useMemo(() => ({
-    categories: [
-      {
-        id: 'styles',
-        title: 'Styles',
-        description: 'Changes to many graphics',
-        allowMultiple: false,
-        zipFile: 'Styles.zip',
-        hasManifest: true,
-        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
-        // filePattern: /Style/i // can be used filter a multi-catergory archive
-      }
-    ]
-  }), []);
-  const {
-    categories: styleCategories,
-    loading: loadingStyle,
-    error: styleError,
-    getSelectedStylePatches
-  } = useStylePatches(stylePatchesConfig);
+  // Build base patch list from manifest — instant, no zip loading
+  const patches: Patch[] = useMemo(() =>
+    manifest.baseClassic.map(filename => ({
+      name: filename.replace(/\.ips$/i, '').toUpperCase(),
+      originalName: filename,
+    })),
+    [manifest.baseClassic]
+  );
 
+  // Build style categories from manifest
+  const styleCategories: StyleCategory[] = useMemo(() => [
+    buildStyleCategory(manifest.styles, 'styles', 'Styles', 'Changes to many graphics', false),
+  ], [manifest.styles]);
 
+  const getSelectedStyles = (ids: string[]): StylePatch[] => {
+    const all = styleCategories.flatMap(c => c.patches);
+    return ids.map(id => all.find(p => p.id === id)).filter((p): p is StylePatch => !!p);
+  };
 
-  // Loads main Ultima patches
-  useEffect(() => {
-    const loadPatches = async () => {
-      try {
-        setLoadingPatches(true);
-        const response = await fetch('/FF4UC.zip');
-        const zipData = await response.arrayBuffer();
-        const zip = await JSZip.loadAsync(zipData);
-        const patchEntries: Patch[] = [];
-
-        await Promise.all(
-          Object.keys(zip.files).map(async (filename) => {
-            const file = zip.files[filename];
-            
-            if (file.dir || !file.name.toLowerCase().endsWith('.ips')) {
-              return; // filtered for patch files only
-            }
-            
-            try {
-              const originalName = file.name.split('/').pop() || file.name; // rm path
-              const data = new Uint8Array(await file.async('arraybuffer')); // convert to raw Uint8Array
-              
-              const header = new TextDecoder().decode(data.slice(0, 5)); // verifies ips header ("PATCH")
-              if (header !== 'PATCH') {
-                console.warn(`Skipping invalid IPS file: ${file.name} (invalid header: ${header})`);
-                return;
-              }
-              
-              const nameWithoutExtension = originalName.replace(/\.ips$/i, '').toUpperCase(); // case mgmt for CRC32 matching
-              
-              patchEntries.push({ 
-                name: nameWithoutExtension, 
-                data,
-                originalName
-              });
-              
-              console.log(`Loaded patch: ${nameWithoutExtension} from ${originalName}`);
-            } catch (err) {
-              console.error(`Error processing patch file ${file.name}:`, err);
-            }
-          })
-        );
-
-        console.log(`Successfully loaded ${patchEntries.length} main project patches`);
-        setPatches(patchEntries);
-      } catch (err) {
-        console.error('Failed to load main patches:', err);
-        setError('Failed to load main patch files.');
-      } finally {
-        setLoadingPatches(false);
-      }
-    };
-
-    loadPatches();
-  }, []);
-
-
-  // Detects & removes SMC/SFC copier header if present
   const removeHeaderIfPresent = (romData: Uint8Array): Uint8Array => {
-    if (romData.length % 1024 === 512) { // copier header is always 512 bytes
-      console.log('ROM copier header detected, removing 512 bytes');
-      return romData.slice(512);
-    }
+    if (romData.length % 1024 === 512) return romData.slice(512);
     return romData;
   };
 
-  // Validates & prepares ROM
   const handleMatch = async (romFile: File) => {
     setIsPatching(true);
     setError(null);
     setRomState(null);
 
     try {
-      // Loads ROM bytes
       const arrayBuffer = await romFile.arrayBuffer();
-      const romBytes = new Uint8Array(arrayBuffer); // needed for specificity in Type
-      // Checks, removes header if present
+      const romBytes = new Uint8Array(arrayBuffer);
       const headerlessRom = removeHeaderIfPresent(romBytes);
-      // Calculates original ROM CRC32
       const romCRC32 = computeCRC32(headerlessRom);
-      console.log(`ROM CRC32: ${romCRC32}`); // debug log
 
-      // Finds matching main patch by CRC32
-      const matchingPatch = patches.find(patch => patch.name === romCRC32);
+      const matchingPatch = patches.find(p => p.name === romCRC32);
       if (!matchingPatch) {
         throw new Error(`No matching patch found for ROM with CRC32: ${romCRC32}`);
       }
-      console.log(`Found matching patch: ${matchingPatch.originalName}`);
 
-      // Expands uploaded rom to 2MB to fit FF4 Ultima
       const expandedRom = headerlessRom.length < 2 * 1024 * 1024
-        ? (() => {
-            const newRom = new Uint8Array(2 * 1024 * 1024);
-            newRom.set(headerlessRom);
-            return newRom;
-          })()
+        ? (() => { const r = new Uint8Array(2 * 1024 * 1024); r.set(headerlessRom); return r; })()
         : headerlessRom;
 
-      // Stores ROM state; allows for optional patches to be added
-      setRomState({
-        originalFile: romFile,
-        processedRom: expandedRom,
-        matchingPatch: matchingPatch,
-        originalCRC32: romCRC32
-      });
-
-      console.log('ROM validated and ready for patching');
-    } catch (err: any) {
-      console.error('Error during ROM validation:', err);
-      setError(err.message || 'An unknown error occurred.');
+      setRomState({ originalFile: romFile, processedRom: expandedRom, matchingPatch, originalCRC32: romCRC32 });
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
     } finally {
       setIsPatching(false);
     }
   };
 
-  // Generates patched ROM (called by DownloadRomButton)
   const generatePatchedRom = async (): Promise<Uint8Array> => {
-    if (!romState) {
-      throw new Error('No ROM loaded');
-    }
-    console.log('Generating patched ROM...');
-    // Starts with the processed ROM...
+    if (!romState) throw new Error('No ROM loaded');
+
     let patchedRom = new Uint8Array(romState.processedRom.buffer);
-    // Applies main patch
-    patchedRom = applyIPS(patchedRom, romState.matchingPatch.data as Uint8Array);
-    console.log(`Applied main patch: ${romState.matchingPatch.originalName}`);
 
-    // Applies optional patches (in order of selection)
-    const selectedStyles = getSelectedStylePatches(selectedStylePatches);
+    // Fetch + apply base classic patch
+    patchedRom = await fetchAndApply(patchedRom, 'base-classic', romState.matchingPatch.originalName);
 
-    for (const stylePatch of selectedStyles) {
-      console.log(`Applying optional patch: ${stylePatch.name}`);
-      patchedRom = applyIPS(patchedRom, stylePatch.data);
+    // Fetch + apply selected style patches
+    const selectedStyles = getSelectedStyles(selectedStylePatches);
+    for (const patch of selectedStyles) {
+      patchedRom = await fetchAndApply(patchedRom, 'styles', patch.filename);
     }
 
     return patchedRom;
   };
 
-  // Control checks
   const hasValidRom = romState !== null;
-  const isReady = !loadingPatches && patches.length > 0;
-  
+
   return (
-  <>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className='flex-col justify-center items-center'>
-        <ClassicTitle />
-        <h5><a href="Final Fantasy IV Ultima changelog.txt" rel="noopener noreferrer" target="_blank">See changelog</a></h5>
-        <DownloadRomButtonClassic
-          onGenerateRom={generatePatchedRom} // Upgraded to offer readme files conditionally
-          filename={`FF4 Ultima${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
-          disabled={!hasValidRom || isPatching}
-        />
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className='flex-col justify-center items-center'>
+          <ClassicTitle />
+          <h5>
+            <a href="Final Fantasy IV Ultima changelog.txt" rel="noopener noreferrer" target="_blank">
+              See changelog
+            </a>
+          </h5>
+          <DownloadRomButtonClassic
+            onGenerateRom={generatePatchedRom}
+            filename={`FF4 Ultima${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
+            disabled={!hasValidRom || isPatching}
+          />
+        </div>
+
+        <div className='flex-col justify-center items-center'>
+          {/* RomVerifier is ready immediately — no zip loading required */}
+          <RomVerifier onMatch={handleMatch} />
+          <p className="text-center mb-2">
+            Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima.<br />
+            Choose a new visual style if you wish!<br />
+            <em>(Note: RetroAchievements doesn't support Styles.)</em>
+          </p>
+        </div>
       </div>
 
-      <div className='flex-col justify-center items-center'>
-        {loadingPatches ? (
-          <p>Loading main patches...</p>
-        ) : isReady ? (
-          <RomVerifier onMatch={handleMatch} />
-        ) : (
-          <p className="text-red-500">No patches could be loaded. Please refresh the page.</p>
-        )}
-         <p className="text-center mb-2">
-          Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima.<br/>
-          Choose a new visual style if you wish!<br/>
-          <em>(Note: RetroAchievements doesn't support Styles.)</em>
-        </p>
-      </div>
-    </div>
-    {/* Styles & Optional Patches */}
-    <div className='flex justify-center items-center'>
-      {isReady && (
-        <><StylesPanel
+      {/* Styles panel — always ready, populated from static props */}
+      <div className='flex justify-center items-center'>
+        <StylesPanel
           categories={styleCategories}
           selectedPatches={selectedStylePatches}
           onSelectionChange={setSelectedStylePatches}
           isDisabled={isPatching || !hasValidRom}
         />
-        </>
-      )}
 
-      
-      {/* ROM Information */}
-      {hasValidRom && (
-        <div className="p-4 bg-black rounded-lg">
-          <h2 className="text-xl mb-2">ROM Ready:</h2>
-          <p className="font-mono text-sm">
-            Uploaded CRC32: {romState!.originalCRC32}
-          </p>
-         
-          {selectedOptionalPatches.length > 0 && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-300">Selected patches:</p>
-              <ul className="text-xs text-gray-400 mt-1">
-                {getSelectedStylePatches(selectedStylePatches).map(patch => (
-                  <li key={patch.id}>{patch.name}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
+        {hasValidRom && (
+          <div className="p-4 bg-black rounded-lg">
+            <h2 className="text-xl mb-2">ROM Ready:</h2>
+            <p className="font-mono text-sm">Uploaded CRC32: {romState!.originalCRC32}</p>
+            {selectedStylePatches.length > 0 && (
+              <div className="mt-2">
+                <p className="text-sm text-gray-300">Selected patches:</p>
+                <ul className="text-xs text-gray-400 mt-1">
+                  {getSelectedStyles(selectedStylePatches).map(p => (
+                    <li key={p.id}>{p.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
 
-      {isPatching && <SpinnerOverlay />}
-    </div>
-  </>
+        {isPatching && <SpinnerOverlay />}
+      </div>
+    </>
   );
 }

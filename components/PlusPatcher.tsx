@@ -1,366 +1,246 @@
-// PlusPatcher.tsx developed with Claude Sonnet 4
-import React, { useEffect, useMemo, useState } from 'react';
-import JSZip from 'jszip';
+// PlusPatcher.tsx — zip-free rewrite: all patch lists from build-time static props
+import React, { useMemo, useState } from 'react';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
 import DownloadRomButton from '@/components/DownloadRomButton';
 import RomVerifier from '@/components/RomVerifier';
-import StylesPanel from '@/components/StylesPanel';
-import CustomOptionsPanel from '@/components/CustomOptionsPanel';
+import StylesPanel, { StylePatch, PatchCategory as StyleCategory } from '@/components/StylesPanel';
+import CustomOptionsPanel, { OptionalPatch, PatchCategory as OptionalCategory } from '@/components/CustomOptionsPanel';
 import { applyIPS } from '@/lib/patcher';
 import computeCRC32 from '@/lib/crc32';
-import { useOptionalPatches } from '@/hooks/useOptionalPatches';
-import { useStylePatches } from '@/hooks/useStylePatches';
-import PlusTitle from "@/components/PlusTitle";
+import PlusTitle from '@/components/PlusTitle';
 
+// Manifest shape written by generatePatches.js
+export type ExtractedManifest = {
+  basePlus: string[];
+  baseClassic: string[];
+  styles: string[];
+  battles: string[];
+  maps: string[];
+  portraits: string[];
+  fonts: string[];
+  tweaks: string[];
+};
 
 type Patch = {
-  name: string;
-  data: Uint8Array;
-  originalName: string; // filename without path
+  name: string;         // CRC32 uppercase — used for matching
+  originalName: string; // e.g. "CAA15E97.ips"
 };
 
-// Interface for ROM state mgmt
 type RomState = {
   originalFile: File;
-  processedRom: Uint8Array; // headerless, expanded ROM ready for patching
+  processedRom: Uint8Array;
   matchingPatch: Patch;
-  originalCRC32: string; // previously discrete state
+  originalCRC32: string;
 };
 
-export default function PatchPage() {
-  const [patches, setPatches] = useState<Patch[]>([]);
-  const [romState, setRomState] = useState<RomState | null>(null); // Stores ROM + patch info
+// Mirror the display-name logic from useZipPatches
+function toDisplayName(filename: string): string {
+  return filename
+    .replace(/\.ips$/i, '')
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+}
+
+function buildStyleCategory(
+  filenames: string[],
+  categoryId: string,
+  title: string,
+  description: string,
+  allowMultiple: boolean
+): StyleCategory {
+  const patches: StylePatch[] = filenames.map(filename => ({
+    id: `${categoryId}-${filename}`,
+    name: toDisplayName(filename),
+    description: `Apply ${toDisplayName(filename)} modifications`,
+    filename,
+    data: new Uint8Array(0), // fetched lazily at download time
+    category: categoryId,
+    previewImage: `/previews/${filename.replace(/\.ips$/i, '')}.png`,
+  }));
+  return { id: categoryId, title, description, patches, allowMultiple };
+}
+
+function buildOptionalCategory(
+  filenames: string[],
+  categoryId: string,
+  title: string,
+  description: string,
+  allowMultiple: boolean
+): OptionalCategory {
+  const patches: OptionalPatch[] = filenames.map(filename => ({
+    id: `${categoryId}-${filename}`,
+    name: toDisplayName(filename),
+    description: `Apply ${toDisplayName(filename)} modifications`,
+    filename,
+    data: new Uint8Array(0), // fetched lazily at download time
+    category: categoryId,
+    previewImage: `/previews/${filename.replace(/\.ips$/i, '')}.png`,
+  }));
+  return { id: categoryId, title, description, patches, allowMultiple };
+}
+
+// Fetch and apply a single .ips file from /extracted/{subdir}/{filename}
+async function fetchAndApply(
+  rom: Uint8Array,
+  subdir: string,
+  filename: string
+): Promise<Uint8Array> {
+  const url = `/extracted/${subdir}/${encodeURIComponent(filename)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch patch: ${filename}`);
+  return applyIPS(rom, new Uint8Array(await res.arrayBuffer())) as Uint8Array;
+}
+
+export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest }) {
+  const [romState, setRomState] = useState<RomState | null>(null);
   const [isPatching, setIsPatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [loadingPatches, setLoadingPatches] = useState(true);
   const [selectedStylePatches, setSelectedStylePatches] = useState<string[]>([]);
   const [selectedOptionalPatches, setSelectedOptionalPatches] = useState<string[]>([]);
 
-  // Available styles (groups of options)
-  const stylePatchesConfig = useMemo(() => ({
-    categories: [
-      {
-        id: 'styles',
-        title: 'Styles',
-        description: 'Changes to many graphics',
-        allowMultiple: false,
-        zipFile: 'Styles.zip',
-        hasManifest: true,
-        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
-        // filePattern: /Style/i // can be used filter a multi-catergory archive
-      }
-    ]
-  }), []);
-  const {
-    categories: styleCategories,
-    loading: loadingStyle,
-    error: styleError,
-    getSelectedStylePatches
-  } = useStylePatches(stylePatchesConfig);
+  // Build base patch list from manifest — instant, no zip loading
+  const patches: Patch[] = useMemo(() =>
+    manifest.basePlus.map(filename => ({
+      name: filename.replace(/\.ips$/i, '').toUpperCase(),
+      originalName: filename,
+    })),
+    [manifest.basePlus]
+  );
 
-  // Optional patches by category
-  const optionalPatchesConfig = useMemo(() => ({
-    categories: [
-      {
-        id: 'battles',
-        title: 'Battle Sprites',
-        description: 'Changes hero graphics in battle',
-        allowMultiple: false,
-        zipFile: 'Battles.zip',
-        hasManifest: true,
-        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
-      },
-      {
-        id: 'maps',
-        title: 'Map Sprites',
-        description: 'Changes the heroes\' map avatars',
-        allowMultiple: false,
-        zipFile: 'Maps.zip',
-        hasManifest: true,
-        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
-      },
-      {
-        id: 'portraits',
-        title: 'Portraits',
-        description: 'Changes the hero faces in the menu',
-        allowMultiple: false,
-        zipFile: 'Portraits.zip',
-        hasManifest: true,
-        manifestPath: (patchName: string) => `/manifests/${patchName}-manifest.txt`
-      },
-      {
-        id: 'tweaks',
-        title: 'Game Adjustments',
-        description: 'Tweaks to the battle or menu systems (Multiple possible)',
-        allowMultiple: true,
-        zipFile: 'Tweaks.zip',
-        hasManifest: false
-      },
-      {
-        id: 'fonts',
-        title: 'Alt Fonts (+ Item Names)',
-        description: 'Alternate Fonts, + Alt. Item Names with SBG',
-        allowMultiple: false,
-        zipFile: 'Fonts.zip',
-        hasManifest: false
-      }
-    ]
-  }), []);
+  // Build style categories from manifest
+  const styleCategories: StyleCategory[] = useMemo(() => [
+    buildStyleCategory(manifest.styles, 'styles', 'Styles', 'Changes to many graphics', false),
+  ], [manifest.styles]);
 
-  const {
-    categories: optionalCategories,
-    loading: loadingOptional,
-    error: optionalError,
-    getSelectedOptionalPatches
-  } = useOptionalPatches(optionalPatchesConfig);
+  // Build optional categories from manifest
+  const optionalCategories: OptionalCategory[] = useMemo(() => [
+    buildOptionalCategory(manifest.battles,  'battles',  'Battle Sprites',   'Changes hero graphics in battle',        false),
+    buildOptionalCategory(manifest.maps,     'maps',     'Map Sprites',      "Changes the heroes' map avatars",         false),
+    buildOptionalCategory(manifest.portraits,'portraits','Portraits',         'Changes the hero faces in the menu',      false),
+    buildOptionalCategory(manifest.tweaks,   'tweaks',   'Game Adjustments', 'Tweaks to the battle or menu systems',    true),
+    buildOptionalCategory(manifest.fonts,    'fonts',    'Alt Fonts (+ Item Names)', 'Alternate Fonts, + Alt. Item Names with SBG', false),
+  ], [manifest.battles, manifest.maps, manifest.portraits, manifest.tweaks, manifest.fonts]);
 
-  // Loads main Ultima patches
-  useEffect(() => {
-    const loadPatches = async () => {
-      try {
-        setLoadingPatches(true);
-        const response = await fetch('/FF4UP.zip');
-        const zipData = await response.arrayBuffer();
-        const zip = await JSZip.loadAsync(zipData);
-        const patchEntries: Patch[] = [];
+  // Helper: look up selected patch objects by ID
+  const getSelectedFrom = <T extends { id: string }>(categories: { patches: T[] }[], ids: string[]): T[] => {
+    const all = categories.flatMap(c => c.patches);
+    return ids.map(id => all.find(p => p.id === id)).filter((p): p is T => !!p);
+  };
 
-        await Promise.all(
-          Object.keys(zip.files).map(async (filename) => {
-            const file = zip.files[filename];
-            
-            if (file.dir || !file.name.toLowerCase().endsWith('.ips')) {
-              return; // filtered for patch files only
-            }
-            
-            try {
-              const originalName = file.name.split('/').pop() || file.name; // rm path
-              const data = new Uint8Array(await file.async('arraybuffer')); // convert to raw Uint8Array
-              
-              const header = new TextDecoder().decode(data.slice(0, 5)); // verifies ips header ("PATCH")
-              if (header !== 'PATCH') {
-                console.warn(`Skipping invalid IPS file: ${file.name} (invalid header: ${header})`);
-                return;
-              }
-              
-              const nameWithoutExtension = originalName.replace(/\.ips$/i, '').toUpperCase(); // case mgmt for CRC32 matching
-              
-              patchEntries.push({ 
-                name: nameWithoutExtension, 
-                data,
-                originalName
-              });
-              
-              console.log(`Loaded patch: ${nameWithoutExtension} from ${originalName}`);
-            } catch (err) {
-              console.error(`Error processing patch file ${file.name}:`, err);
-            }
-          })
-        );
-
-        console.log(`Successfully loaded ${patchEntries.length} main project patches`);
-        setPatches(patchEntries);
-      } catch (err) {
-        console.error('Failed to load main patches:', err);
-        setError('Failed to load main patch files.');
-      } finally {
-        setLoadingPatches(false);
-      }
-    };
-
-    loadPatches();
-  }, []);
-
-
-  // Detects & removes SMC/SFC copier header if present
   const removeHeaderIfPresent = (romData: Uint8Array): Uint8Array => {
-    if (romData.length % 1024 === 512) { // copier header is always 512 bytes
-      console.log('ROM copier header detected, removing 512 bytes');
-      return romData.slice(512);
-    }
+    if (romData.length % 1024 === 512) return romData.slice(512);
     return romData;
   };
 
-  // Validates & prepares ROM
   const handleMatch = async (romFile: File) => {
     setIsPatching(true);
     setError(null);
     setRomState(null);
 
     try {
-      // Loads ROM bytes
       const arrayBuffer = await romFile.arrayBuffer();
-      const romBytes = new Uint8Array(arrayBuffer); // needed for specificity in Type
-      // Checks, removes header if present
+      const romBytes = new Uint8Array(arrayBuffer);
       const headerlessRom = removeHeaderIfPresent(romBytes);
-      // Calculates original ROM CRC32
       const romCRC32 = computeCRC32(headerlessRom);
-      console.log(`ROM CRC32: ${romCRC32}`); // debug log
 
-      // Finds matching main patch by CRC32
-      const matchingPatch = patches.find(patch => patch.name === romCRC32);
+      // Instant lookup against static manifest — no zip download needed
+      const matchingPatch = patches.find(p => p.name === romCRC32);
       if (!matchingPatch) {
         throw new Error(`No matching patch found for ROM with CRC32: ${romCRC32}`);
       }
-      console.log(`Found matching patch: ${matchingPatch.originalName}`);
 
-      // Expands uploaded rom to 2MB to fit FF4 Ultima
       const expandedRom = headerlessRom.length < 2 * 1024 * 1024
-        ? (() => {
-            const newRom = new Uint8Array(2 * 1024 * 1024);
-            newRom.set(headerlessRom);
-            return newRom;
-          })()
+        ? (() => { const r = new Uint8Array(2 * 1024 * 1024); r.set(headerlessRom); return r; })()
         : headerlessRom;
 
-      // Stores ROM state; allows for optional patches to be added
-      setRomState({
-        originalFile: romFile,
-        processedRom: expandedRom,
-        matchingPatch: matchingPatch,
-        originalCRC32: romCRC32
-      });
-
-      console.log('ROM validated and ready for patching');
-    } catch (err: any) {
-      console.error('Error during ROM validation:', err);
-      setError(err.message || 'An unknown error occurred.');
+      setRomState({ originalFile: romFile, processedRom: expandedRom, matchingPatch, originalCRC32: romCRC32 });
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
     } finally {
       setIsPatching(false);
     }
   };
 
-  // Generates patched ROM (called by DownloadRomButton)
   const generatePatchedRom = async (): Promise<{
     patchedRom: Uint8Array;
-    readmesToDownload: {filename: string; content: string }[]
+    readmesToDownload: { filename: string; content: string }[];
   }> => {
-    if (!romState) {
-      throw new Error('No ROM loaded');
-    }
-    console.log('Generating patched ROM...');
-    // Starts with the processed ROM...
+    if (!romState) throw new Error('No ROM loaded');
+
     let patchedRom = new Uint8Array(romState.processedRom.buffer);
-    // Applies main patch
-    patchedRom = applyIPS(patchedRom, romState.matchingPatch.data as Uint8Array);
-    console.log(`Applied main patch: ${romState.matchingPatch.originalName}`);
-
-
-    // Applies optional patches (in order of selection)
-    const selectedStyles = getSelectedStylePatches(selectedStylePatches);
-    // Applies optional patches (in order of selection)
-    const selectedOptionals = getSelectedOptionalPatches(selectedOptionalPatches);
-    // Newest feature to conditionally download readme for SBG patches
     const readmesToDownload: { filename: string; content: string }[] = [];
 
-    for (const stylePatch of selectedStyles) {
-      console.log(`Applying optional patch: ${stylePatch.name}`);
-      patchedRom = applyIPS(patchedRom, stylePatch.data);
-      
-      // Check to see if readme required
-      if (stylePatch.filename.includes('SBG')) {
-        try{
-          // Construct readme filename (same as .ips but .txt)
-          const readmeFilename = stylePatch.filename.replace(/\.ips$/i, '.txt');
-          const readmePath = `/readmes/${readmeFilename}`;
-          
-          // Fetch the readme content
-          const readmeResponse = await fetch(readmePath);
-          if (readmeResponse.ok) {
-            const readmeContent = await readmeResponse.text();
-            readmesToDownload.push({
-              filename: readmeFilename,
-              content: readmeContent
-            });
-            console.log(`Queued readme for download: ${readmeFilename}`);
+    // Fetch + apply base patch (one small .ips file, not the whole zip)
+    patchedRom = await fetchAndApply(patchedRom, 'base-plus', romState.matchingPatch.originalName);
+
+    // Fetch + apply selected style patches
+    const selectedStyles = getSelectedFrom(styleCategories, selectedStylePatches);
+    for (const patch of selectedStyles) {
+      patchedRom = await fetchAndApply(patchedRom, 'styles', patch.filename);
+
+      if (patch.filename.includes('SBG')) {
+        try {
+          const readmeFilename = patch.filename.replace(/\.ips$/i, '.txt');
+          const readmeRes = await fetch(`/readmes/${readmeFilename}`);
+          if (readmeRes.ok) {
+            readmesToDownload.push({ filename: readmeFilename, content: await readmeRes.text() });
           }
-        } catch(err){
-          console.warn(`Failed to load readme for ${stylePatch.filename}:`, err);
-          // Non-blocking error, readme fail is not critical
-        }
+        } catch { /* non-critical */ }
       }
     }
 
-    // Optionals patched on after Styles;
-    // need to add a block to only allow one of these,
-    // they are not compatible
+    // Fetch + apply selected optional patches
+    const selectedOptionals = getSelectedFrom(optionalCategories, selectedOptionalPatches);
+    for (const patch of selectedOptionals) {
+      patchedRom = await fetchAndApply(patchedRom, patch.category ?? patch.id.split('-')[0], patch.filename);
 
-    for (const optionalPatch of selectedOptionals) {
-      console.log(`Applying optional patch: ${optionalPatch.name}`);
-      patchedRom = applyIPS(patchedRom, optionalPatch.data);
-      
-      // Check to see if readme required
-      if (optionalPatch.filename.includes('SBG')) {
-        try{
-          // Construct readme filename (same as .ips but .txt)
-          const readmeFilename = optionalPatch.filename.replace(/\.ips$/i, '.txt');
-          const readmePath = `/readmes/${readmeFilename}`;
-          
-          // Fetch the readme content
-          const readmeResponse = await fetch(readmePath);
-          if (readmeResponse.ok) {
-            const readmeContent = await readmeResponse.text();
-            readmesToDownload.push({
-              filename: readmeFilename,
-              content: readmeContent
-            });
-            console.log(`Queued readme for download: ${readmeFilename}`);
+      if (patch.filename.includes('SBG')) {
+        try {
+          const readmeFilename = patch.filename.replace(/\.ips$/i, '.txt');
+          const readmeRes = await fetch(`/readmes/${readmeFilename}`);
+          if (readmeRes.ok) {
+            readmesToDownload.push({ filename: readmeFilename, content: await readmeRes.text() });
           }
-        } catch(err){
-          console.warn(`Failed to load readme for ${optionalPatch.filename}:`, err);
-          // Non-blocking error, readme fail is not critical
-        }
+        } catch { /* non-critical */ }
       }
     }
 
-    console.log(`Final patched ROM generated with ${selectedOptionals.length} optional patches`);
     return { patchedRom, readmesToDownload };
   };
 
-  // Control checks
   const hasValidRom = romState !== null;
-  const isReady = !loadingPatches && patches.length > 0;
-  const hasOptionalPatches = optionalCategories.length > 0;
-  
-  return (
-  <>
-    {/* title screen & upload zone */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 
+  return (
+    <>
+      {/* Title + download */}
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div className='flex-col justify-center items-center'>
           <PlusTitle />
-          <h5><a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">Version 1.11</a>, March 2026</h5>
+          <h5>
+            <a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">
+              Version 1.11
+            </a>, March 2026
+          </h5>
           <DownloadRomButton
-            onGenerateRom={generatePatchedRom} // Upgraded to offer readme files conditionally
+            onGenerateRom={generatePatchedRom}
             filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
             disabled={!hasValidRom || isPatching}
           />
         </div>
 
-
         <div className='flex-col justify-center items-center'>
-        {loadingPatches ? (
-          <p>Loading main patches...</p>
-        ) : isReady ? (
+          {/* RomVerifier is ready immediately — no zip loading required */}
           <RomVerifier onMatch={handleMatch} />
-        ) : (
-          <p className="text-red-500 text-center">No patches could be loaded. Please refresh the page.</p>
-        )}
-        
-
           <p className="text-center">
-            Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br/>
-            Choose a new visual style, or pick and choose<br/>alternate graphics & a new font if you wish!
+            Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br />
+            Choose a new visual style, or pick and choose<br />alternate graphics & a new font if you wish!
           </p>
         </div>
-
       </div>
 
-
-
-    {/* Styles & Optional Patches */}
-    <div className='flex-col justify-center items-center'>
-      {isReady && hasOptionalPatches && (
-        <><StylesPanel
+      {/* Styles & Optional Patches — always ready, populated from static props */}
+      <div className='flex-col justify-center items-center'>
+        <StylesPanel
           categories={styleCategories}
           selectedPatches={selectedStylePatches}
           onSelectionChange={setSelectedStylePatches}
@@ -373,46 +253,34 @@ export default function PatchPage() {
           selectedPatches={selectedOptionalPatches}
           onSelectionChange={setSelectedOptionalPatches}
           isDisabled={isPatching || !hasValidRom}
-        /></>
-      )}
-      {/* Loading state for optional patches */}
-      {loadingOptional && (
-        <p className="text-gray-400 text-sm">Loading optional patches...</p>
-      )}
-      {/* Errors */}
-      {error && <p className="text-red-500 font-medium">{error}</p>}
-      {optionalError && <p className="text-yellow-500 font-medium">Optional patches: {optionalError}</p>}
-      
-      {/* ROM Information */}
-      {hasValidRom && (
-        <div className="p-4 bg-black rounded-lg">
-          <h2 className="text-xl mb-2">ROM Ready:</h2>
-          <p className="font-mono text-sm">
-            Uploaded CRC32: {romState!.originalCRC32}
-          </p>
-          {/* <p className="text-sm text-gray-300">
-            Matching patch: {romState!.matchingPatch.originalName}
-          </p> */}
-          {selectedOptionalPatches.length > 0 && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-300">Selected patches:</p>
-              <ul className="text-xs text-gray-400 mt-1">
-                {getSelectedStylePatches(selectedStylePatches).map(patch => (
-                  <li key={patch.id}>{patch.name}</li>
-                ))}
-              </ul>
-              <ul className="text-xs text-gray-400 mt-1">
-                {getSelectedOptionalPatches(selectedOptionalPatches).map(patch => (
-                  <li key={patch.id}>{patch.name}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
+        />
 
-      {isPatching && <SpinnerOverlay />}
-    </div>
-  </>
+        {error && <p className="text-red-500 font-medium">{error}</p>}
+
+        {hasValidRom && (
+          <div className="p-4 bg-black rounded-lg">
+            <h2 className="text-xl mb-2">ROM Ready:</h2>
+            <p className="font-mono text-sm">Uploaded CRC32: {romState!.originalCRC32}</p>
+            {selectedOptionalPatches.length > 0 && (
+              <div className="mt-2">
+                <p className="text-sm text-gray-300">Selected patches:</p>
+                <ul className="text-xs text-gray-400 mt-1">
+                  {getSelectedFrom(styleCategories, selectedStylePatches).map(p => (
+                    <li key={p.id}>{p.name}</li>
+                  ))}
+                </ul>
+                <ul className="text-xs text-gray-400 mt-1">
+                  {getSelectedFrom(optionalCategories, selectedOptionalPatches).map(p => (
+                    <li key={p.id}>{p.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
+        {isPatching && <SpinnerOverlay />}
+      </div>
+    </>
   );
 }

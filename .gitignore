@@ -20,6 +20,7 @@
 
 # production
 /build
+/public/extracted
 
 # misc
 .DS_Store
