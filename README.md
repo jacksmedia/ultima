@@ -1,4 +1,9 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) 15 project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## FF4 Ultima patcher
+For descriptions of the custom code in this project, check out the `context.md` file.
+
+This webapp is available at [FF4 Ultima Patcher](https://ultima-plus.vercel.app/).
 
 ## Getting Started
 

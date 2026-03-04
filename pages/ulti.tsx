@@ -1,14 +1,10 @@
 // Ulti Patcher - modular patch config builder with dropdown multi-select
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { applyIPS } from '@/lib/patcher';
 import Layout from '@/layout';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
 import BothTitles from '@/components/BothTitles';
-
-type RomFile = {
-  file: File;
-  data: Uint8Array;
-};
 
 type PatchOption = {
   path: string;      // Full path like "Kain\\Kain (Classic DS, by xJ4cks).ips"
@@ -20,7 +16,6 @@ type CategoryData = {
   id: string;
   title: string;
   patches: PatchOption[];
-  loading: boolean;
 };
 
 // All categories support multiple selections
@@ -33,31 +28,66 @@ type PatchConfig = {
 };
 
 const CATEGORIES = [
-  { id: 'battle', title: 'Battle Sprites', jsonFile: 'battle.json', baseDir: 'battle' },
-  { id: 'map', title: 'Map Sprites', jsonFile: 'map.json', baseDir: 'map' },
-  { id: 'portraits', title: 'Portraits', jsonFile: 'portraits.json', baseDir: 'portraits' },
-  { id: 'fonts', title: 'Fonts', jsonFile: null, baseDir: 'fonts' }, // Direct directory listing
-  { id: 'game', title: 'Game Tweaks', jsonFile: 'game.json', baseDir: 'game' },
+  { id: 'battle',    title: 'Battle Sprites', baseDir: 'battle' },
+  { id: 'map',       title: 'Map Sprites',    baseDir: 'map' },
+  { id: 'portraits', title: 'Portraits',      baseDir: 'portraits' },
+  { id: 'fonts',     title: 'Fonts',          baseDir: 'fonts' },
+  { id: 'game',      title: 'Game Tweaks',    baseDir: 'game' },
 ] as const;
 
-const Ulti: React.FC = () => {
+// Build-time helper: convert raw path array to sorted PatchOption array
+function toPatches(paths: string[], baseDir: string): PatchOption[] {
+  return paths
+    .filter(p => p.toLowerCase().endsWith('.ips'))
+    .map(p => {
+      const filename = p.split(/[\\\/]/).pop() || p;
+      const name = filename.replace(/\.ips$/i, '');
+      const previewPath = `/patches/${baseDir}/${p.replace(/\.ips$/i, '.png')}`;
+      return { path: p, name, previewPath };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export const getStaticProps: GetStaticProps = () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const fs = require('fs') as typeof import('fs');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const path = require('path') as typeof import('path');
+  const base = path.join(process.cwd(), 'public/patches');
+  const read = (f: string): string[] =>
+    JSON.parse(fs.readFileSync(path.join(base, f), 'utf-8'));
+
+  return {
+    props: {
+      initialCategories: {
+        battle:    toPatches(read('battle.json'),          'battle'),
+        map:       toPatches(read('map.json'),             'map'),
+        portraits: toPatches(read('portraits.json'),       'portraits'),
+        fonts:     toPatches(read('fonts/manifest.json'),  'fonts'),
+        game:      toPatches(read('game.json'),            'game'),
+      } as Record<string, PatchOption[]>,
+    },
+  };
+};
+
+type RomFile = {
+  file: File;
+  data: Uint8Array;
+};
+
+const Ulti = ({ initialCategories }: InferGetStaticPropsType<typeof getStaticProps>) => {
   // ROM state
   const [romFile, setRomFile] = useState<RomFile | null>(null);
   const [isPatching, setIsPatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Page loading state
-  const [pageReady, setPageReady] = useState(false);
-  const [loadAttempt, setLoadAttempt] = useState(0);
-  const [loadError, setLoadError] = useState(false);
-
-  // Category data loaded from JSON files
-  const [categories, setCategories] = useState<Record<string, CategoryData>>({
-    battle: { id: 'battle', title: 'Battle Sprites', patches: [], loading: true },
-    map: { id: 'map', title: 'Map Sprites', patches: [], loading: true },
-    portraits: { id: 'portraits', title: 'Portraits', patches: [], loading: true },
-    fonts: { id: 'fonts', title: 'Fonts', patches: [], loading: true },
-    game: { id: 'game', title: 'Game Tweaks', patches: [], loading: true },
+  // Category data — populated at build time, no loading state needed
+  const [categories] = useState<Record<string, CategoryData>>({
+    battle:    { id: 'battle',    title: 'Battle Sprites', patches: initialCategories.battle },
+    map:       { id: 'map',       title: 'Map Sprites',    patches: initialCategories.map },
+    portraits: { id: 'portraits', title: 'Portraits',      patches: initialCategories.portraits },
+    fonts:     { id: 'fonts',     title: 'Fonts',          patches: initialCategories.fonts },
+    game:      { id: 'game',      title: 'Game Tweaks',    patches: initialCategories.game },
   });
 
   // Patch selections
@@ -68,89 +98,6 @@ const Ulti: React.FC = () => {
     fonts: [],
     game: []
   });
-
-  // Load patches from JSON files on mount (with retry logic)
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadCategory = async (category: typeof CATEGORIES[number], retries = 3): Promise<boolean> => {
-      for (let attempt = 0; attempt < retries; attempt++) {
-        try {
-          let patchPaths: string[] = [];
-
-          if (category.jsonFile) {
-            const response = await fetch(`/patches/${category.jsonFile}`);
-            if (response.ok) {
-              patchPaths = await response.json();
-            } else if (attempt < retries - 1) {
-              await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
-              continue;
-            }
-          } else if (category.id === 'fonts') {
-            const response = await fetch('/patches/fonts/manifest.json');
-            if (response.ok) {
-              patchPaths = await response.json();
-            } else if (attempt < retries - 1) {
-              await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
-              continue;
-            }
-          }
-
-          // Convert paths to PatchOption objects
-          const patches: PatchOption[] = patchPaths
-            .filter((p: string) => p.toLowerCase().endsWith('.ips'))
-            .map((path: string) => {
-              const filename = path.split(/[\\\/]/).pop() || path;
-              const name = filename.replace(/\.ips$/i, '');
-              const previewPath = `/patches/${category.baseDir}/${path.replace(/\.ips$/i, '.png')}`;
-              return { path, name, previewPath };
-            })
-            .sort((a: PatchOption, b: PatchOption) => a.name.localeCompare(b.name));
-
-          if (isMounted) {
-            setCategories(prev => ({
-              ...prev,
-              [category.id]: { ...prev[category.id], patches, loading: false }
-            }));
-          }
-          return patches.length > 0;
-        } catch (err) {
-          console.error(`Attempt ${attempt + 1} failed for ${category.id}:`, err);
-          if (attempt < retries - 1) {
-            await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
-          }
-        }
-      }
-
-      // All retries failed
-      if (isMounted) {
-        setCategories(prev => ({
-          ...prev,
-          [category.id]: { ...prev[category.id], loading: false }
-        }));
-      }
-      return false;
-    };
-
-    const loadAllCategories = async () => {
-      setLoadError(false);
-      const results = await Promise.all(CATEGORIES.map(cat => loadCategory(cat)));
-      const successCount = results.filter(Boolean).length;
-
-      if (isMounted) {
-        if (successCount >= 3) {
-          // At least 3 categories loaded successfully
-          setPageReady(true);
-        } else {
-          setLoadError(true);
-        }
-      }
-    };
-
-    loadAllCategories();
-
-    return () => { isMounted = false; };
-  }, [loadAttempt]);
 
   // Remove ROM copier header if present
   const removeHeaderIfPresent = (romData: Uint8Array): Uint8Array => {
@@ -181,12 +128,9 @@ const Ulti: React.FC = () => {
           })()
         : headerlessRom;
 
-      setRomFile({
-        file,
-        data: expandedRom
-      });
-    } catch (err: any) {
-      setError(err.message || 'Failed to read ROM file.');
+      setRomFile({ file, data: expandedRom });
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to read ROM file.');
     }
   };
 
@@ -208,28 +152,17 @@ const Ulti: React.FC = () => {
 
       // Fonts: exclusive selection (radio behavior)
       if (categoryId === 'fonts') {
-        return {
-          ...prev,
-          [categoryId]: isSelected ? [] : [patchPath]
-        };
+        return { ...prev, [categoryId]: isSelected ? [] : [patchPath] };
       }
 
       // Battle, map, portraits: one per character name
       if (categoryId === 'battle' || categoryId === 'map' || categoryId === 'portraits') {
         if (isSelected) {
-          // Deselecting - just remove it
-          return {
-            ...prev,
-            [categoryId]: current.filter(p => p !== patchPath)
-          };
+          return { ...prev, [categoryId]: current.filter(p => p !== patchPath) };
         } else {
-          // Selecting - remove any existing patch for same character, then add new one
           const newCharName = getCharacterName(patchPath);
           const filtered = current.filter(p => getCharacterName(p) !== newCharName);
-          return {
-            ...prev,
-            [categoryId]: [...filtered, patchPath]
-          };
+          return { ...prev, [categoryId]: [...filtered, patchPath] };
         }
       }
 
@@ -284,8 +217,8 @@ const Ulti: React.FC = () => {
       a.download = 'FF4 Ultima Custom.sfc';
       a.click();
       URL.revokeObjectURL(url);
-    } catch (err: any) {
-      setError(err.message || 'Failed to generate patched ROM.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to generate patched ROM.');
     } finally {
       setIsPatching(false);
     }
@@ -312,31 +245,21 @@ const Ulti: React.FC = () => {
     reader.onload = (e) => {
       try {
         const loadedConfig = JSON.parse(e.target?.result as string);
-        // Ensure all arrays exist
         const migratedConfig: PatchConfig = {
-          battle: Array.isArray(loadedConfig.battle) ? loadedConfig.battle : [],
-          map: Array.isArray(loadedConfig.map) ? loadedConfig.map : [],
+          battle:    Array.isArray(loadedConfig.battle)    ? loadedConfig.battle    : [],
+          map:       Array.isArray(loadedConfig.map)       ? loadedConfig.map       : [],
           portraits: Array.isArray(loadedConfig.portraits) ? loadedConfig.portraits : [],
-          fonts: Array.isArray(loadedConfig.fonts) ? loadedConfig.fonts : [],
-          game: Array.isArray(loadedConfig.game) ? loadedConfig.game : []
+          fonts:     Array.isArray(loadedConfig.fonts)     ? loadedConfig.fonts     : [],
+          game:      Array.isArray(loadedConfig.game)      ? loadedConfig.game      : []
         };
         setPatchConfig(migratedConfig);
         setError(null);
-      } catch (err) {
+      } catch {
         setError('Invalid config file format.');
       }
     };
     reader.readAsText(file);
     event.target.value = '';
-  };
-
-  // Get preview images for selected patches in a category
-  const getSelectedPreviews = (categoryId: keyof PatchConfig): string[] => {
-    const category = categories[categoryId];
-    const selected = patchConfig[categoryId];
-    return selected
-      .map(path => category.patches.find(p => p.path === path)?.previewPath)
-      .filter((p): p is string => !!p);
   };
 
   // Render a category with clickable toggle cards
@@ -361,43 +284,38 @@ const Ulti: React.FC = () => {
             'One per character (selecting replaces previous)'}
           {categoryId === 'game' && 'Select any combination'}
         </p>
-        {category.loading ? (
-          <p className="text-gray-300">Loading...</p>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-64 overflow-y-auto p-1">
-            {category.patches.map((patch) => {
-              const isSelected = selectedPaths.includes(patch.path);
-              return (
-                <button
-                  key={patch.path}
-                  onClick={() => togglePatch(categoryId, patch.path)}
-                  className={`
-                    p-2 rounded-lg text-left text-sm transition-all duration-150
-                    ${isSelected
-                      ? 'bg-green-600 hover:bg-green-500 ring-2 ring-green-400 shadow-xl'
-                      : 'bg-indigo-700 hover:bg-indigo-600 border border-indigo-500'
-                    }
-                  `}
-                >
-                  <div className="flex-col items-center gap-2">
-                    <img src={patch.previewPath} className={` ${isSelected ? '' : 'mask-b-from-20% mask-b-to-80%' } `}
-                     />
-                      <p className="truncate" title={patch.name}>
-                        {patch.name.length > 45 ? patch.name.slice(0, 43) + '...' : patch.name}
-                      </p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-64 overflow-y-auto p-1">
+          {category.patches.map((patch) => {
+            const isSelected = selectedPaths.includes(patch.path);
+            return (
+              <button
+                key={patch.path}
+                onClick={() => togglePatch(categoryId, patch.path)}
+                className={`
+                  p-2 rounded-lg text-left text-sm transition-all duration-150
+                  ${isSelected
+                    ? 'bg-green-600 hover:bg-green-500 ring-2 ring-green-400 shadow-xl'
+                    : 'bg-indigo-700 hover:bg-indigo-600 border border-indigo-500'
+                  }
+                `}
+              >
+                <div className="flex-col items-center gap-2">
+                  <img src={patch.previewPath} className={` ${isSelected ? '' : 'mask-b-from-20% mask-b-to-80%' } `}
+                   />
+                    <p className="truncate" title={patch.name}>
+                      {patch.name.length > 45 ? patch.name.slice(0, 43) + '...' : patch.name}
+                    </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
     );
   };
 
   const totalSelections = Object.values(patchConfig).reduce((sum, arr) => sum + arr.length, 0);
   const hasSelections = totalSelections > 0;
-  const isLoading = Object.values(categories).some(c => c.loading);
 
   // Get all selected patches with their category info for the persistent preview panel
   const getAllSelectedPatches = () => {
@@ -410,11 +328,7 @@ const Ulti: React.FC = () => {
       for (const patchPath of selected) {
         const patch = categoryData.patches.find(p => p.path === patchPath);
         if (patch) {
-          allSelected.push({
-            categoryId: category.id,
-            categoryTitle: category.title,
-            patch
-          });
+          allSelected.push({ categoryId: category.id, categoryTitle: category.title, patch });
         }
       }
     }
@@ -423,51 +337,6 @@ const Ulti: React.FC = () => {
   };
 
   const allSelectedPatches = getAllSelectedPatches();
-
-  // Loading screen with spinning animation
-  if (!pageReady) {
-    return (
-      <div>
-        <Layout>
-          <div className="container mx-auto bg-indigo-900 min-h-screen flex flex-col items-center justify-center">
-            <BothTitles />
-            <div className="text-center p-8">
-              {/* Spinning ring animation */}
-              <div className="relative w-24 h-24 mx-auto mb-6">
-                <div className="absolute inset-0 border-4 border-indigo-600 rounded-full"></div>
-                <div className="absolute inset-0 border-4 border-transparent border-t-green-400 rounded-full animate-spin"></div>
-                <div className="absolute inset-2 border-4 border-transparent border-b-purple-400 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
-              </div>
-
-              <h1 className="text-2xl font-bold mb-2">Building Ulti Patcher</h1>
-              <p className="text-gray-300 mb-4">Loading patch options...</p>
-
-              {loadError && (
-                <div className="mt-4">
-                  <p className="text-yellow-400 mb-3">Some data failed to load.</p>
-                  <button
-                    onClick={() => {
-                      setCategories({
-                        battle: { id: 'battle', title: 'Battle Sprites', patches: [], loading: true },
-                        map: { id: 'map', title: 'Map Sprites', patches: [], loading: true },
-                        portraits: { id: 'portraits', title: 'Portraits', patches: [], loading: true },
-                        fonts: { id: 'fonts', title: 'Fonts', patches: [], loading: true },
-                        game: { id: 'game', title: 'Game Tweaks', patches: [], loading: true },
-                      });
-                      setLoadAttempt(prev => prev + 1);
-                    }}
-                    className="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg font-semibold transition-colors"
-                  >
-                    Retry Loading
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </Layout>
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -498,20 +367,14 @@ const Ulti: React.FC = () => {
             {error && <p className="text-red-400 mt-2">{error}</p>}
           </div>
 
-          {/* Patch Selectors - 5 categories with dropdowns */}
+          {/* Patch Selectors - 5 categories */}
           <div className="mb-4">
             <h3 className="text-lg font-semibold mb-2">2. Choose your options</h3>
-            {isLoading ? (
-              <p className="text-gray-300">Loading patch options...</p>
-            ) : (
-              <>
-                {renderCategory('battle')}
-                {renderCategory('map')}
-                {renderCategory('portraits')}
-                {renderCategory('fonts')}
-                {renderCategory('game')}
-              </>
-            )}
+            {renderCategory('battle')}
+            {renderCategory('map')}
+            {renderCategory('portraits')}
+            {renderCategory('fonts')}
+            {renderCategory('game')}
           </div>
 
           {/* Persistent Selection Preview Panel */}
