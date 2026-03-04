@@ -358,7 +358,7 @@ export default function PatchPage() {
 
 
     {/* Styles & Optional Patches */}
-    <div className='flex-col justify-center items-center h-full'>
+    <div className='flex-col justify-center items-center'>
       {isReady && hasOptionalPatches && (
         <><StylesPanel
           categories={styleCategories}

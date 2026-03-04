@@ -229,7 +229,7 @@ export default function PatchPage() {
       </div>
     </div>
     {/* Styles & Optional Patches */}
-    <div className='flex justify-center items-center h-full'>
+    <div className='flex justify-center items-center'>
       {isReady && (
         <><StylesPanel
           categories={styleCategories}
