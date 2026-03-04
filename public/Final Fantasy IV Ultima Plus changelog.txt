@@ -1,15 +1,6 @@
 Final Fantasy IV - Ultima Plus Changelog
 ------------
 
-Changelog 2026
---------------
-
-v1.1.1
-- bugfixed "Double Spell learning" issue discovered by dev team
-- fixed typo in spell description for Burst
-- 2 script edits relating to Damcyan attack and the intro of Palom & Porom
-
-
 
 Changelog 2025
 --------------
