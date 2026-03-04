@@ -3,7 +3,6 @@ import fs from 'fs';
 import path from 'path';
 import Layout from '@/layout';
 import ClassicPatcher from '@/components/ClassicPatcher';
-import Attribution from '@/components/Attribution';
 import { ExtractedManifest } from '@/components/PlusPatcher';
 
 export const getStaticProps: GetStaticProps<{ manifest: ExtractedManifest }> = () => {
@@ -20,7 +19,6 @@ const Classic: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ man
           <h1 className='flex w-full justify-center app-title'>FF4 Ultima Patcher</h1>
         </div>
         <ClassicPatcher manifest={manifest} />
-        <Attribution />
       </div>
     </Layout>
   );
