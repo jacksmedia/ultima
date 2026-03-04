@@ -300,7 +300,7 @@ const Ulti = ({ initialCategories }: InferGetStaticPropsType<typeof getStaticPro
                 `}
               >
                 <div className="flex-col items-center gap-2">
-                  <img src={patch.previewPath} className={` ${isSelected ? '' : 'mask-b-from-20% mask-b-to-80%' } `}
+                  <img src={patch.previewPath} loading="lazy" className={` ${isSelected ? '' : 'mask-b-from-20% mask-b-to-80%' } `}
                    />
                     <p className="truncate" title={patch.name}>
                       {patch.name.length > 45 ? patch.name.slice(0, 43) + '...' : patch.name}
@@ -392,6 +392,7 @@ const Ulti = ({ initialCategories }: InferGetStaticPropsType<typeof getStaticPro
                     <img
                       src={patch.previewPath}
                       alt={patch.name}
+                      loading="lazy"
                       className="w-24 h-auto rounded border border-indigo-600 mb-1"
                       onError={(e) => {
                         e.currentTarget.src = '';

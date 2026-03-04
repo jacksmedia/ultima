@@ -87,7 +87,7 @@ NextJS 15 webapp for the FF4 Ultima romhack community (Final Fantasy IV SNES). A
 
 - [x] ~~Apply getStaticProps pattern to `ClassicPatcher.tsx`~~ ✓
 - [x] ~~Investigate PlusPatcher zip loading — pre-extract zip contents at build time~~ ✓ (generatePatches.js now extracts all zips; JSZip removed from runtime bundle for /, /classic)
-- [ ] Image lazy-loading on ulti.tsx patch grid (~300 preview PNGs all load at once — consider `loading="lazy"` on `<img>` tags)
+- [x] ~~Image lazy-loading on ulti.tsx patch grid~~ ✓ — added `loading="lazy"` to both `<img>` sites in ulti.tsx (category grid cards + selection preview panel). Fixes first-visit failure caused by ~315 simultaneous PNG requests blocking JS bundle hydration.
 - [ ] `ApplyPatches.tsx` stub — implement or remove
 
 ---
