@@ -264,13 +264,16 @@ option span {
 
 /* per page styling */
 .plus-patcher-bg {
-  background: linear-gradient(#000, #237195, #000);
+  background: repeating-linear-gradient(#000, #237195, #000);
+  min-height: 100%;
 }
 .discord-bg {
-  background: linear-gradient(#000, #112, #000);
+  background: repeating-linear-gradient(#000, #112, #000);
+  min-height: 100%;
 }
 .guides-bg {
-  background: linear-gradient(#000, #112,#606, #606, #112);
+  background: repeating-linear-gradient(#000, #112,#606, #606, #112);
+  min-height: 100%;
 }
 
 button {
@@ -297,4 +300,8 @@ a > h3 {
 .label-styling {
   padding: 6px;
   padding-top: 10px;
+}
+
+html {
+  background: #000;   /* needed bc main doesn't cover the entire page! */
 }
