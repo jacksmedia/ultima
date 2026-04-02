@@ -68,7 +68,7 @@ const Guides: NextPage = () => {
 				</li>
 			</ul>
 		</div>
-		<div className=' text-center'>
+		<div className='text-center'>
 			<h4>Bestiary Omissions</h4>
 			<ul>
 				<li>The 4 Fiends fight in the Giant</li>
@@ -90,7 +90,7 @@ const Guides: NextPage = () => {
 					</a>
 				</li>
 				<li>
-					<a target="_blank" href="/ff4u-extra-offsets.json">
+					<a target="_blank" href="/ff4u-extra-offsets.json" className="mb-10">
 						<h3>
 							Golbez & Anna
 						</h3>
