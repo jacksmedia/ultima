@@ -69,7 +69,7 @@ const Guides: NextPage = () => {
 			</ul>
 		</div>
 		<div className='text-center'>
-			<h4>Bestiary Omissions</h4>
+			<h3>Bestiary Omissions</h3>
 			<ul>
 				<li>The 4 Fiends fight in the Giant</li>
 				<li>The Golbez fought by Tellah in his cutscene</li>
@@ -81,22 +81,14 @@ const Guides: NextPage = () => {
 			</ul>
 			<h3 className='classic-hr>'>ᕦ(ò_óˇ)ᕤ</h3>
 			<h4>Rom Offsets for Sprite Hacking</h4>
-			<ul>
-				<li>
-					<a target="_blank" href="/ff4u-hero-offsets.json">
-						<h3>
-							Cecil, Kain, Rosa, Rydia/Kydia,<br/>Edge, Yang, Edward,<br/>Palom, Porom, Edward,<br/>Tellah, Cid, FuSoYa
-						</h3>
-					</a>
-				</li>
-				<li>
-					<a target="_blank" href="/ff4u-extra-offsets.json" className="mb-10">
-						<h3>
-							Golbez & Anna
-						</h3>
-					</a>
-				</li>
-			</ul>
+			<div className="mb-10 flex flex-row space-between">
+				<a target="_blank" href="/ff4u-hero-offsets.json">
+					<p>Main Cast</p>
+				</a>
+				<a target="_blank" href="/ff4u-extra-offsets.json">
+					<p>Golbez & Anna</p>
+				</a>
+			</div>
 		  </div>
       </div>
     </Layout>
