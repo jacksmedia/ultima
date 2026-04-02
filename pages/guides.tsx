@@ -81,7 +81,7 @@ const Guides: NextPage = () => {
 			</ul>
 			<h3 className='classic-hr>'>ᕦ(ò_óˇ)ᕤ</h3>
 			<h4>Rom Offsets for Sprite Hacking</h4>
-			<div className="mb-10 flex flex-row space-between">
+			<div className="mb-10 flex flex-row justify-around">
 				<a target="_blank" href="/ff4u-hero-offsets.json">
 					<p>Main Cast</p>
 				</a>
