@@ -89,6 +89,7 @@ const Guides: NextPage = () => {
 					<p>Golbez & Anna</p>
 				</a>
 			</div>
+			<div className="mb-10">ᕦ(ò_óˇ)ᕤ</div>
 		  </div>
       </div>
     </Layout>
