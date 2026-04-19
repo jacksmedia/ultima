@@ -289,6 +289,10 @@ button {
 
 }
 
+.mb-30-px {
+  margin-bottom: 30px;
+}
+
 a > h3 {
   color: #cebd70;
 }
