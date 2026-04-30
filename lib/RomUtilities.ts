@@ -1,4 +1,4 @@
-import { crc32 } from 'crc';
+import computeCRC32 from './crc32';
 
 export interface RomInfo {
   name: string;
@@ -32,16 +32,14 @@ export const validateFF4UltimaRom = async (file: File, fileData: ArrayBuffer): P
 // Calculates CRC32 from ArrayBuffer
 export const calculateCrc32 = (data: ArrayBuffer): string => {
   const uint8Array = new Uint8Array(data);
-  const checksum = crc32(uint8Array.buffer);
-  return checksum.toString(16).padStart(8, '0');
+  return computeCRC32(uint8Array);
 };
 
 // Extract ROM information from file
 export const extractRomInfo = async (file: File): Promise<RomInfo> => {
   const fileData = await file.arrayBuffer();
   const uint8Array = new Uint8Array(fileData);
-  const checksum = crc32(uint8Array.buffer);
-  const crc32Hex = checksum.toString(16).padStart(8, '0').toUpperCase();
+  const crc32Hex = computeCRC32(uint8Array);
   
   let type: 'original' | 'patched' | 'unknown' = 'unknown';
   

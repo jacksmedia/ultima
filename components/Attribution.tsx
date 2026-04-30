@@ -2,7 +2,7 @@ const Attribution = () => {
     return(
     <>
       <div className='mt-5 w-full block-inline bg-black fixed-bottom-div'>
-          <p className="text-center small-text">Not endorsed by Square Enix, and not affiliated with them in any way. 
+          <p className="text-center small-text">Not endorsed by Square Enix, nor affiliated with them in any way. 
           Site built by <a href="https://jacks.media" rel="noopener noreferrer" target="_blank" className="special">Jacks.Media</a>, 2026.</p>
           
           <p className="text-center small-text"><a target="_blank" href="https://icons8.com/icon/pfF6HpODcjW0/close">Menu</a> icons by <a target="_blank" href="https://icons8.com">Icons8</a></p>
@@ -12,6 +12,8 @@ const Attribution = () => {
           position: fixed;
           bottom: 0;
           left: 0;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
         }
         @keyframes special-text {
           0% {color: #80a;}

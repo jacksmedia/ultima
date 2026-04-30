@@ -108,8 +108,12 @@ a.primary {
   background: radial-gradient(#333, #333,#533608);
 }
 .nicer-btn-blue:hover {
-  background: radial-gradient(#275de6,#00f);
-  border: #275de6 3px groove;
+  background: radial-gradient(#275de6,#1788ae);
+  transition-timing-function: ease-in;
+  transition-duration: 1500ms;
+  border: #1788ae 3px groove;
+  transition-timing-function: ease-in;
+  transition-duration: 500ms;
 }
 .blue-border { /* similar to above, only for Ultima Classic title image */
   border-radius: 5px;
@@ -263,11 +267,11 @@ option span {
 
 
 /* per page styling */
-.plus-patcher-bg {
+.patcher-bg {
   background: repeating-linear-gradient(#000, #237195, #000);
   min-height: 100%;
 }
-.discord-bg {
+.dark-bg {
   background: repeating-linear-gradient(#000, #112, #000);
   min-height: 100%;
 }

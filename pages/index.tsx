@@ -13,7 +13,7 @@ export const getStaticProps: GetStaticProps<{ manifest: ExtractedManifest }> = (
 const HomePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ manifest }) => {
   return (
     <Layout>
-      <div className='plus-patcher-bg text-center h-screen'>
+      <div className='patcher-bg text-center h-screen'>
         <div className='flex flex-wrap'>
           <h1 className='flex w-full justify-center app-title'>FF4 Ultima Plus Patcher</h1>
         </div>
