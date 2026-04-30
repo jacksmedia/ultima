@@ -467,9 +467,9 @@ const Ulti = ({ initialCategories }: InferGetStaticPropsType<typeof getStaticPro
 
           {/* Download Button */}
           <div className="bg-indigo-700 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">4. Download</h3>
+            <h3 className="text-lg font-semibold">4. Download</h3>
             <button
-              className="bg-green-600 hover:bg-green-500 p-4 rounded shadow-md text-xl font-bold w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-green-600 hover:bg-green-500 p-4 rounded shadow-md text-xl font-bold w-full mb-50-px disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleDownload}
               disabled={!romFile || !hasSelections || isPatching}
             >

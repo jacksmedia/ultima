@@ -191,6 +191,7 @@ option span {
 .guides-bg {
   background: repeating-linear-gradient(#000, #112,#606, #606, #112);
   min-height: 100%;
+  padding-bottom: 10vh;
 }
 
 button {
@@ -203,6 +204,10 @@ button {
   margin-bottom: 4rem;
   padding: 2rem;
 
+}
+
+.mb-50-px {
+  margin-bottom: 50px;
 }
 
 a > h3 {

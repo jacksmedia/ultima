@@ -73,7 +73,7 @@ const Guides: NextPage = () => {
 				</li>
 			</ul>
 		</div>
-		<div className='text-center'>
+		<div className='text-center mb-10'>
 			<h3>Bestiary Omissions</h3>
 			<ul>
 				<li>The 4 Fiends fight in the Giant</li>
