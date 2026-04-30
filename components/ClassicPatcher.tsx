@@ -1,8 +1,8 @@
 // ClassicPatcher.tsx — zip-free rewrite: patch lists from build-time static props
 import React, { useMemo, useState } from 'react';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
-import DownloadRomButtonClassic from '@/components/DownloadRomButtonClassic';
-import RomVerifier from '@/components/RomVerifier';
+import DownloadRomButton from '@/components/DownloadRomButton';
+import ExtensibleRomVerifier from '@/components/ExtensibleRomVerifier';
 import StylesPanel, { StylePatch, PatchCategory as StyleCategory } from '@/components/StylesPanel';
 import { applyIPS } from '@/lib/patcher';
 import computeCRC32 from '@/lib/crc32';
@@ -146,18 +146,18 @@ export default function ClassicPatcher({ manifest }: { manifest: ExtractedManife
               See changelog
             </a>
           </h5>
-          <DownloadRomButtonClassic
+          <DownloadRomButton
             onGenerateRom={generatePatchedRom}
             filename={`FF4 Ultima${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
             disabled={!hasValidRom || isPatching}
+            variant="classic"
           />
         </div>
 
-        <div className='flex-col justify-center items-center'>
-          {/* RomVerifier is ready immediately — no zip loading required */}
-          <RomVerifier onMatch={handleMatch} />
+        <div className='flex flex-col justify-center items-center'>
+          <ExtensibleRomVerifier onValidRom={handleMatch} />
           <p className="text-center mb-2">
-            Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima.<br />
+            This site creates a copy of FF4 Ultima.<br />
             Choose a new visual style if you wish!<br />
             <em>(Note: RetroAchievements doesn't support Styles.)</em>
           </p>

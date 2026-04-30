@@ -1,10 +1,15 @@
 import { NextPage } from 'next';
+import Head from 'next/head';
 import Layout from '@/layout';
 import BothTitles from "@/components/BothTitles";
 
 const Patches: NextPage = () => {
   return (
-    <Layout>      
+    <Layout>
+      <Head>
+        <title>FF4 Ultima Patches | Download All Patch Files</title>
+        <meta name="description" content="Download the complete FF4 Ultima patch archive with all battle sprites, portraits, fonts, and game tweaks." />
+      </Head>
       <div className='dark-bg text-center h-screen'>
         <h1 className="">FF4 Ultima Patches</h1>
         <BothTitles />

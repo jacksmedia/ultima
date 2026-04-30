@@ -14,9 +14,6 @@ main {
   background-color: black;
 }
 
-a.primary {
-  gap: 8px;
-}
 
 .nav-l1nk {
   color: #eef;
@@ -28,34 +25,6 @@ a.primary {
   padding: 0.6rem;
 }
 
-.footer {
-  grid-row-start: 3;
-  display: flex;
-  gap: 24px;
-}
-
-.footer a {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.footer img {
-  flex-shrink: 0;
-}
-
-
-/* RomVerifier */
-.dotted-border {
-  border-radius: 20%;
-  border:#ededed 8 dotted;
-}
-.active-border {
-  border:#ae7517 8 dotted;
-}
-.passive-border {
-  border:#ededed 8 dotted;
-}
 
 /* CustomOptionsPanel */
 .custom-options-button {
@@ -148,58 +117,6 @@ option span {
 
 
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-
-  .footer a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-}
-
-@media (max-width: 600px) {
-  .page {
-    padding: 32px;
-    padding-bottom: 80px;
-  }
-
-  .main {
-    align-items: center;
-  }
-
-  .main ol {
-    text-align: center;
-  }
-
-  .ctas {
-    flex-direction: column;
-  }
-
-  .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
-  }
-
-  a.secondary {
-    min-width: auto;
-  }
-
-  .footer {
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-  }
-}
 
 
 /* BothTitles */
@@ -256,13 +173,9 @@ option span {
 
 
 
-/* older styling */
+/* utility */
 .hidden-input {
   visibility: hidden;
-}
-
-.kard {
-  background-color: #112;
 }
 
 

@@ -19,7 +19,7 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
   validationRules = [],
   acceptedExtensions = ['.sfc', '.smc'],
   title = "Drop your ROM file here or",
-  description = "Supported formats: .sfc, .smc"
+  description = "File type = .sfc OR .smc"
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -104,9 +104,9 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
   return (
     <div
       className={`
-        w-full max-w-md p-8 border-2 border-dashed rounded-lg
+        w-full max-w-md px-8 border-4 border-dashed rounded-lg
         ${isDragging ? 'border-blue-500 bg-blue-950' : 'border-gray-600 bg-gray-900'}
-        transition-colors flex flex-col items-center justify-center
+        transition-colors flex flex-col items-center justify-around
       `}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -120,7 +120,10 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
         className="hidden-input"
       />
       
-      <div className='p-2'>
+      <div className='p-1 flex flex-col items-center'>
+        <p className="mb-2 text-md text-gray-300">
+          Upload your FFII or FFIV ROM file
+        </p>
         <Image 
           src="/cloud-upload.svg"
           width={138}
@@ -147,7 +150,7 @@ const ExtensibleRomVerifier: React.FC<RomVerifierProps> = ({
         
         <button
           onClick={handleBrowseClick}
-          className="px-4 py-2 text-sm font-medium text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 text-sm font-medium text-white border-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           disabled={isProcessing}
         >
           {isProcessing ? 'Processing... ' : 'Browse Files'}

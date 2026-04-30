@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import SpinnerOverlay from '@/components/SpinnerOverlay';
 import DownloadRomButton from '@/components/DownloadRomButton';
-import RomVerifier from '@/components/RomVerifier';
+import ExtensibleRomVerifier from '@/components/ExtensibleRomVerifier';
 import StylesPanel, { StylePatch, PatchCategory as StyleCategory } from '@/components/StylesPanel';
 import CustomOptionsPanel, { OptionalPatch, PatchCategory as OptionalCategory } from '@/components/CustomOptionsPanel';
 import { applyIPS } from '@/lib/patcher';
@@ -228,11 +228,10 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
           />
         </div>
 
-        <div className='flex-col justify-center items-center'>
-          {/* RomVerifier is ready immediately — no zip loading required */}
-          <RomVerifier onMatch={handleMatch} />
+        <div className='flex flex-col justify-center items-center'>
+          <ExtensibleRomVerifier onValidRom={handleMatch} />
           <p className="text-center">
-            Upload your FFII or FFIV ROM file to create a copy of FF4 Ultima Plus.<br />
+            This site creates a copy of FF4 Ultima Plus.<br />
             Choose a new visual style, or pick and choose<br />alternate graphics & a new font if you wish!
           </p>
         </div>

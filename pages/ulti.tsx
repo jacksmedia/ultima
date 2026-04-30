@@ -1,5 +1,6 @@
 // Ulti Patcher - modular patch config builder with dropdown multi-select
 import React, { useState } from 'react';
+import Head from 'next/head';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { applyIPS } from '@/lib/patcher';
 import Layout from '@/layout';
@@ -341,6 +342,10 @@ const Ulti = ({ initialCategories }: InferGetStaticPropsType<typeof getStaticPro
   return (
     <div>
       <Layout>
+        <Head>
+          <title>Ulti Patcher | Advanced FF4 Ultima Customization</title>
+          <meta name="description" content="Advanced modular patcher for FF4 Ultima with granular control over battle sprites, map sprites, portraits, fonts, and game tweaks." />
+        </Head>
         <div className="container mx-auto bg-indigo-900 min-h-screen">
           <BothTitles />
           <h1 className="text-3xl font-bold mb-2 text-center">The Ulti Patcher</h1>

@@ -1,60 +1,63 @@
-// DownloadRomButton.tsx authored by Claude Sonnet 4 - REFACTORED
 import React, { useState } from 'react';
 
+type RomResult = Uint8Array | {
+  patchedRom: Uint8Array;
+  readmesToDownload: { filename: string; content: string }[];
+};
+
 interface DownloadRomButtonProps {
-  onGenerateRom: () => Promise<{
-    patchedRom: Uint8Array;
-    readmesToDownload: { filename: string; content: string }[]
-  }>; // now offers readme on pattern match to filename
+  onGenerateRom: () => Promise<RomResult>;
   filename: string;
   disabled?: boolean;
+  variant?: 'plus' | 'classic';
 }
 
-const DownloadRomButton: React.FC<DownloadRomButtonProps> = ({ 
-  onGenerateRom, 
-  filename, 
-  disabled = false 
+const DownloadRomButton: React.FC<DownloadRomButtonProps> = ({
+  onGenerateRom,
+  filename,
+  disabled = false,
+  variant = 'plus'
 }) => {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleDownload = async () => {
     if (disabled) return;
-    
+
     try {
       setIsGenerating(true);
-
-      // Generate patched rom; retrieve any readmes
       console.log('Generating patched ROM for download...');
-      const { patchedRom, readmesToDownload } = await onGenerateRom();
-      
-      // Create and trigger download
+
+      const result = await onGenerateRom();
+
+      // Handle both return types: plain Uint8Array or object with readmes
+      const patchedRom = result instanceof Uint8Array ? result : result.patchedRom;
+      const readmesToDownload = result instanceof Uint8Array ? [] : result.readmesToDownload;
+
+      // Create and trigger ROM download
       const romBlob = new Blob([patchedRom], { type: 'application/octet-stream' });
       const romUrl = URL.createObjectURL(romBlob);
-      
       const romLink = document.createElement('a');
       romLink.href = romUrl;
       romLink.download = filename;
-      document.body.appendChild(romLink); // DOM interacting w link object
+      document.body.appendChild(romLink);
       romLink.click();
       document.body.removeChild(romLink);
-      URL.revokeObjectURL(romUrl); // Cleans up object URL
+      URL.revokeObjectURL(romUrl);
       console.log('ROM download completed.');
 
-      // Readme download if available
+      // Download readmes if available
       for (const readme of readmesToDownload) {
         const readmeBlob = new Blob([readme.content], { type: 'text/plain' });
         const readmeUrl = URL.createObjectURL(readmeBlob);
         const readmeLink = document.createElement('a');
         readmeLink.href = readmeUrl;
         readmeLink.download = `SquishBGone_Changelog_${readme.filename}_vsStandardFF4UP.txt`;
-        document.body.appendChild(readmeLink); 
+        document.body.appendChild(readmeLink);
         readmeLink.click();
         document.body.removeChild(readmeLink);
         URL.revokeObjectURL(readmeUrl);
-        console.log(`Downloaded readme file: ${readme.filename}`)
+        console.log(`Downloaded readme file: ${readme.filename}`);
       }
-
-      
     } catch (error) {
       console.error('Error generating ROM for download:', error);
       alert(`Failed to generate patched ROM: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -64,15 +67,16 @@ const DownloadRomButton: React.FC<DownloadRomButtonProps> = ({
   };
 
   const isButtonDisabled = disabled || isGenerating;
+  const btnClass = variant === 'classic' ? 'nicer-btn' : 'nicer-btn-blue';
 
   return (
     <button
       onClick={handleDownload}
       disabled={isButtonDisabled}
-      className={`px-8 py-4
+      className={`px-8 py-4 ${btnClass}
         ${isButtonDisabled
-          ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 nicer-btn' 
-          : 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 nicer-btn-blue'
+          ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
+          : 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
         }
       `}
     >

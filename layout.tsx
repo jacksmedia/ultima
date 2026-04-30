@@ -5,7 +5,7 @@ import Attribution from '@/components/Attribution';
 const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Head>
         <title>FF4 Ultima Patcher</title>
         <meta name="description" content="Get FF4 Ultima Plus" title="FF4 Ultima Patcher" />
@@ -13,9 +13,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Head>
 
       <Navbar />
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
       <Attribution />
-    </>
+    </div>
   );
 };
 

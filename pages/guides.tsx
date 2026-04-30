@@ -1,10 +1,15 @@
 import { NextPage } from 'next';
+import Head from 'next/head';
 import Layout from '@/layout';
 import BothTitles from "@/components/BothTitles";
 
 const Guides: NextPage = () => {
   return (
-    <Layout>      
+    <Layout>
+      <Head>
+        <title>FF4 Ultima Guides | Walkthroughs, Maps & Resources</title>
+        <meta name="description" content="Complete guides, world maps, boss strategies, item checklists, and bestiary for FF4 Ultima." />
+      </Head>
       <div className='guides-bg'>
         <h1>FF4 Ultima Guides</h1>
           <BothTitles />
@@ -46,21 +51,21 @@ const Guides: NextPage = () => {
 			<h4>Maps charted by Boomerang</h4>
 			<ul>
 				<li>
-					<a target="_blank" href="/overworldmap">
+					<a target="_blank" href="/maps/overworld">
 						<h3>
 							Overworld Map
 						</h3>
 					</a>
 				</li>
 				<li>
-					<a target="_blank" href="/underworldmap">
+					<a target="_blank" href="/maps/underworld">
 						<h3>
 							Underworld Map
 						</h3>
 					</a>
 				</li>
 				<li>
-					<a target="_blank" href="/lunarmap">
+					<a target="_blank" href="/maps/lunar">
 						<h3>
 							Lunar Map
 						</h3>

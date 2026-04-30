@@ -1,4 +1,5 @@
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
+import Head from 'next/head';
 import fs from 'fs';
 import path from 'path';
 import Layout from '@/layout';
@@ -13,6 +14,10 @@ export const getStaticProps: GetStaticProps<{ manifest: ExtractedManifest }> = (
 const HomePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ manifest }) => {
   return (
     <Layout>
+      <Head>
+        <title>FF4 Ultima Plus Patcher | Create Your Custom ROM</title>
+        <meta name="description" content="Patch your Final Fantasy IV ROM to create FF4 Ultima Plus with custom battle sprites, portraits, and visual styles." />
+      </Head>
       <div className='patcher-bg text-center h-screen'>
         <div className='flex flex-wrap'>
           <h1 className='flex w-full justify-center app-title'>FF4 Ultima Plus Patcher</h1>

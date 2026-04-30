@@ -1,10 +1,15 @@
 import { NextPage } from 'next';
+import Head from 'next/head';
 import Layout from '@/layout';
 import BothTitles from "@/components/BothTitles";
 
 const Discord: NextPage = () => {
   return (
-    <Layout>      
+    <Layout>
+      <Head>
+        <title>FF4 Ultima Discord | Join the Community</title>
+        <meta name="description" content="Join the FF4 Ultima Discord community for discussion, support, and the latest updates." />
+      </Head>
       <div className='dark-bg text-center h-screen'>
         <h1 className="">FF4 Ultima Discord</h1>
           <BothTitles />

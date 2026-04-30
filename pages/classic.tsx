@@ -1,4 +1,5 @@
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
+import Head from 'next/head';
 import fs from 'fs';
 import path from 'path';
 import Layout from '@/layout';
@@ -14,6 +15,10 @@ export const getStaticProps: GetStaticProps<{ manifest: ExtractedManifest }> = (
 const Classic: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ manifest }) => {
   return (
     <Layout>
+      <Head>
+        <title>FF4 Ultima Classic Patcher | RetroAchievements Compatible</title>
+        <meta name="description" content="Create FF4 Ultima Classic ROM with optional visual styles. Compatible with RetroAchievements." />
+      </Head>
       <div className='patcher-bg text-center h-screen'>
         <div className='flex flex-wrap'>
           <h1 className='flex w-full justify-center app-title'>FF4 Ultima Patcher</h1>
