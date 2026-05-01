@@ -211,7 +211,7 @@ const StylesPanel: React.FC<StylesPanelProps> = ({
                             handlePreviewClick(patch);
                           }}
                           disabled={isDisabled}
-                          className="mx-auto px-2 py-2 text-white nicer-btn"
+                          className="mx-auto px-2 py-2 text-white nicer-btn-blue"
                         >
                           Preview
                         </button>

@@ -12,6 +12,7 @@
 
 main {
   background-color: black;
+  padding-bottom: 30px;
 }
 
 
@@ -115,10 +116,6 @@ option span {
 }
 
 
-
-
-
-
 /* BothTitles */
 .both-titles {
   display: flex;
@@ -130,7 +127,6 @@ option span {
   height: 224px;
   max-height: 224px;
 }
-
 
 
 /* index.tsx title styling */

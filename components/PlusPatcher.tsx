@@ -211,8 +211,11 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
   const hasValidRom = romState !== null;
 
   return (
-    <>
+    <div className='patcher-bg text-center h-screen'>
       {/* Title + download */}
+      <div className='flex flex-wrap'>
+        <h1 className='flex w-full justify-center app-title'>FF4 Ultima Plus Patcher</h1>
+      </div>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div className='flex-col justify-center items-center'>
           <PlusTitle />
@@ -226,6 +229,27 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
             filename={`FF4 Ultima Plus${selectedOptionalPatches.length > 0 ? ' Custom' : ''}.sfc`}
             disabled={!hasValidRom || isPatching}
           />
+          {hasValidRom && (
+            <div className="bg-slate-900 rounded-lg border-1">
+              <h2 className="text-xl mb-2">ROM Ready:</h2>
+              <p className="font-mono text-sm">Uploaded CRC32: {romState!.originalCRC32}</p>
+              {selectedOptionalPatches.length > 0 && (
+                <div className="mt-2">
+                  <p className="text-sm text-gray-300">Selected patches:</p>
+                  <ul className="text-xs text-gray-400 mt-1">
+                    {getSelectedFrom(styleCategories, selectedStylePatches).map(p => (
+                      <li key={p.id}>{p.name}</li>
+                    ))}
+                  </ul>
+                  <ul className="text-xs text-gray-400 mt-1">
+                    {getSelectedFrom(optionalCategories, selectedOptionalPatches).map(p => (
+                      <li key={p.id}>{p.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div className='flex flex-col justify-center items-center'>
@@ -280,6 +304,6 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
 
         {isPatching && <SpinnerOverlay />}
       </div>
-    </>
+    </div>
   );
 }

@@ -18,12 +18,7 @@ const HomePage: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ ma
         <title>FF4 Ultima Plus Patcher | Create Your Custom ROM</title>
         <meta name="description" content="Patch your Final Fantasy IV ROM to create FF4 Ultima Plus with custom battle sprites, portraits, and visual styles." />
       </Head>
-      <div className='patcher-bg text-center h-screen'>
-        <div className='flex flex-wrap'>
-          <h1 className='flex w-full justify-center app-title'>FF4 Ultima Plus Patcher</h1>
-        </div>
-        <PlusPatcher manifest={manifest} />
-      </div>
+      <PlusPatcher manifest={manifest} />
     </Layout>
   );
 };
