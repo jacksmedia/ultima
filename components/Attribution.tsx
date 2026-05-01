@@ -1,7 +1,7 @@
 const Attribution = () => {
     return(
     <>
-      <div className='w-full block-inline bg-black px-1'>
+      <div className='w-full block bg-black px-1'>
           <p className="text-center text-sm p-6">Not endorsed by Square Enix, nor affiliated with them in any way. 
           Site built by <a href="https://jacks.media" rel="noopener noreferrer" target="_blank" className="special">Jacks.Media</a>, 2026.</p>
           
