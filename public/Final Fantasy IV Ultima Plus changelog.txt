@@ -1,6 +1,14 @@
 Final Fantasy IV - Ultima Plus Changelog
 ------------
 
+Changelog 2026
+--------------
+New music tracks are in development for Ultima Plus, stay tuned! 
+
+Style packs are upgraded to feature 4bpp Battle Backgrounds (Aug. 2)
+
+Gedankenschild adapts the 4bpp Battle Backgrounds for Ultima (Jan. 1)
+
 
 Changelog 2025
 --------------
