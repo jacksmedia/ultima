@@ -3,6 +3,22 @@ import Head from 'next/head';
 import Layout from '@/layout';
 import BothTitles from "@/components/BothTitles";
 
+// class AllGuides implements Iterable<string> { 
+// 	private items: string[]=[
+// 	"https://docs.google.com/document/d/1O77TDKTG1dWDrHaT40NECik6Cz3rtYmUoazxTQPxnIY/edit?tab=t.0",
+// 	"https://docs.google.com/document/d/1Z4O08DPN0JhQ4E0d2wbQYOZM4n814V5DyhyWqTVPSkM/edit?usp=sharing",
+// 	"https://docs.google.com/spreadsheets/d/19IU_ccvRXbx7BrihScF6c0JQ-7mFVNQR96KukOGrXkU/edit?gid=589265229#gid=589265229",
+// 	"https://docs.google.com/spreadsheets/d/1NDR7HuKJXEq6X0EsmXlQ52uE9wctkn9qvZKSTYc9bcI/edit?gid=0#gid=0",
+// 	"https://docs.google.com/spreadsheets/d/1gxxapWwliJwzvp8TSYJL2qRT3vvJhZciRpN0bXcEDFU/edit?gid=40660744#gid=40660744",
+// 	"https://docs.google.com/spreadsheets/d/154hnvdQEgOl5nOxxU2RvFwTlcP8lIRasSZMJVySvpM0/edit?gid=1386834576#gid=1386834576"
+// 	];
+// 	*[Symbol.iterator](): IterableIterator<string> {
+//         for (const item of this.items) {
+//             yield item;
+//         }
+//     }
+// }
+
 const Guides: NextPage = () => {
   return (
     <Layout>
@@ -15,6 +31,7 @@ const Guides: NextPage = () => {
           <BothTitles />
         <div className='dark-grey-panel text-center'>
 			<h3>Guides written by Lily of Team Ultima</h3>
+
 			<ul>
 				<li>
 					<a target="_blank" href="https://docs.google.com/document/d/1O77TDKTG1dWDrHaT40NECik6Cz3rtYmUoazxTQPxnIY/edit?tab=t.0">
@@ -27,22 +44,22 @@ const Guides: NextPage = () => {
 					</a>
 				</li>
 				<li>
-					<a target="_blank" href="https://docs.google.com/spreadsheets/d/19IU_ccvRXbx7BrihScF6c0JQ-7mFVNQR96KukOGrXkU/edit?gid=589265229#gid=589265229">
+					<a target="_blank" href="https://docs.google.com/spreadsheets/d/19IU_ccvRXbx7BrihScF6c0JQ-7mFVNQR96KukOGrXkU/edit?usp=drive_link">
 						<h3>FF4U Boss Guide</h3>
 					</a>
 				</li>
 				<li>
-					<a target="_blank" href="https://docs.google.com/spreadsheets/d/1NDR7HuKJXEq6X0EsmXlQ52uE9wctkn9qvZKSTYc9bcI/edit?gid=0#gid=0">
+					<a target="_blank" href="https://docs.google.com/spreadsheets/d/1NDR7HuKJXEq6X0EsmXlQ52uE9wctkn9qvZKSTYc9bcI/edit?usp=drive_link">
 						<h3>FF4U Drop/Steal Table</h3>
 					</a>
 				</li>
 				<li>
-					<a target="_blank" href="https://docs.google.com/spreadsheets/d/1gxxapWwliJwzvp8TSYJL2qRT3vvJhZciRpN0bXcEDFU/edit?gid=40660744#gid=40660744">
+					<a target="_blank" href="https://docs.google.com/spreadsheets/u/0/d/1gxxapWwH2Jwzvp8TSYJL2qRT3vvJhZciRpN0bXcEDFU/htmlview">
 						<h3>FF4U Item Checklist</h3>
 					</a>
 				</li>
 				<li>
-					<a target="_blank" href="https://docs.google.com/spreadsheets/d/154hnvdQEgOl5nOxxU2RvFwTlcP8lIRasSZMJVySvpM0/edit?gid=1386834576#gid=1386834576">
+					<a target="_blank" href="https://docs.google.com/spreadsheets/d/154hnvdQEgOl5nOxxU2RvFwTlcP8lIRasSZMJVySvpM0/edit?usp=drive_link">
 						<h3>FF4U Bestiary</h3>
 					</a>
 				</li>

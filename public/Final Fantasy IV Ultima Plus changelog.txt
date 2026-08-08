@@ -1,70 +1,109 @@
 Final Fantasy IV - Ultima Plus Changelog
-------------
+------
+ 2026
+------
 
-Changelog 2026
---------------
-New music tracks are in development for Ultima Plus, stay tuned! 
+v1.1
+- adds timer and resolves potential softlock bug in the repeat fight on the Lunar Whale (chillyfeez)
+- adds four new music tracks (epigonone, chillyfeez)
 
-Style packs are upgraded to feature 4bpp Battle Backgrounds (Aug. 2)
+v1.0.12a
+- !Steal can nab mythic items (chillyfeez)
+- Sneak Ring only enhances Edge's !Steal, not the mug effect of equipment (chillyfeez)
 
-Gedankenschild adapts the 4bpp Battle Backgrounds for Ultima (Jan. 1)
+v1.0.12
+- Applied Double Spell Learning fix (chillyfeez)
+- Changed "Damcyan has already been waylaid" to "Damcyan has already been attacked" (FlamePurge)
+- Fixed incorrect pluralization error referring to twins' age (FlamePurge)
+- Fixed error in Burst description (FlamePurge)
 
 
 Changelog 2025
 --------------
 
-v1.1
-- cameo NPC has his own map sprite; 2 soldiers in Baron were slightly modified to achieve this
-- "Form" command in menu modifed slightly; shifting the entire party from front to back row removed
-- tiny layout bug in IconKey fixed
-- one hardcoded occurrence of Edge's name fixed: is now dynamic
-- "Slime" icon color fixed in several menus
-- "Dark" & "Lightning" icons' color fixed in Magic menu
-- "al" tile in font modified to look better
+v1.0.11
+- cameo NPC has his own map sprite; 2 soldiers in Baron were slightly modified to achieve this (chillyfeez)
+- "Form" command in menu modifed slightly; shifting the entire party from front to back row removed (chillyfeez)
+- tiny layout bug in IconKey fixed (chillyfeez)
+- one hardcoded occurrence of Edge's name fixed: is now dynamic (FlamePurge)
+- "Slime" icon color fixed in several menus (xJ4cks)
+- "Dark" & "Lightning" icons' color fixed in Magic menu (xJ4cks)
+- "al" tile in font modified to look better (xJ4cks)
 
 
 v1.0.10
-- item improvement: Gaia Gear now protects against Gradual Petrify status AND Stone status (Description changed to reflect this)
-- UI improvement: Gradual Petrify appears as a Dark Grey Stone icon in equipment menus & Bestiary
-- UI improvement: Curse status icon is displayed correctly as a Dark Grey Skull in equipment menus
+- item improvement: Gaia Gear now protects against Gradual Petrify status AND Stone status (Description changed to reflect this) (chillyfeez)
+- UI improvement: Gradual Petrify appears as a Dark Grey Stone icon in equipment menus & Bestiary (chillyfeez)
+- UI improvement: Curse status icon is displayed correctly as a Dark Grey Skull in equipment menus (xJ4cks)
 
 v1.0.09
-- bugfix: Fixes back attack bug seen in random encounters that caused soft lock
+- bugfix: Fixes back attack bug seen in random encounters that caused soft lock (chillyfeez)
 
 v1.0.08
-- bugfix: Fixes a bug that caused a soft lock when reviving a character that began the battle KO'ed during a back attack
-- Fabul map improvement: Towers's names adjusted to "1F" vs both as "East Tower"
-- 2 dialog typo fixes in Bosh Rush room; 1 typo in SquishBGone (Sorcerer -> Magus)
+- bugfix: Fixes a bug that caused a soft lock when reviving a character that began the battle KO'ed during a back attack (chillyfeez)
+- Fabul map improvement: Towers's names adjusted to "1F" vs both as "East Tower" (FlamePurge)
+- 2 dialog typo fixes in Bosh Rush room; 1 typo in SquishBGone (Sorcerer -> Magus) (FlamePurge)
 
 v1.0.07a
-- Training room dialogue updated to reflect new row mechanics in Ultima Plus
+- Training room dialogue updated to reflect new row mechanics in Ultima Plus (FlamePurge)
 
 v1.0.07
-- bugfix: Edward equipment retained on New Game +
-- Star icon fixed in Load Menu
+- bugfix: Edward equipment retained on New Game + (chillyfeez)
+- Star icon fixed in Load Menu (xJ4cks)
 
 v1.0.06b
-- Float icon bugfix in Icon Key
+- Float icon bugfix in Icon Key (xJ4cks)
 
 v1.0.06
-- adds new Holy elemental icon (white diamond, matches FF4:TAY icon)
-- improves "Star" icon
-- "Add" becomes the more obvious "With" in Bestiary
-- removes Float icon from elemental weakness dude msg in training room
-- reverts names of tier 2 elemental attack items to Ultima Classic style, per everyone's recommendation (IceBlast became IceShard since it sounds cooler)
-- reverts Bloodsip to VampFang as a result of above
-- recovers the other v1.05 changes (Wind icon, 2 new magic attack items) without bugs
+- adds new Holy elemental icon (white diamond, matches FF4:TAY icon) (xJ4cks)
+- improves "Star" icon (xJ4cks)
+- "Add" becomes the more obvious "With" in Bestiary (xJ4cks)
+- removes Float icon from elemental weakness dude msg in training room (FlamePurge)
+- reverts names of tier 2 elemental attack items to Ultima Classic style, per everyone's recommendation (IceBlast became IceShard since it sounds cooler) (FlamePurge)
+- reverts Bloodsip to VampFang as a result of above (FlamePurge)
+- recovers the other v1.05 changes (Wind icon, 2 new magic attack items) without bugs (xJ4cks)
 
-v1.0.05 (bugged) 
-- New Wind icon (yellow/green whirlwind)
-- Names of 4 magic attack items, "Fangs", were changed to be more distinct
+v1.0.05
+- New Wind icon (yellow/green whirlwind) (xJ4cks)
+- Names of 4 magic attack items, "Fangs", were changed to be more distinct (FlamePurge)
 
 v1.0.04b
-- Bugfix as suggested by reference docs to address "empty dialog" that can occur at certain moments such as when learning spells
+- Bugfix as suggested by reference docs to address "empty dialog" that can occur at certain moments such as when learning spells (chillyfeez)
 
 v1.0.04
-- Grammatical correction in a character ability side quest
-- Title screen year changed to 2025
+- Grammatical correction in a character ability side quest (FlamePurge)
+- Title screen year changed to 2025 (chillyfeez)
+
+
+--------------
+Changelog 2024
+--------------
+v1.0.03
+- Icon Key menu overhaul, now includes more stats (chillyfeez)
+
+
+v1.0.02
+- Typo correction in Fabul story dialogue (FlamePurge)
+- Removed stutter from Fabul NPC uttering a character name label (FlamePurge)
+- VampFang -> Bloodsip (FlamePurge)
+
+
+v1.0.01
+- Blind icon display in "Icon Key" menu label fixed (xJ4cks)
+
+
+v1.00
+- Custom battle formation (chillyfeez)
+- Added Easy Mode (chillyfeez)
+- 100% overhauled script! (FlamePurge)
+- Edward promoted to retain equipment (chillyfeez)
+- All items have icons (xJ4cks)
+- Icons for all elements (xJ4cks, FlamePurge, chillyfeez)
+- Multiple uses of items and spells from menu (chillyfeez)
+- L + R allow quick Equip menu navigation (chillyfeez)
+- Endgame score report (chillyfeez)
+- Many new custom fonts & graphics added (see details below)
+
 
 
 Optional Content Patches
@@ -99,39 +138,6 @@ For more info, please reach out to us on the FF4Ultima discord: https://discord.
 
 --> Saves from versions before 2022 will absolutely GLITCH. Please start a new game and enjoy! :)
 
-
-
---------------
-Changelog 2024
---------------
-v1.0.03
-- Icon Key menu overhaul by chillyfeez; now includes more stats
-
-------------------------
-
-v1.0.02
-- Typo correction in Fabul story dialogue
-- Removed stutter from Fabul NPC uttering a character name label
-- VampFang -> Bloodsip
-
-------------------------
-
-v1.0.01
-- Blind icon display in "Icon Key" menu label fixed by xJ4cks
-
-------------------------
-
-v1.00
-- Custom battle formation
-- Added Easy Mode
-- 100% overhauled script!
-- Edward promoted to retain equipment
-- All items have icons
-- Icons for all elements
-- Multiple uses of items and spells from menu
-- L + R allow quick Equip menu navigation
-- Endgame score report
-- Many new custom fonts & graphics added (see details below)
 
 
 Optional Content Patches
