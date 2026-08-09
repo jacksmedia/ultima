@@ -19,6 +19,7 @@ export type ExtractedManifest = {
   portraits: string[];
   fonts: string[];
   tweaks: string[];
+  upgrades: string[];
 };
 
 type Patch = {
@@ -119,7 +120,8 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
     buildOptionalCategory(manifest.portraits,'portraits','Portraits',         'Changes the hero faces in the menu',      false),
     buildOptionalCategory(manifest.tweaks,   'tweaks',   'Game Adjustments', 'Tweaks to the battle or menu systems',    true),
     buildOptionalCategory(manifest.fonts,    'fonts',    'Alt Fonts (+ Item Names)', 'Alternate Fonts, + Alt. Item Names with SBG', false),
-  ], [manifest.battles, manifest.maps, manifest.portraits, manifest.tweaks, manifest.fonts]);
+    buildOptionalCategory(manifest.upgrades, 'upgrades', 'Upgrades',         'Enhanced graphics with expanded colors',  false),
+  ], [manifest.battles, manifest.maps, manifest.portraits, manifest.tweaks, manifest.fonts, manifest.upgrades]);
 
   // Helper: look up selected patch objects by ID
   const getSelectedFrom = <T extends { id: string }>(categories: { patches: T[] }[], ids: string[]): T[] => {
@@ -221,8 +223,11 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
           <PlusTitle />
           <h5>
             <a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">
+              Version 1.0.12
+            </a>, April 2026
+            {/* <a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">
               Version 1.1
-            </a>, August 2026
+            </a>, August 2026 */}
           </h5>
           <DownloadRomButton
             onGenerateRom={generatePatchedRom}

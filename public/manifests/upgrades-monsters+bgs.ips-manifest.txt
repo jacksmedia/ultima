@@ -1,0 +1,6 @@
+FF4UP 16 color monsters & battle bgs, by Gedankenschild
+
+Created from these 2 patches:
+
+FF4U 4bpp Battle Bgs - by Gedankenschild & StrikerTheHedgefox.ips
+FF4UP 4bpp Monsters and Battle BGs by Gedankenschild and StrikerTheHedgefox Addendum.ips (by epigonone)

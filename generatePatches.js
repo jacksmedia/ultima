@@ -78,6 +78,7 @@ const zipsToExtract = [
   { zip: 'Portraits.zip', dir: 'portraits',    key: 'portraits'    },
   { zip: 'Fonts.zip',     dir: 'fonts',        key: 'fonts'        },
   { zip: 'Tweaks.zip',    dir: 'tweaks',       key: 'tweaks'       },
+  { zip: 'Upgrades.zip',  dir: 'upgrades',     key: 'upgrades'     },
 ];
 
 console.log('\nExtracting zips to public/extracted/...');
