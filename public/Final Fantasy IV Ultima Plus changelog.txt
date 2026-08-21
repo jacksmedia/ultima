@@ -7,7 +7,7 @@ v1.1
 - adds timer and resolves potential softlock bug in the repeat fight on the Lunar Whale (chillyfeez)
 - adds four new music tracks (epigonone, chillyfeez)
 
-v1.0.12a
+v1.0.13
 - !Steal can nab mythic items (chillyfeez)
 - Sneak Ring only enhances Edge's !Steal, not the mug effect of equipment (chillyfeez)
 

@@ -192,6 +192,7 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
     }
 
     // Fetch + apply selected optional patches
+    // Find readme file if warranted
     const selectedOptionals = getSelectedFrom(optionalCategories, selectedOptionalPatches);
     for (const patch of selectedOptionals) {
       patchedRom = await fetchAndApply(patchedRom, patch.category ?? patch.id.split('-')[0], patch.filename);
