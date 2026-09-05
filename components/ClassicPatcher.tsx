@@ -64,6 +64,7 @@ export default function ClassicPatcher({ manifest }: { manifest: ExtractedManife
   const [error, setError] = useState<string | null>(null);
   const [selectedStylePatches, setSelectedStylePatches] = useState<string[]>([]);
   const [selectedOptionalPatches] = useState<string[]>([]); // kept for filename logic only
+  const [stylesOpen, setStylesOpen] = useState(false); // StylesPanel is now controlled by its parent
 
   // Build base patch list from manifest — instant, no zip loading
   const patches: Patch[] = useMemo(() =>
@@ -171,6 +172,8 @@ export default function ClassicPatcher({ manifest }: { manifest: ExtractedManife
           selectedPatches={selectedStylePatches}
           onSelectionChange={setSelectedStylePatches}
           isDisabled={isPatching || !hasValidRom}
+          isOpen={stylesOpen}
+          onToggle={() => setStylesOpen(open => !open)}
         />
 
         {hasValidRom && (

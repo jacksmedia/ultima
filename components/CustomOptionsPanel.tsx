@@ -26,6 +26,8 @@ interface CustomOptionsPanelProps {
   onSelectionChange: (selectedPatchIds: string[]) => void;
   onPreviewImage?: (imageSrc: string, title: string, description: string) => void;
   isDisabled?: boolean;
+  isOpen: boolean;        // controlled by the parent: is this panel expanded?
+  onToggle: () => void;   // parent decides what a header click means
 }
 
 const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
@@ -33,9 +35,10 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
   selectedPatches,
   onSelectionChange,
   onPreviewImage,
-  isDisabled = false
+  isDisabled = false,
+  isOpen,
+  onToggle
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState<{
     src: string;
@@ -102,7 +105,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
     <div className="">
       {/* Toggle Button */}
       <button
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={onToggle}
         disabled={isDisabled}
         className={`
           px-2 py-2 mt-3 custom-options-button 
@@ -110,7 +113,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
             ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 nicer-btn' 
             : 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 nicer-btn-blue'
           }
-          ${isExpanded ? 'rounded-b-none' : ''}
+          ${isOpen ? 'rounded-b-none' : ''}
         `}
       >
         <div className="flex items-center justify-between p-2">
@@ -124,7 +127,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
               </span>
             )}
             <svg 
-              className={`w-5 h-5 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+              className={`w-5 h-5 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
               xmlns="http://www.w3.org/2000/svg" 
               fill="none" 
               viewBox="0 0 24 24" 
@@ -137,7 +140,7 @@ const CustomOptionsPanel: React.FC<CustomOptionsPanelProps> = ({
       </button>
 
       {/* Options Panel */}
-      {isExpanded && (
+      {isOpen && (
         <div className="">
           <div className="p-3 m-2">
             {categories.map((category) => (

@@ -34,6 +34,9 @@ type RomState = {
   originalCRC32: string;
 };
 
+// Styles and Custom Options are mutually exclusive: only one panel is open at a time
+type PanelId = 'styles' | 'custom';
+
 // Mirror the display-name logic from useZipPatches
 function toDisplayName(filename: string): string {
   return filename
@@ -98,6 +101,19 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
   const [error, setError] = useState<string | null>(null);
   const [selectedStylePatches, setSelectedStylePatches] = useState<string[]>([]);
   const [selectedOptionalPatches, setSelectedOptionalPatches] = useState<string[]>([]);
+  const [activePanel, setActivePanel] = useState<PanelId | null>(null);
+
+  // Opening one panel discards the other panel's selections and collapses it.
+  // Clicking the already-open header just collapses it, selections intact.
+  const togglePanel = (panel: PanelId) => {
+    if (activePanel === panel) {
+      setActivePanel(null);
+      return;
+    }
+    if (panel === 'styles') setSelectedOptionalPatches([]);
+    else setSelectedStylePatches([]);
+    setActivePanel(panel);
+  };
 
   // Build base patch list from manifest — instant, no zip loading
   const patches: Patch[] = useMemo(() =>
@@ -212,6 +228,7 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
   };
 
   const hasValidRom = romState !== null;
+  const hasSelections = selectedStylePatches.length > 0 || selectedOptionalPatches.length > 0;
 
   return (
     <div className='patcher-bg text-center h-screen'>
@@ -236,7 +253,7 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
             <div className="bg-slate-900 rounded-lg border-1">
               <h2 className="text-xl mb-2">ROM Ready:</h2>
               <p className="font-mono text-sm">Uploaded CRC32: {romState!.originalCRC32}</p>
-              {selectedOptionalPatches.length > 0 && (
+              {hasSelections && (
                 <div className="mt-2">
                   <p className="text-sm text-gray-300">Selected patches:</p>
                   <ul className="text-xs text-gray-400 mt-1">
@@ -271,14 +288,17 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
           selectedPatches={selectedStylePatches}
           onSelectionChange={setSelectedStylePatches}
           isDisabled={isPatching || !hasValidRom}
+          isOpen={activePanel === 'styles'}
+          onToggle={() => togglePanel('styles')}
         />
-        <h4>Styles are meant to be used without extra Options.</h4>
-        <p>Feel free to experiment, yet keep in mind they are not supported together.</p>
+        <p>Styles and Custom Options are not supported together, so opening one clears the other.</p>
         <CustomOptionsPanel
           categories={optionalCategories}
           selectedPatches={selectedOptionalPatches}
           onSelectionChange={setSelectedOptionalPatches}
           isDisabled={isPatching || !hasValidRom}
+          isOpen={activePanel === 'custom'}
+          onToggle={() => togglePanel('custom')}
         />
 
         {error && <p className="text-red-500 font-medium">{error}</p>}
@@ -287,7 +307,7 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
           <div className="p-4 bg-black rounded-lg">
             <h2 className="text-xl mb-2">ROM Ready:</h2>
             <p className="font-mono text-sm">Uploaded CRC32: {romState!.originalCRC32}</p>
-            {selectedOptionalPatches.length > 0 && (
+            {hasSelections && (
               <div className="mt-2">
                 <p className="text-sm text-gray-300">Selected patches:</p>
                 <ul className="text-xs text-gray-400 mt-1">

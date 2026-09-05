@@ -1,6 +1,6 @@
 {
   "name": "ultima-patcher",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "private": true,
   "scripts": {
     "generate-patches": "node generatePatches.js",
