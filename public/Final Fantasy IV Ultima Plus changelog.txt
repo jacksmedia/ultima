@@ -3,6 +3,9 @@ Final Fantasy IV - Ultima Plus Changelog
  2026
 ------
 
+v1.1.01
+- debugs occurrence of chocobo far offshore (chillyfeez)
+
 v1.1
 - adds timer and resolves potential softlock bug in the repeat fight on the Lunar Whale (chillyfeez)
 - adds four new music tracks (epigonone, chillyfeez)
