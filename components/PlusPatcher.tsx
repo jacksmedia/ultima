@@ -241,7 +241,7 @@ export default function PlusPatcher({ manifest }: { manifest: ExtractedManifest 
           <PlusTitle />
           <h5>
             <a href="Final Fantasy IV Ultima Plus changelog.txt" rel="noopener noreferrer" target="_blank">
-              Version 1.1.02
+              Version 1.1.03
             </a>, October 2026
           </h5>
           <DownloadRomButton

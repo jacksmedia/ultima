@@ -2,6 +2,9 @@ Final Fantasy IV - Ultima Plus Changelog
 ------
  2026
 ------
+v1.1.03
+- bugfix for font (chillyfeez)
+
 v1.1.02
 - fixes a bug that caused the wrong music to play when talking to the Fat Chocobo (chillyfeez)
 
